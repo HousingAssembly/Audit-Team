@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const Receipt = require("../models/Receipt");
 
-// POST /api/receipts → 插入一条收据信息
+// POST /api/receipts 
 router.post("/", async (req, res) => {
   try {
     const newReceipt = new Receipt(req.body);
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET /api/receipts → 获取所有收据信息（测试用）
+// GET /api/receipts 
 router.get("/", async (req, res) => {
   try {
     const all = await Receipt.find();
