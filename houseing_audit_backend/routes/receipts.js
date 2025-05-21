@@ -15,6 +15,19 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  try {
+    console.log("Get new messagesL ", req.body); 
+
+    const newReceipt = new Receipt(req.body);
+    const saved = await newReceipt.save();
+    res.status(201).json({ insertedId: saved._id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // GET /api/receipts 
 router.get("/", async (req, res) => {
   try {

@@ -8,18 +8,19 @@ app.use(express.json());
 
 // connect MongoDB
 mongoose.connect("mongodb://localhost:27017/housing_audit", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// connect the local MongoDB and use Housing_audit database
 })
 .then(() => console.log("Connected to MongoDB"))
-.catch((err) => console.error("MongoDB connection error:", err));
+    const receipts = await Receipt.find();
+    console.log("Current receipts in database:");
+    console.log(receipts);  
 
-// routes
+// setting the connection, all the receipts will be dealed by receiptRoutes
 app.use("/api/receipts", receiptRoutes);
 
 // routes testing 
 app.get("/", (req, res) => {
-  res.send("✅ Housing Audit Backend is running!");
+  res.send(" Housing Audit Backend is running!");
 });
 
 // start routes

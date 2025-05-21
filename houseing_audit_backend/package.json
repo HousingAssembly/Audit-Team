@@ -8,10 +8,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "cd houseing_audit_backend npm init -y # download the required stuff npm install express mongoose",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongoose": "^8.15.0"
-  }
+  },
+  "devDependencies": {}
 }
