@@ -1,3 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-palette-red: #cd091d;
+  --color-palette-black: #18181d;
+  --color-palette-text: #5f5b5a;
+}
+
+.bg-palette-red {
+  background-color: var(--color-palette-red);
+}
+
+.text-palette-text {
+  color: var(--color-palette-text);
+}
+
+.text-palette-black {
+  color: var(--color-palette-black)
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +26,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
