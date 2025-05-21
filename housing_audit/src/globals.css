@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --color-palette-red: #cd091d;
+  --color-palette-red: #a40000;
   --color-palette-black: #18181d;
   --color-palette-text: #5f5b5a;
 }
@@ -19,6 +19,11 @@
 .text-palette-black {
   color: var(--color-palette-black)
 }
+
+.text-palette-red {
+  color: var(--color-palette-red)
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
