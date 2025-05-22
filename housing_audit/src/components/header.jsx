@@ -20,8 +20,9 @@ export default function Header() {
           <Link to="/">Home</Link>
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
+          <Link to="/projects">Active/Future Projects</Link>
         </div>
-        <button className="bg-palette-red font-medium text-lg text-white px-6 py-1 ml-24 rounded-lg m-4">Login</button>
+        <Link to="/login" className="bg-palette-red font-medium text-lg text-white px-6 py-1 ml-24 rounded-lg m-4">Staff Login</Link>
       </div> 
     </div>
   );
