@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Header from './components/header'; 
 import Footer from './components/footer';
+import Dashboard from './components/dashboard';
 import './globals.css';  
 
 const Root = () => {
@@ -13,7 +14,6 @@ const Root = () => {
 
   return (
     <>
-      {/* Conditionally render Header and Footer */}
       {!shouldHideFooterHeader && <Header />}
       <App />
       {!shouldHideFooterHeader && <Footer />}
@@ -28,7 +28,7 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<Root />} />
-        {/* Add other routes as needed */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   </React.StrictMode>
