@@ -1,8 +1,6 @@
-// models/Receipt.js
-
 const mongoose = require("mongoose");
 
-const ReceiptSchema = new mongoose.Schema({
+const AuditSchema = new mongoose.Schema({
   registration_number: String,
   application_date: String,
   client_copy_date: String,
@@ -37,4 +35,4 @@ const ReceiptSchema = new mongoose.Schema({
   timestamp_uploaded: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Receipt", ReceiptSchema);
+module.exports = mongoose.model("Audit", AuditSchema);

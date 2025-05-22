@@ -1,0 +1,33 @@
+{
+  "registration_number": "C123789",
+  "application_date": "2024-02-10",
+  "client_copy_date": "2024-05-21",
+  "applicant": {
+    "surname": "Ngwenya",
+    "first_name": "Lebo",
+    "id_number": "8905051234567",
+    "date_of_birth": "1989-05-05"
+  },
+  "spouse_or_partner": {
+    "surname": "Ngwenya",
+    "first_name": "Kabelo",
+    "id_number": "8804047654321",
+    "date_of_birth": "1988-04-04"
+  },
+  "address": {
+    "street": "456 Freedom Ave",
+    "suburb": "Khayelitsha",
+    "postal_code": "7784"
+  },
+  "contact": {
+    "cellphone_1": "0812345678",
+    "cellphone_2": "0823456789",
+    "landline": "0217654321"
+  },
+  "marital_status": {
+    "status": "Married",
+    "date_married": "2012-11-22",
+    "date_divorced": ""
+  },
+  "ocr_raw_text": "This audit was uploaded using a JSON file via curl"
+}
