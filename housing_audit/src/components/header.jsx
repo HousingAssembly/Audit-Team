@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import LoginForm from './LoginForm';
 
 export default function Header() { 
+
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();    
@@ -9,6 +13,10 @@ export default function Header() {
       section.scrollIntoView({ behavior: 'smooth' });
       window.history.pushState({}, '', `#${sectionId}`);
     }
+  };
+
+  const closeModal = () => {
+    setIsLoginOpen(false); 
   };
 
   return ( 
@@ -22,7 +30,13 @@ export default function Header() {
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
           <Link to="/projects">Active/Future Projects</Link>
         </div>
-        <Link to="/login" className="bg-palette-red font-medium text-lg text-white px-6 py-1 ml-24 rounded-lg m-4">Staff Login</Link>
+        <button className="bg-palette-red font-medium text-lg text-white px-6 py-1 ml-24 rounded-lg m-4" onClick={() => setIsLoginOpen(true)}>Staff Login</button>
+
+        {isLoginOpen && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center">
+          <LoginForm closeModal={closeModal}/>
+        </div>
+        )}
       </div> 
     </div>
   );
