@@ -4,17 +4,6 @@ const express = require("express");
 const router = express.Router();
 const Receipt = require("../models/Receipt");
 
-// POST /api/receipts 
-router.post("/", async (req, res) => {
-  try {
-    const newReceipt = new Receipt(req.body);
-    const saved = await newReceipt.save();
-    res.status(201).json({ insertedId: saved._id });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 router.post("/", async (req, res) => {
   try {
     console.log("Get new messagesL ", req.body); 
