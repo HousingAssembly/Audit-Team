@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import SignUpForm from './SignUpForm';
 
 export default function Header() { 
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignUpOpen, setisSignUpOpen] = useState(false);
 
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();    
@@ -17,7 +19,13 @@ export default function Header() {
 
   const closeModal = () => {
     setIsLoginOpen(false); 
+    setisSignUpOpen(false); 
   };
+
+  const openLoginSignUp = () => {
+    setisSignUpOpen(!isSignUpOpen);
+    setIsLoginOpen(!isLoginOpen);
+  }
 
   return ( 
     <div className="w-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
@@ -34,7 +42,12 @@ export default function Header() {
 
         {isLoginOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center">
-          <LoginForm closeModal={closeModal}/>
+          <LoginForm openLoginSignUp={openLoginSignUp} closeModal={closeModal}/>
+        </div>
+        )}
+        {isSignUpOpen && ( 
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center">
+          <SignUpForm openLoginSignUp={openLoginSignUp} closeModal={closeModal}/>
         </div>
         )}
       </div> 
