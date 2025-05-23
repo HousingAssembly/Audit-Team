@@ -15,7 +15,7 @@ const Root = () => {
   return (
     <>
       {!shouldHideFooterHeader && <Header />}
-      <App />
+        <App />
       {!shouldHideFooterHeader && <Footer />}
     </>
   );
