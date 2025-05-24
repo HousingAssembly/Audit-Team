@@ -59,7 +59,7 @@ export default function Home() {
                 <div className="flex flex-col items-center justify-around items-start gap-12 -rotate-[2.5deg]">
                   <div className="flex gap-4 mt-24 items-center">
                     <img src="email.png" alt="Email Icon" className="h-14 w-auto object-contain"/>
-                    <span className="ml-8 text-xl">housingassembly@gmail.com</span>
+                    <span className="ml-8 text-xl">info@housingassembly.org.za</span>
                   </div>
                   <div className="flex transform -translate-x-[35px]">
                     <img src="location.png" alt="Pin Icon" className="h-16 mr-2 w-auto object-contain"/>
