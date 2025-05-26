@@ -1,4 +1,18 @@
+import { useState } from 'react';
+import ViewAudit from './ViewAudit';
+
 export default function Home() { 
+
+  const [isViewAuditOpen, setIsViewAuditOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsViewAuditOpen(false); 
+  };
+
+  const openViewAudit = () => {
+    setIsViewAuditOpen(!isViewAuditOpen);
+  }
+
   return ( 
     <div className="flex flex-col space-y-24 w-full py-12">
       <div className="flex flex-row mx-12 justify-center items-center">
@@ -7,8 +21,8 @@ export default function Home() {
         </div>
         <div className="w-1/2 text-center">
           <div className="flex flex-col space-y-24 justify-center items-center">
-            <div className="text-palette-text text-[92px] font-normal max-w-[540px]">DECENT HOUSING FOR ALL</div>
-            <button className="flex bg-palette-red font-medium text-2xl text-white px-6 py-1 rounded-lg m-4 items-center justify-center">View Audit<span className="text-4xl mb-1">→</span></button>
+            <div className="text-zinc-700 text-[92px] font-bold max-w-[540px]">DECENT HOUSING FOR ALL</div>
+            <button className="flex bg-palette-red font-medium text-2xl text-white px-6 py-1 rounded-lg m-4 items-center justify-center" onClick={() => setIsViewAuditOpen(true)}><span className="font-bold mr-2">View Audit</span><span className="text-4xl mb-1">→</span></button>
           </div>        
         </div>
       </div>
@@ -45,7 +59,7 @@ export default function Home() {
                 <div className="flex flex-col items-center justify-around items-start gap-12 -rotate-[2.5deg]">
                   <div className="flex gap-4 mt-24 items-center">
                     <img src="email.png" alt="Email Icon" className="h-14 w-auto object-contain"/>
-                    <span className="ml-8 text-xl">housingassembly@gmail.com</span>
+                    <span className="ml-8 text-xl">info@housingassembly.org.za</span>
                   </div>
                   <div className="flex transform -translate-x-[35px]">
                     <img src="location.png" alt="Pin Icon" className="h-16 mr-2 w-auto object-contain"/>
@@ -65,6 +79,13 @@ export default function Home() {
           </section>
           <div className="h-[650px] bg-white" />
         </div>
+
+        {isViewAuditOpen && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center">
+            <ViewAudit openViewAudit={openViewAudit} closeModal={closeModal}/>
+          </div>
+        )}
+
       </div>
     </div>
   );

@@ -1,20 +1,27 @@
 import cv2
 import pytesseract
+from matplotlib import pyplot as plt
 
-image_path = "houseing_audit_backend/ORC/TestingSample.jpeg"
-
+image_path = "TestingSample.jpeg"
 image = cv2.imread(image_path)
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+print("Grayscale Image:")
 
-thresh = cv2.adaptiveThreshold(gray, 255, 
-                               cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                               cv2.THRESH_BINARY, 11, 2)
+plt.figure(figsize=(8, 4))
+plt.imshow(gray, cmap='gray')
+plt.title("Grayscale Image")
+plt.axis("off")
+plt.show()
 
-text = pytesseract.image_to_string(thresh, lang='eng')
+plt.figure(figsize=(10, 6))
+plt.imshow(image_rgb)
+plt.title("Original Image")
+plt.axis("off")
+plt.show()
 
-print("result：\n", text)
+extracted_text = pytesseract.image_to_string(image_rgb)
+print(" Extracted Text:\n")
+print(extracted_text)
 
-with open("houseing_audit_backend/ORC/output.txt", "w") as f:
-    f.write(text)
-# python + tesseract + OpenCV
