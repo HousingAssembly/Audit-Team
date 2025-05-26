@@ -21,8 +21,8 @@ export default function Home() {
         </div>
         <div className="w-1/2 text-center">
           <div className="flex flex-col space-y-24 justify-center items-center">
-            <div className="text-palette-text text-[92px] font-normal max-w-[540px]">DECENT HOUSING FOR ALL</div>
-            <button className="flex bg-palette-red font-medium text-2xl text-white px-6 py-1 rounded-lg m-4 items-center justify-center" onClick={() => setIsViewAuditOpen(true)}>View Audit<span className="text-4xl mb-1">→</span></button>
+            <div className="text-zinc-700 text-[92px] font-bold max-w-[540px]">DECENT HOUSING FOR ALL</div>
+            <button className="flex bg-palette-red font-medium text-2xl text-white px-6 py-1 rounded-lg m-4 items-center justify-center" onClick={() => setIsViewAuditOpen(true)}><span className="font-bold mr-2">View Audit</span><span className="text-4xl mb-1">→</span></button>
           </div>        
         </div>
       </div>
