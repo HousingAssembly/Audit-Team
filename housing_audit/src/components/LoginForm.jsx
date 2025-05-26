@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 
-<<<<<<< Updated upstream
-function LoginForm({ onLogin }) {
-  const [username, setUsername] = useState("");
-=======
 function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
   const [email, setEmail] = useState("");
->>>>>>> Stashed changes
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
@@ -20,13 +15,8 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
 
     const data = await res.json();
     if (res.ok) {
-<<<<<<< Updated upstream
-      onLogin(data.token || true);  // simulate login success
-      alert("✅ Login successful!");
-=======
       onLogin(data.token || true); 
       alert("Login successful!");
->>>>>>> Stashed changes
     } else {
       alert("Something went wrong ?" + data.error);
     }
@@ -34,18 +24,12 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
 
   return (
     <form onSubmit={handleSubmit}>
-<<<<<<< Updated upstream
-      <h2>Admin Login</h2>
-      <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-      <button type="submit">Login</button>
-=======
       <div className="bg-white rounded-3xl mt-12 flex flex-col py-6 px-6">
         <div className="flex flex-row justify-center items-end ml-24">
           <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto"/>
           <div className="px-2 text-4xl font-medium"><span className="text-palette-red">H</span>ouse <span className="text-palette-red">A</span>udit</div>
           <div className="flex ml-24 mb-auto">
-            <button onClick={handleClose}>
+            <button onClick={closeModal}>
               <img src="x.png" alt="X" className="object-contain h-6 w-auto"/>
             </button>
           </div>
@@ -63,9 +47,8 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
           </div>
           <button className="py-2 w-full bg-red-800 text-white text-2xl font-medium rounded-full" type="submit">Login</button>
         </div>
-        <div className="text-center font-medium text-sm mt-12">DON'T HAVE AN ACCOUNT? <button onClick={handleOpenSignUp} className="text-palette-red">SIGN UP</button></div>
+        <div className="text-center font-medium text-sm mt-12">DON'T HAVE AN ACCOUNT? <button onClick={openLoginSignUp} className="text-palette-red">SIGN UP</button></div>
       </div>
->>>>>>> Stashed changes
     </form>
   );
 }
