@@ -1,14 +1,21 @@
-const fs = require("fs");
-const Tesseract = require("tesseract.js");
+// app.js - 使用 tesseract.js 识别本地图片
+const Tesseract = require('tesseract.js');
+const path = require('path');
+
+const imagePath = process.argv[2]
+
+if (!imagePath) {
+    process.exit(1);
+}
+
+console.log('🔍 正在识别图片：', imagePath);
 
 Tesseract.recognize(
-  'testing.png',  
-  'eng'
-).then(result => {
-  const text = result.data.text;
-  console.log("the result text:\n", text);
-
-  fs.writeFileSync("output.txt", text); 
-}).catch(err => {
-  console.error("failed to write:", err);
-});
+    path.resolve(imagePath),
+    'eng',
+    {
+        logger: m => console.log(m)
+    }
+).then(({ data: { text } }) => {
+    console.log(text);
+})
