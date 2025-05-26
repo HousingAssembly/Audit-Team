@@ -14,6 +14,8 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
     });
 
     const data = await res.json();
+    if (res.ok) {
+      onLogin(data.token || true); 
 
     if (res.status === 403 && data.error === "Account not approved yet.") {
       alert("Your account is pending admin approval.");
@@ -44,8 +46,8 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
             <span className="text-palette-red">H</span>ouse <span className="text-palette-red">A</span>udit
           </div>
           <div className="flex ml-24 mb-auto">
-            <button onClick={handleClose}>
-              <img src="x.png" alt="X" className="object-contain h-6 w-auto" />
+            <button onClick={closeModal}>
+              <img src="x.png" alt="X" className="object-contain h-6 w-auto"/>
             </button>
           </div>
         </div>
@@ -70,6 +72,7 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
             SIGN UP
           </button>
         </div>
+        <div className="text-center font-medium text-sm mt-12">DON'T HAVE AN ACCOUNT? <button onClick={openLoginSignUp} className="text-palette-red">SIGN UP</button></div>
       </div>
     </form>
   );
