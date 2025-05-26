@@ -1,32 +1,5 @@
-const mongoose = require("mongoose");
-
-const UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String,
-    enum: ["pending", "admin"],
-    default: "pending"
-  },
-  created_at: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-module.exports = mongoose.model("User", UserSchema);
-
-
 const jwt = require("jsonwebtoken");
-const User = require("./user");
+const User = require("../models/user");
 
 const requireAdmin = async (req, res, next) => {
   try {
@@ -40,10 +13,11 @@ const requireAdmin = async (req, res, next) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    req.user = user; // Attach user to request if needed later
+    req.user = user; 
     next();
   } catch (err) {
     return res.status(401).json({ error: "Invalid token" });
   }
 };
 
+module.exports = requireAdmin;
