@@ -1,19 +1,27 @@
+// secrets
+require("dotenv").config();
+const MONGO_URI = process.env.MONGO_URI;
+
+// dependencies
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// models
 const User = require("./models/user");
 const Audit = require("./models/audit")
 
+// routes
 const auditRoutes = require("./routes/audits");
 const userRoutes = require("./routes/users"); 
 
+// connection using express and mongoose and cors and a bunch of stuff 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 mongoose.connect(
-  "mongodb+srv://housingassemblyza:9qYjkla4iBps7K7A@auditing-team.icqjwbd.mongodb.net/?retryWrites=true&w=majority&appName=Auditing-Team",
+  MONGO_URI,
   {
     dbName: "housing_audit", 
     useNewUrlParser: true,
