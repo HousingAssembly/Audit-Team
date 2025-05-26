@@ -25,3 +25,11 @@ extracted_text = pytesseract.image_to_string(image_rgb)
 print(" Extracted Text:\n")
 print(extracted_text)
 
+<<<<<<< HEAD
+=======
+
+# If you want to use it, use
+#python3 handwriting_ocr.py
+# And then input your testing file
+#testing.png 
+>>>>>>> fff4aa7be2ac11b7a0f94a8198f83af9b67044ab

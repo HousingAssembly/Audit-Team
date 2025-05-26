@@ -15,9 +15,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+<<<<<<< HEAD
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
     "mongoose": "^8.15.0",
+=======
+    "mongoose": "^8.15.0",
+    "sharp": "^0.34.2",
+>>>>>>> fff4aa7be2ac11b7a0f94a8198f83af9b67044ab
     "tesseract.js": "^6.0.1"
   }
 }
