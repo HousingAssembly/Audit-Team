@@ -11,6 +11,7 @@ import Statistics from "./components/dashboard/Statistics";
 import ExportCSV from "./components/dashboard/ExportCSV";
 import PendingApprovals from "./components/dashboard/PendingApprovals";
 import Account from "./components/dashboard/Account";
+import ProtectedRoute from "./protectedRoute";
 
 function App() {
   const location = useLocation();
@@ -19,18 +20,18 @@ function App() {
   return (
     <>
       {!shouldHideFooterHeader && <Header />}
-      
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="overview" element={<Overview />} />
-          <Route path="upload-audit" element={<UploadAudit />} />
           <Route path="view-audit" element={<ViewAudit />} />
-          <Route path="waitlist" element={<Waitlist />} />
-          <Route path="statistics" element={<Statistics />} />
-          <Route path="export" element={<ExportCSV />} />
-          <Route path="pending-approvals" element={<PendingApprovals />} />
-          <Route path="account" element={<Account />} />
+          <Route path="overview" element={<ProtectedRoute><Overview /></ProtectedRoute>} />
+          <Route path="upload-audit" element={<ProtectedRoute><UploadAudit /></ProtectedRoute>} />
+          <Route path="waitlist" element={<ProtectedRoute><Waitlist /></ProtectedRoute>} />
+          <Route path="statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
+          <Route path="export" element={<ProtectedRoute><ExportCSV /></ProtectedRoute>} />
+          <Route path="pending-approvals" element={<ProtectedRoute><PendingApprovals /></ProtectedRoute>} />
+          <Route path="account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
         </Route>
       </Routes>
 

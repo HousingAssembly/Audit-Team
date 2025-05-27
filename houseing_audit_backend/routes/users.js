@@ -51,10 +51,11 @@ router.post("/login", async (req, res) => {
     const { password: _, ...userData } = user.toObject();
     res.json({ token, user: userData });
   } catch (err) {
-    console.error("Login failed:", err);
-    res.status(500).json({ error: "Login failed" });
+    console.error("Login poop:", err);
+    res.status(500).json({ error: "Login poooop" });
   }
 });
+
 
 router.put("/approve/:id", requireAdmin, async (req, res) => {
   try {
