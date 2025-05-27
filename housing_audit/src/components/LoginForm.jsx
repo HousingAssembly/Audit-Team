@@ -1,39 +1,45 @@
 import React, { useState } from "react";
 
-function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
+<<<<<<< Updated upstream
+function LoginForm({ onLogin }) {
   const [username, setUsername] = useState("");
+=======
+function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
+  const [email, setEmail] = useState("");
+>>>>>>> Stashed changes
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5001/api/login", {
+    const res = await fetch("http://localhost:5001/api/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ email, password })
     });
 
     const data = await res.json();
     if (res.ok) {
-      onLogin(data.token || true); 
+<<<<<<< Updated upstream
+      onLogin(data.token || true);  // simulate login success
       alert("✅ Login successful!");
+=======
+      onLogin(data.token || true); 
+      alert("Login successful!");
+>>>>>>> Stashed changes
     } else {
-      alert("❌ " + data.error);
+      alert("Something went wrong ?" + data.error);
     }
-  };
-
-  const handleClose = (e) => {
-      e.preventDefault(); 
-      closeModal(); 
-  };
-
-  const handleOpenSignUp = (e) => {
-    e.preventDefault();
-    openLoginSignUp();
   };
 
   return (
     <form onSubmit={handleSubmit}>
+<<<<<<< Updated upstream
+      <h2>Admin Login</h2>
+      <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+      <button type="submit">Login</button>
+=======
       <div className="bg-white rounded-3xl mt-12 flex flex-col py-6 px-6">
         <div className="flex flex-row justify-center items-end ml-24">
           <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto"/>
@@ -49,7 +55,7 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
         <div className="flex flex-col space-y-8 py-4">
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
             <img src="/profile-red.png" alt="Profile Icon" className="ml-4 h-5 w-auto object-contain" />
-            <input className="px-4 py-2" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"/>
+            <input className="px-4 py-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
           </div>
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
             <img src="/lock.png" alt="Lock Icon" className="ml-4 h-5 w-auto object-contain" />
@@ -59,6 +65,7 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
         </div>
         <div className="text-center font-medium text-sm mt-12">DON'T HAVE AN ACCOUNT? <button onClick={handleOpenSignUp} className="text-palette-red">SIGN UP</button></div>
       </div>
+>>>>>>> Stashed changes
     </form>
   );
 }
