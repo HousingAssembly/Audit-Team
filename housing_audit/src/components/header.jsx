@@ -15,7 +15,7 @@ export default function Header() {
     if (token && user) {
       navigate("/dashboard/overview");
     }
-  },[]);
+  },[navigate]);
 
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();    
