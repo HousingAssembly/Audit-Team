@@ -1,11 +1,21 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 
 export default function Header() { 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setisSignUpOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (token && user) {
+      navigate("/dashboard/overview");
+    }
+  },[]);
 
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();    
@@ -56,7 +66,7 @@ export default function Header() {
                 localStorage.setItem("token", token);
                 localStorage.setItem("user", JSON.stringify(user));
                 closeModal(); 
-                window.location.href = "/dashboard/overview";
+                navigate("/dashboard/overview");
               }}
             />
           </div>
