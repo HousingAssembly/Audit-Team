@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+import ProtectedRoute from "./protectedRoute";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import Home from "./components/home";
@@ -11,7 +12,8 @@ import Statistics from "./components/dashboard/Statistics";
 import ExportCSV from "./components/dashboard/ExportCSV";
 import PendingApprovals from "./components/dashboard/PendingApprovals";
 import Account from "./components/dashboard/Account";
-import ProtectedRoute from "./protectedRoute";
+import ProjectShowcasePage from "./Projects";
+
 
 function App() {
   const location = useLocation();
@@ -23,6 +25,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<ProjectShowcasePage />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="view-audit" element={<ViewAudit />} />
           <Route path="overview" element={<ProtectedRoute><Overview /></ProtectedRoute>} />
