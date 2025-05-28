@@ -1,4 +1,7 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+
 import ProtectedRoute from "./protectedRoute";
 import Header from "./components/header";
 import Footer from "./components/footer";
@@ -14,10 +17,33 @@ import PendingApprovals from "./components/dashboard/PendingApprovals";
 import Account from "./components/dashboard/Account";
 import ProjectShowcasePage from "./Projects";
 
-
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const shouldHideFooterHeader = location.pathname.startsWith("/dashboard");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const now = Date.now() / 1000;
+
+        if (decoded.exp < now) {
+          // Token expired
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          alert("Session expired. Please log in again.");
+          navigate("/account");
+        }
+      } catch (err) {
+        console.error("Invalid token:", err);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/account");
+      }
+    }
+  }, [navigate]);
 
   return (
     <>
