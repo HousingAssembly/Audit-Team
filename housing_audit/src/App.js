@@ -12,6 +12,7 @@ import ExportCSV from "./components/dashboard/ExportCSV";
 import PendingApprovals from "./components/dashboard/PendingApprovals";
 import Account from "./components/dashboard/Account";
 import ProtectedRoute from "./protectedRoute";
+import Projects from "./components/Projects";
 
 function App() {
   const location = useLocation();
@@ -23,6 +24,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="view-audit" element={<ViewAudit />} />
           <Route path="overview" element={<ProtectedRoute><Overview /></ProtectedRoute>} />
