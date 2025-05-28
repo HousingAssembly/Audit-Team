@@ -44,7 +44,7 @@ export default function Home() {
             
             <div className="absolute inset-0 skew-y-6 bg-palette-red h-[1000px] opacity-90 z-10"></div>
             
-            <div className="relative z-20 skew-y-6">
+            <div className="relative z-20 skew-y-6 ml-[5rem]">
               <div className="-skew-y-6 max-w-7xl mx-auto px-6 py-40 text-white flex flex-col md:flex-row items-center justify-between">
                 <div className="w-full md:w-2/3 space-y-8 text-[25px] leading-[3rem] ">
                   <p>
