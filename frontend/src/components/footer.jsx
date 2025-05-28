@@ -12,7 +12,7 @@ export default function Footer() {
             <Link to="https://www.youtube.com" target="_blank" rel="noopener norefferer"><img className="object-contain h-10 w-auto" src="youtube.png" alt="Youtube Icon"/></Link>
           </div>
         </div>
-        <div className="font-normal">@2025 Housing Audit. All Right Reserved.</div>
+        <div className="font-normal">@2025 HouseAudit. All Right Reserved.</div>
       </div>  
     </div>
   );

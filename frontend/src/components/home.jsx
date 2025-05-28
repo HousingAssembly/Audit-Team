@@ -17,7 +17,7 @@ export default function Home() {
     <div className="flex flex-col space-y-20 w-full pt-12">
       <div className="flex flex-row mx-12 justify-center items-center">
         <div className="w-1/2 text-center pl-20">
-          <img src="housing-landing.png" alt="Houses" className="object-contain w-[600px] h-auto inline-block -mt-12 ml-10"/>
+          <img src="housing-landing.png" alt="Houses" className="object-contain w-[600px] h-auto inline-block -mt-13 ml-10"/>
         </div>
         <div className="w-1/2 text-center">
           <div className="flex flex-col justify-center items-center">
@@ -29,13 +29,24 @@ export default function Home() {
           </div>        
         </div>
       </div>
-      <div className="relative w-full overflow-x-hidden overflow-y-visible bg-white">
-        <div className="min-h-screen overflow-x-hidden">
-          <div className="h-12 bg-white"/>
-          <section id="about" className="scroll-mt-[10vw]">
-            <div className="skew-y-3 bg-palette-red">
-              <div className="-skew-y-3 max-w-7xl mx-auto px-6 py-40 text-white flex flex-col md:flex-row items-center justify-between">
-                <div className="w-full md:w-2/3 space-y-8 text-[20px] leading-[3rem]">
+
+      <div className="relative w-full overflow-hidden overflow-visible bg-white">
+        <div className="min-h-screen">
+          <div className="bg-white"/>
+          <section id="about" className="relative w-full">
+            <div className="absolute inset-0 skew-y-6 overflow-hidden z-0 h-[950px] w-full">
+              <img
+                src="protest-image.png"
+                alt="Protest"
+                className="w-full h-[950px] object-cover"
+              />
+            </div>
+            
+            <div className="absolute inset-0 skew-y-6 bg-palette-red h-[950px] opacity-90 z-10"></div>
+            
+            <div className="relative z-20 skew-y-6">
+              <div className="-skew-y-6 max-w-7xl mx-auto px-6 py-40 text-white flex flex-col md:flex-row items-center justify-between">
+                <div className="w-full md:w-2/3 space-y-8 text-[25px] leading-[3rem] ">
                   <p>
                     HouseAudit is a digital platform developed by Housing Assembly, a
                     grassroots movement serving over 20 communities across the 
@@ -52,7 +63,7 @@ export default function Home() {
                     track progress and hold decision-makers accountable.
                   </p>
                 </div>
-                <div className="w-full md:w-1/3 text-center font-bold text-[48px] mt-12 md:mt-0">
+                <div className="w-full md:w-1/3 text-center font-bold text-[48px] mt-12 md:mt-0 tracking-wider">
                   ABOUT US
                 </div>
               </div>
@@ -60,22 +71,24 @@ export default function Home() {
           </section>
           <section id="contact" className="scroll-mt-[7vw]">
             <div className="relative">
-              <div className="absolute z-20 left-1/2 -translate-x-1/2 top-[-40px] rotate-[2.5deg] bg-black text-white px-12 py-24 w-[90%] max-w-5xl rounded-md shadow-lg">
-                <div className="text-center text-5xl font-bold -rotate-[2.5deg]">CONTACT</div>
-                <div className="flex flex-col items-center justify-around items-start gap-12 -rotate-[2.5deg]">
-                  <div className="flex gap-4 mt-24 items-center">
-                    <img src="email.png" alt="Email Icon" className="h-14 w-auto object-contain"/>
-                    <span className="ml-8 text-xl">info@housingassembly.org.za</span>
-                  </div>
-                  <div className="flex transform -translate-x-[35px]">
-                    <img src="location.png" alt="Pin Icon" className="h-16 mr-2 w-auto object-contain"/>
-                    <div className="text-xl leading-loose ml-12">
-                      <div className="font-semibold">Community House:</div>
+              <div className="absolute z-20 left-1/2 -translate-x-1/2 top-[-40px] rotate-[6deg] bg-black text-white px-12 py-24 w-[45%] h-[600px] max-w-5xl rounded-md shadow-lg">
+                <div className="text-center text-5xl font-bold -rotate-[6deg] tracking-wider">CONTACT</div>
+                <div className="flex justify-start mt-[4rem] -rotate-[6deg] ml-[12rem]">
+                  <div className="flex flex-row gap-10">
+                    <div className="flex flex-col items-end gap-16">
+                      <img src="email.png" alt="Email Icon" className="h-10 w-auto object-contain" />
+                      <img src="location.png" alt="Pin Icon" className="h-14 w-auto object-contain mr-1" />
+                    </div>
+                    <div className="flex flex-col gap-12 text-xl leading-loose">
+                      <div>info@housingassembly.org.za</div>
                       <div>
-                        41 Salt River Road,<br />
-                        Salt River,<br />
-                        Cape Town,<br />
-                        South Africa
+                        <div className="font-semibold">Community House:</div>
+                        <div>
+                          41 Salt River Road,<br />
+                          Salt River,<br />
+                          Cape Town,<br />
+                          South Africa
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -83,6 +96,7 @@ export default function Home() {
               </div>
             </div>
           </section>
+
           <div className="h-[650px] bg-white" />
         </div>
 
