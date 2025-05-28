@@ -33,16 +33,16 @@ export default function Home() {
       <div className="relative w-full overflow-hidden overflow-visible bg-white">
         <div className="min-h-screen">
           <div className="bg-white"/>
-          <section id="about" className="relative w-full">
-            <div className="absolute inset-0 skew-y-6 overflow-hidden z-0 h-[950px] w-full">
+          <section id="about" className="relative w-full scroll-mt-[-30px]">
+            <div className="absolute inset-0 skew-y-6 overflow-hidden z-0 h-[1000px] w-full">
               <img
                 src="protest-image.png"
                 alt="Protest"
-                className="w-full h-[950px] object-cover"
+                className="w-full h-[1000px] object-cover"
               />
             </div>
             
-            <div className="absolute inset-0 skew-y-6 bg-palette-red h-[950px] opacity-90 z-10"></div>
+            <div className="absolute inset-0 skew-y-6 bg-palette-red h-[1000px] opacity-90 z-10"></div>
             
             <div className="relative z-20 skew-y-6">
               <div className="-skew-y-6 max-w-7xl mx-auto px-6 py-40 text-white flex flex-col md:flex-row items-center justify-between">
@@ -69,16 +69,18 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section id="contact" className="scroll-mt-[7vw]">
+          <section id="contact" className="scroll-mt-[4vw]">
             <div className="relative">
-              <div className="absolute z-20 left-1/2 -translate-x-1/2 top-[-40px] rotate-[6deg] bg-black text-white px-12 py-24 w-[45%] h-[600px] max-w-5xl rounded-md shadow-lg">
+              <div className="relative z-20 bg-black text-white px-12 py-24 w-full max-w-4xl mx-auto rounded-md shadow-lg transform rotate-6">
                 <div className="text-center text-5xl font-bold -rotate-[6deg] tracking-wider">CONTACT</div>
-                <div className="flex justify-start mt-[4rem] -rotate-[6deg] ml-[12rem]">
+                  <div className="mt-16 transform -rotate-6 pl-[15rem]">
                   <div className="flex flex-row gap-10">
+                  
                     <div className="flex flex-col items-end gap-16">
                       <img src="email.png" alt="Email Icon" className="h-10 w-auto object-contain" />
                       <img src="location.png" alt="Pin Icon" className="h-14 w-auto object-contain mr-1" />
                     </div>
+
                     <div className="flex flex-col gap-12 text-xl leading-loose">
                       <div>info@housingassembly.org.za</div>
                       <div>
@@ -97,7 +99,7 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="h-[650px] bg-white" />
+          <div className="h-[100px] bg-white" />
         </div>
 
         {isViewAuditOpen && (
