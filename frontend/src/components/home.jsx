@@ -49,7 +49,7 @@ export default function Home() {
             
             <div className="absolute inset-0 skew-y-6 bg-palette-red h-[1400px] sm:h-[1000px] opacity-90 z-10"></div>
             <div className="relative z-20 skew-y-6">
-              <div className="-skew-y-6 max-w-7xl mx-auto px-6 py-40 text-white flex flex-col md:flex-row items-center justify-between">
+              <div className="-skew-y-6 max-w-7xl mx-auto px-6 py-20 text-white flex flex-col md:flex-row items-center justify-between">
                 <div className="w-full md:w-1/3 text-center font-bold text-[48px] mb-12 md:mt-0 tracking-wider">
                   ABOUT US
                 </div>
@@ -74,14 +74,14 @@ export default function Home() {
             </div>
           </section>
           <section id="contact" className="scroll-mt-[4vw]">
-            <div className="relative">
-              <div className="relative z-20 bg-black text-white px-12 py-24 w-full max-w-4xl mx-auto rounded-md shadow-lg transform rotate-6">
+            <div className="relative flex justify-center px-4 sm:px-12">
+              <div className="relative z-20 bg-black text-white py-24 w-full max-w-4xl rounded-md shadow-lg transform rotate-6">
                 <div className="text-center text-5xl font-bold -rotate-[6deg] tracking-wider">CONTACT</div>
-                  <div className="mt-16 transform -rotate-6 pl-[15rem]">
-                  <div className="flex flex-row gap-10">
-                  
-                    <div className="flex flex-col items-end gap-16">
-                      <img src="email.png" alt="Email Icon" className="h-10 w-auto object-contain" />
+
+                <div className="mt-16 transform -rotate-6 px-12 sm:px-12">
+                  <div className="flex flex-row gap-10 items-start sm:justify-center text-center sm:text-left">
+                    <div className="flex flex-col items-center sm:items-end gap-16">
+                      <img src="email.png" alt="Email Icon" className="h-10 min-w-[42px] object-contain" />
                       <img src="location.png" alt="Pin Icon" className="h-14 w-auto object-contain mr-1" />
                     </div>
 
@@ -102,7 +102,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-
           <div className="h-[100px] bg-white" />
         </div>
 
