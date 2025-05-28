@@ -15,10 +15,15 @@ export default function Home() {
 
   return ( 
     <div className="flex flex-col space-y-20 w-full pt-12">
-      <div className="flex flex-row mx-12 justify-center items-center">
+      <div className="flex flex-col xl:flex-row mx-12 justify-center items-center">
         <div className="w-1/2 text-center pl-20">
-          <img src="housing-landing.png" alt="Houses" className="object-contain w-[600px] h-auto inline-block -mt-13 ml-10"/>
+          <img 
+            src="housing-landing.png" 
+            alt="Houses" 
+            className="object-contain w-auto min-w-[300px] max-w-[600px] h-auto inline-block -mt-13 ml-10"
+          />
         </div>
+
         <div className="w-1/2 text-center">
           <div className="flex flex-col justify-center items-center">
             <div class="w-[498px] h-[504px] text-center justify-center text-zinc-700 text-8xl font-bold font-['Sumana'] leading-[155px]">DECENT HOUSING FOR ALL</div>

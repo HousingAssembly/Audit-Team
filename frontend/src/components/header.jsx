@@ -40,18 +40,18 @@ export default function Header() {
     <div className="w-full py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       <div className="flex flex-row items-center mr-7">
         <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
-        <div className="text-4xl mt-5 ml-1">
-          <span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span> 
-          <span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span>
+        <div className="text-4xl sm:mt-5 ml-1 flex flex-col sm:flex-row">
+          <div><span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span></div>
+          <div><span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span></div>
         </div>
-        <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold">
+        <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold hidden sm:flex">
           <Link to="/">Home</Link>
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
           <Link to="/projects">Active/Future Projects</Link>
         </div>
         <button
-          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-20 rounded-xl flex items-center justify-center leading-none"
+          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto sm:ml-20 rounded-xl flex items-center justify-center leading-none "
           onClick={() => setIsLoginOpen(true)}
           style={{ alignSelf: 'center', lineHeight: '1', paddingBottom: '5px'}}
         >
