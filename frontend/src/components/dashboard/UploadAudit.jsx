@@ -1,6 +1,12 @@
-const InputField = ({ label }) => (
+const Field = ({ label }) => (
   <div className="py-2 outline outline-[3px] outline-offset-[-1.50px] outline-zinc-700 text-zinc-700 text-start px-4 font-bold">
     {label}
+  </div>
+);
+
+const InputField = () => (
+  <div className="outline outline-[3px] outline-offset-[-1.50px] outline-zinc-700 text-zinc-700 text-start font-bold">
+  <input className="w-full h-full px-2" />
   </div>
 );
 
@@ -20,84 +26,84 @@ const UploadAudit = () => {
       </div>
 
       <Section title="AUDIT DETAILS">
-        <InputField label="Status" />
+        <Field label="Status" />
         <InputField label="Input" />
-        <InputField label="Registration number allocated on the database" />
+        <Field label="Registration number allocated on the database" />
         <InputField label="Input" />
-        <InputField label="Existing application date (YYYY/MM/DD)" />
+        <Field label="Existing application date (YYYY/MM/DD)" />
         <InputField label="Input" />
       </Section>
 
       <Section title="APPLICANT’S PERSONAL DETAILS">
-        <InputField label="Surname" />
+        <Field label="Surname" />
         <InputField label="Input" />
-        <InputField label="Last Name" />
+        <Field label="Last Name" />
         <InputField label="Input" />
-        <InputField label="Identity(ID) Number" />
+        <Field label="Identity(ID) Number" />
         <InputField label="Input" />
-        <InputField label="Date of Birth (YYYY/MM/DD)" />
+        <Field label="Date of Birth (YYYY/MM/DD)" />
         <InputField label="Input" />
       </Section>
 
       <Section title="SPOUSE OR PARTNER’S PERSONAL DETAILS">
-        <InputField label="Surname" />
+        <Field label="Surname" />
         <InputField label="Input" />
-        <InputField label="Last Name" />
+        <Field label="Last Name" />
         <InputField label="Input" />
-        <InputField label="Date of Birth (YYYY/MM/DD)" />
+        <Field label="Date of Birth (YYYY/MM/DD)" />
         <InputField label="Input" />
-        <InputField label="Date of Birth (YYYY/MM/DD)" />
+        <Field label="Date of Birth (YYYY/MM/DD)" />
         <InputField label="Input" />
       </Section>
 
       <Section title="RESIDENTIAL DETAILS">
-        <InputField label="Room/Flat Number or Structure Number" />
+        <Field label="Room/Flat Number or Structure Number" />
         <InputField label="Input" />
-        <InputField label="Street Number" />
+        <Field label="Street Number" />
         <InputField label="Input" />
-        <InputField label="Street Name" />
+        <Field label="Street Name" />
         <InputField label="Input" />
-        <InputField label="Suburb" />
+        <Field label="Suburb" />
         <InputField label="Input" />
-        <InputField label="1st Cellphone Number" />
+        <Field label="1st Cellphone Number" />
         <InputField label="Input" />
-        <InputField label="2nd Cellphone Number" />
+        <Field label="2nd Cellphone Number" />
         <InputField label="Input" />
-        <InputField label="Landline Telephone Number" />
+        <Field label="Landline Telephone Number" />
         <InputField label="Input" />
       </Section>
 
       <Section title="MARITAL STATUS">
-        <InputField label="Married in a community of property" />
+        <Field label="Married in a community of property" />
         <InputField label="Input" />
-        <InputField label="Married by antenuptial contract (out of community of property)" />
+        <Field label="Married by antenuptial contract (out of community of property)" />
         <InputField label="Input" />
-        <InputField label="Customary marriage or Muslim marriage" />
+        <Field label="Customary marriage or Muslim marriage" />
         <InputField label="Input" />
-        <InputField label="Common law partner" />
+        <Field label="Common law partner" />
         <InputField label="Input" />
-        <InputField label="Widowed" />
+        <Field label="Widowed" />
         <InputField label="Input" />
-        <InputField label="Date married (YYYY/MM/DD)" />
+        <Field label="Date married (YYYY/MM/DD)" />
         <InputField label="Input" />
-        <InputField label="Divorced with dependants" />
+        <Field label="Divorced with dependants" />
         <InputField label="Input" />
-        <InputField label="Separated or partner deserted with dependants" />
+        <Field label="Separated or partner deserted with dependants" />
         <InputField label="Input" />
-        <InputField label="Single without dependants" />
+        <Field label="Single without dependants" />
         <InputField label="Input" />
-        <InputField label="Engaged to be married" />
+        <Field label="Engaged to be married" />
         <InputField label="Input" />
-        <InputField label="Date divorced/split (YYYY/MM/DD)" />
+        <Field label="Date divorced/split (YYYY/MM/DD)" />
         <InputField label="Input" />
       </Section>
 
       <Section title="SPECIAL CIRCUMSTANCES">
-        <InputField label="Disability/Chronic Illness" />
+        <Field label="Disability/Chronic Illness" />
         <InputField label="Input" />
-        <InputField label="Old Age (60+)/War Veterans" />
+        <Field label="Old Age (60+)/War Veterans" />
         <InputField label="Input" />
-        <InputField label="Women/Child Headed Households" />
+        <Field label="Women/Child Headed Households" />
         <InputField label="Input" />
       </Section>
     </div>
