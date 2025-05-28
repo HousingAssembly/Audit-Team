@@ -53,7 +53,7 @@ const futureProjects = [
 
 export default function ProjectShowcasePage() {
   return (
-    <div className="flex flex-col w-full py-12 space-y-20">
+    <div className="flex flex-col w-full py-12 space-y-20 overflow-x-hidden">
       {/* Logo */}
       <div className="flex flex-col items-center space-y-2">
         <img src="Projectspictures/Logo.png" alt="Logo" className="h-45 w-auto" />

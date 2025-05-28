@@ -62,7 +62,7 @@ export default function SignUpForm({ closeModal, openLoginSignUp }) {
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
             <img src="/profile-red.png" alt="Profile Icon" className="ml-4 h-5 w-auto object-contain" />
             <input
-              className="px-4 py-2"
+              className="px-4 py-2 w-full outline-none rounded-full"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -72,7 +72,7 @@ export default function SignUpForm({ closeModal, openLoginSignUp }) {
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
             <img src="/lock.png" alt="Lock Icon" className="ml-4 h-5 w-auto object-contain" />
             <input
-              className="px-4 py-2"
+              className="px-4 py-2 w-full outline-none rounded-full"
               type="password"
               placeholder="Password"
               value={password}
@@ -83,7 +83,7 @@ export default function SignUpForm({ closeModal, openLoginSignUp }) {
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
             <img src="/lock.png" alt="Lock Icon" className="ml-4 h-5 w-auto object-contain" />
             <input
-              className="px-4 py-2"
+              className="px-4 py-2 w-full outline-none rounded-full"
               type="password"
               placeholder="Re-Enter Password"
               value={confirmPassword}

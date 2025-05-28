@@ -57,16 +57,16 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow">
             <img src="/profile-red.png" alt="Profile Icon" className="ml-4 h-5 w-auto object-contain" />
             <input
-              className="px-4 py-2"
+              className="px-4 py-2 w-full outline-none rounded-full"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
+              placeholder="Email"              
             />
           </div>
           <div className="flex flex-row space-x-2 items-center border border-red-800 rounded-full shadow">
             <img src="/lock.png" alt="Lock Icon" className="ml-4 h-5 w-auto object-contain" />
             <input
-              className="px-4 py-2"
+              className="px-4 py-2 w-full outline-none rounded-full"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
