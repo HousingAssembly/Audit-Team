@@ -19,7 +19,6 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
       alert("Your account is pending admin approval.");
     } else if (res.ok) {
       onLogin(data.token, data.user); // Pass both token and user
-      alert("Login successful!");
     } else {
       alert(data.error || "Something went wrong");
     }
