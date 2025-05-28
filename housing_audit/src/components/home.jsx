@@ -16,34 +16,40 @@ export default function Home() {
   return ( 
     <div className="flex flex-col space-y-24 w-full py-12">
       <div className="flex flex-row mx-12 justify-center items-center">
-        <div className="w-1/2 text-center">
-          <img src="house-landing.png" alt="Houses" className="object-contain h-128 w-auto"/>
+        <div className="w-1/2 text-center pl-20">
+          <img src="housing-landing.png" alt="Houses" className="object-contain w-[600px] h-auto inline-block -mt-12 ml-10"/>
         </div>
         <div className="w-1/2 text-center">
-          <div className="flex flex-col space-y-24 justify-center items-center">
-            <div className="text-zinc-700 text-[92px] font-bold max-w-[540px]">DECENT HOUSING FOR ALL</div>
-            <button className="flex bg-palette-red font-medium text-2xl text-white px-6 py-1 rounded-lg m-4 items-center justify-center" onClick={() => setIsViewAuditOpen(true)}><span className="font-bold mr-2">View Audit</span><span className="text-4xl mb-1">→</span></button>
+          <div className="flex flex-col justify-center items-center">
+            <div class="w-[498px] h-[504px] text-center justify-center text-zinc-700 text-8xl font-bold font-['Sumana'] leading-[155px]">DECENT HOUSING FOR ALL</div>
+            <button className="flex bg-palette-red font-medium text-[25px] text-white px-6 py-2 rounded-xl m-4 items-center justify-center" onClick={() => setIsViewAuditOpen(true)}>
+              <span className="font-bold mr-2 -mt-1">View Audit</span>
+              <img src="arrow-right.svg" alt="Arrow" className="w-6 h-6 ml-1 inline-block" />
+            </button>
           </div>        
         </div>
       </div>
       <div className="relative w-full overflow-x-hidden overflow-y-visible bg-white">
         <div className="min-h-screen overflow-x-hidden">
-          <div className="h-12 bg-white" />
+          <div className="h-12 bg-white"/>
           <section id="about" className="scroll-mt-[10vw]">
             <div className="skew-y-3 bg-palette-red">
-              <div className="-skew-y-3 max-w-7xl mx-auto px-6 py-24 text-white flex flex-col md:flex-row items-center justify-between">
+              <div className="-skew-y-3 max-w-7xl mx-auto px-6 py-40 text-white flex flex-col md:flex-row items-center justify-between">
                 <div className="w-full md:w-2/3 space-y-8 text-[20px] leading-[3rem]">
                   <p>
-                    HouseAudit is a digital platform developed by Housing Assembly, a grassroots movement
-                    serving over 20 communities across the Western Cape. Built to address long-standing
-                    challenges in housing distribution, HouseAudit brings transparency, accountability, and fairness
-                    to the audit process through simple, accessible technology.
+                    HouseAudit is a digital platform developed by Housing Assembly, a
+                    grassroots movement serving over 20 communities across the 
+                    Western Cape. Built to address long-standing challenges in housing 
+                    distribution, HouseAudit brings transparency, accountability, and 
+                    fairness to the audit process through simple, accessible technology.
                   </p>
                   <p>
-                    Our platform enables Housing Assembly to digitally capture, organize, and monitor audit data—
-                    allowing communities to see which housing projects are completed, which remain pending,
-                    and how long individuals have been waiting. By replacing fragmented paperwork with a
-                    centralized system, HouseAudit empowers communities to track progress and hold decision-makers accountable.
+                    Our platform enables Housing Assembly to digitally capture, organize, 
+                    and monitor audit data—allowing communities to see which housing 
+                    projects are completed, which remain pending, and how long 
+                    individuals have been waiting. By replacing fragmented paperwork 
+                    with a centralized system, HouseAudit empowers communities to 
+                    track progress and hold decision-makers accountable.
                   </p>
                 </div>
                 <div className="w-full md:w-1/3 text-center font-bold text-[48px] mt-12 md:mt-0">
