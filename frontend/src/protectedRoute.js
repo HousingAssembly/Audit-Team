@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
   const [checking, setChecking] = useState(true);
@@ -7,21 +8,34 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     try {
+      const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
-      if (user && user.role === "admin") {
-        setAuthorized(true);
+
+      if (!token || !user || user.role !== "admin") {
+        throw new Error("Invalid or missing credentials");
       }
+
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
+
+      if (decoded.exp < now) {
+        throw new Error("Token expired");
+      }
+
+      setAuthorized(true);
     } catch (err) {
-      console.error("Error parsing user from localStorage:", err);
+      console.warn("Access denied:", err.message);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     } finally {
-      setChecking(false); // Done checking regardless of outcome
+      setChecking(false);
     }
   }, []);
 
-  if (checking) return null; // Or a loading spinner if you want
+  if (checking) return null; // Or a loading spinner
 
   if (!authorized) {
-    alert("Access denied: Admins only.");
+;
     return <Navigate to="/" replace />;
   }
 
