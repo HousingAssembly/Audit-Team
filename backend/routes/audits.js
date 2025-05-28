@@ -1,7 +1,7 @@
 // routes/receipts.js
 const express = require("express");
 const router = express.Router();
-const Audit = require("./models/audit");
+const Audit = require("../models/audit");
 
 // POST /api/audits 
 router.post("/", async (req, res) => {
