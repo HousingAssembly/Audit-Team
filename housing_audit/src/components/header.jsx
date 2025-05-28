@@ -37,24 +37,25 @@ export default function Header() {
   };
 
   return ( 
-    <div className="w-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-      <div className="flex flex-row items-end mx-12">
-        <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto mb-2"/>
-        <div className="px-6 text-4xl font-medium mb-2">
-          <span className="text-palette-red font-chelsea">H</span><span className="font-chelsea">ouse</span> 
-          <span className="text-palette-red font-chelsea"> A</span><span className="font-chelsea">udit</span>
+    <div className="w-[1728px] py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+      <div className="flex flex-row items-center mr-7">
+        <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
+        <div className="text-4xl mt-5 ml-1">
+          <span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span> 
+          <span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span>
         </div>
-        <div className="flex flex-row items-center space-x-32 text-lg ml-auto text-zinc-500 font-bold mb-4">
+        <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold">
           <Link to="/">Home</Link>
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
           <Link to="/projects">Active/Future Projects</Link>
         </div>
         <button
-          className="bg-palette-red font-medium text-lg text-white px-6 py-1 ml-24 rounded-lg m-4"
+          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-20 rounded-2xl flex items-center justify-center leading-none"
           onClick={() => setIsLoginOpen(true)}
+          style={{ alignSelf: 'center' }}
         >
-          <span className="font-bold">Staff Login</span>
+          <span className="font-bold leading-none">Staff Login</span>
         </button>
 
         {isLoginOpen && (
