@@ -37,7 +37,7 @@ export default function Header() {
   };
 
   return ( 
-    <div className="w-[1728px] py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+    <div className="w-full py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       <div className="flex flex-row items-center mr-7">
         <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
         <div className="text-4xl mt-5 ml-1">
@@ -51,9 +51,9 @@ export default function Header() {
           <Link to="/projects">Active/Future Projects</Link>
         </div>
         <button
-          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-20 rounded-2xl flex items-center justify-center leading-none"
+          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-20 rounded-xl flex items-center justify-center leading-none"
           onClick={() => setIsLoginOpen(true)}
-          style={{ alignSelf: 'center' }}
+          style={{ alignSelf: 'center', lineHeight: '1', paddingBottom: '5px'}}
         >
           <span className="font-bold leading-none">Staff Login</span>
         </button>
