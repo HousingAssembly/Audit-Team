@@ -99,7 +99,7 @@ export default function SignUpForm({ closeModal, openLoginSignUp }) {
         <div className="text-center font-medium text-sm mt-12">
           ALREADY HAVE AN ACCOUNT?{" "}
           <button className="text-palette-red" onClick={handleOpenLogin}>
-            SIGN UP
+            LOGIN
           </button>
         </div>
       </div>
