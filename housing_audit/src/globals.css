@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sumana&display=swap');
 
 :root {
   --color-palette-red: #a40000;
