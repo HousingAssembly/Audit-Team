@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
@@ -24,24 +24,25 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        const now = Date.now() / 1000;
+    if (!token) {
+      return;
+    }
+    try {
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
 
-        if (decoded.exp < now) {
-          // Token expired
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          alert("Session expired. Please log in again.");
-          navigate("/account");
-        }
-      } catch (err) {
-        console.error("Invalid token:", err);
+      if (decoded.exp < now) {
+        // Token expired
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/account");
+        alert("Session expired. Please log in again.");
+        navigate("/");
       }
+    } catch (err) {
+      console.error("Invalid token:", err);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/");
     }
   }, [navigate]);
 
@@ -50,18 +51,24 @@ function App() {
       {!shouldHideFooterHeader && <Header />}
 
       <Routes>
+        {/* public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<ProjectShowcasePage />} />
-        <Route path="/dashboard" element={<Dashboard />}>
+
+        {/* admin only stuff */} 
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
           <Route path="view-audit" element={<ViewAudit />} />
-          <Route path="overview" element={<ProtectedRoute><Overview /></ProtectedRoute>} />
-          <Route path="upload-audit" element={<ProtectedRoute><UploadAudit /></ProtectedRoute>} />
-          <Route path="waitlist" element={<ProtectedRoute><Waitlist /></ProtectedRoute>} />
-          <Route path="statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
-          <Route path="export" element={<ProtectedRoute><ExportCSV /></ProtectedRoute>} />
-          <Route path="pending-approvals" element={<ProtectedRoute><PendingApprovals /></ProtectedRoute>} />
-          <Route path="account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+          <Route path="overview" element={<Overview />} />
+          <Route path="upload-audit" element={<UploadAudit />} />
+          <Route path="waitlist" element={<Waitlist />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="export" element={<ExportCSV />} />
+          <Route path="pending-approvals" element={<PendingApprovals />} />
+          <Route path="account" element={<Account />} />
         </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+
       </Routes>
 
       {!shouldHideFooterHeader && <Footer />}
