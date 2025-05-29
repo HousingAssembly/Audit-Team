@@ -17,7 +17,7 @@ export default function Home() {
     <>
 
       {isViewAuditOpen && (
-        <div className="absolute top-0 left-0 w-full min-h-screen z-50 flex justify-center py-12 overflow-y-auto">
+        <div className="absolute top-0 left-0 w-full min-h-screen z-50 flex justify-center py-4 overflow-y-auto">
           <ViewAudit openViewAudit={openViewAudit} closeModal={closeModal} />
         </div>
       )}

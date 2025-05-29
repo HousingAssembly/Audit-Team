@@ -19,9 +19,20 @@ export default function ViewAudit() {
       <div className="text-zinc-700/80 text-2xl font-bold py-2">
         Browse, search, and filter all housing audit records in the system.
       </div>
+      
       <div className="py-8">
         <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.25)]">
           <div className="flex flex-row space-x-4">
+            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-2/5 bg-white items-center px-2">
+              <img src="/search.png" alt="Search Icon" className="h-4 w-auto object-contain"/>
+              <input className="py-2 px-2 w-full outline-none" placeholder="Search by ID or name"/>
+            </div>
+            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-1/5 bg-white items-center px-2">
+              <input className="py-2 px-2 w-full outline-none" placeholder="Cape Town"/>
+            </div>
+            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-2/5 bg-white items-center px-2">
+              <input className="py-2 px-2 w-full outline-none" placeholder="Disabled/Chronic Illness"/>
+            </div>
           </div>
           <div className="flex flex-col rounded-lg bg-white border border-solid border-zinc-700/60">
             <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-700/60 w-full text-zinc-700/60 font-bold">

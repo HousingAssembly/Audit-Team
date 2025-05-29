@@ -1,5 +1,5 @@
 const Field = ({ label }) => (
-  <div className="py-2 outline outline-[3px] outline-offset-[-1.50px] outline-zinc-700 text-zinc-700 text-start px-4 font-bold text-xl">
+  <div className="py-2 outline outline-[3px] outline-offset-[-1.50px] outline-zinc-700 text-zinc-700 text-start px-4 bg-white font-bold text-xl">
     {label}
   </div>
 );
