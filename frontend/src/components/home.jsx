@@ -47,22 +47,22 @@ export default function Home() {
         <div className="relative w-full overflow-hidden overflow-visible bg-white">
           <div className="min-h-screen">
             <div className="bg-white"/>
-            <section id="about" className="relative w-full scroll-mt-[-30px]">
-              <div className="absolute inset-0 skew-y-6 overflow-hidden z-0 h-[1000px] w-full">
+            <section id="about" className="relative w-full scroll-mt-[-91px]">
+              <div className="absolute inset-0 skew-y-6 overflow-hidden z-0 h-[1150px] w-full">
                 <img
                   src="protest-image.png"
                   alt="Protest"
-                  className="w-full h-[1000px] object-cover"
+                  className="w-full h-[1150px] object-cover"
                 />
               </div>
               
-              <div className="absolute inset-0 skew-y-6 bg-palette-red h-[1400px] sm:h-[1000px] opacity-90 z-10"></div>
+              <div className="absolute inset-0 skew-y-6 bg-palette-red h-[1400px] sm:h-[1150px] opacity-90 z-10"></div>
               <div className="relative z-20 skew-y-6">
                 <div className="-skew-y-6 max-w-7xl mx-auto px-6 py-20 text-white flex flex-col md:flex-row items-center justify-between">
                   <div className="w-full md:w-1/3 text-center font-bold text-[48px] mb-12 md:mt-0 tracking-wider">
                     ABOUT US
                   </div>
-                  <div className="w-full md:w-2/3 space-y-8 text-[25px] leading-[3rem] ">
+                  <div className="w-full md:w-2/3 space-y-8 text-[28px] leading-[3rem] mt-[7rem] mb-[7rem]">
                     <p>
                       HouseAudit is a digital platform developed by Housing Assembly, a
                       grassroots movement serving over 20 communities across the 
@@ -82,9 +82,9 @@ export default function Home() {
                 </div>
               </div>
             </section>
-            <section id="contact" className="scroll-mt-[4vw]">
+            <section id="contact" className="scroll-mt-[7vw]">
               <div className="relative flex justify-center px-4 sm:px-12">
-                <div className="relative z-20 bg-black text-white py-24 w-full max-w-4xl rounded-md shadow-lg transform rotate-6">
+                <div className="relative z-20 bg-black text-white py-24 w-full max-w-4xl rounded-md shadow-lg transform rotate-6 mt-[-46px]">
                   <div className="text-center text-5xl font-bold -rotate-[6deg] tracking-wider">CONTACT</div>
 
                   <div className="mt-16 transform -rotate-6 px-12 sm:px-12">
