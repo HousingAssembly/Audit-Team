@@ -39,11 +39,15 @@ export default function Header() {
   return ( 
     <div className="w-full py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       <div className="flex flex-row items-center mr-7">
-        <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
-        <div className="text-4xl sm:mt-5 ml-1 flex flex-row">
-          <div><span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span></div>
-          <div><span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span></div>
-        </div>
+        <Link to="/">
+          <div className="flex flex-row items-center mr-7">
+            <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
+            <div className="text-4xl sm:mt-5 ml-1 flex flex-row">
+              <div><span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span></div>
+              <div><span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span></div>
+            </div>
+          </div>
+        </Link>
         <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold hidden sm:flex">
           <Link to="/">Home</Link>
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
