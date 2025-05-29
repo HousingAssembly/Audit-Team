@@ -7,7 +7,7 @@ export default function ViewAudit({ closeModal, openViewAudit }) {
 
   return (
     <form>
-      <div className="bg-white rounded-3xl flex flex-col items-center py-4 px-6 mt-6 overflow-y-auto max-w-[720px] relative">
+      <div className="bg-white rounded-3xl flex flex-col items-center py-4 px-6 mt-6 overflow-y-auto max-w-[720px] relative shadow-[4px_4px_4px_4px_rgba(0,0,0,0.25)]">
         <div className="absolute top-4 right-4">
           <button onClick={handleClose}>
             <img src="x.png" alt="X" className="object-contain h-6 w-auto"/>

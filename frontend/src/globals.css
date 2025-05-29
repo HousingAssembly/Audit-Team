@@ -8,6 +8,7 @@
   --color-palette-red: #a40000;
   --color-palette-black: #18181d;
   --color-palette-text: #5f5b5a;
+  --color-palette-dashboard: #efefef;
 }
 
 .bg-palette-red {
@@ -30,6 +31,9 @@
   font-family: 'Chelsea_Market', cursive;
 }
 
+.bg-palette-dashboard { 
+  background-color: var(--color-palette-dashboard)
+}
 body {
   margin: 0;
   font-family: 'Sumana', serif;
