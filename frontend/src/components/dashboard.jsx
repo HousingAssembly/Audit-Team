@@ -14,10 +14,10 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen flex flex-col font-['Sumana']">
       <div className="w-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-        <div className="flex flex-row items-center mx-12">
-          <img src="/logo.png" alt="Logo" className="object-contain h-16 w-auto"/>
-          <div className="px-6 text-4xl font-medium"><span className="text-palette-red">H</span>ouse <span className="text-palette-red">A</span>udit</div>
-          <div className="ml-auto">
+        <div className="flex flex-row items-center">
+          <img src="/logo.png" alt="Logo" className="object-contain h-16 w-1/4 bg-white shadow-[0px_0px_10px_0px_rgba(0,0,0,0.50)]"/>
+          <div className="text-4xl text-zinc-700 px-6 font-bold">Dashboard</div>
+          <div className="ml-auto px-6">
             <Link to="/"><img src="/profile.png" alt="Profile Icon" className="object-contain h-16 w-auto"/></Link>
           </div>
         </div> 
