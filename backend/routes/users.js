@@ -10,14 +10,10 @@ router.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // does user exist
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ error: "User already exists" });
 
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // create and save new user (default role is pending)
     const newUser = new User({ email, password: hashedPassword, role: "pending" }); 
     await newUser.save();
 
@@ -31,21 +27,17 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // validate input
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
-    //  login only if user is approved
     if (user.role !== "admin") {
       return res.status(403).json({ error: "Account not approved yet." });
     }
 
-    // password match
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    // hashing token
+    //hashing token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     const { password: _, ...userData } = user.toObject();
@@ -70,5 +62,32 @@ router.put("/approve/:id", requireAdmin, async (req, res) => {
     res.status(500).json({ error: "Failed to approve user" });
   }
 });
+
+router.delete("/deny/:id", requireAdmin, async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) return res.status(404).json({ error: "User not found" });
+    res.json({ message: "User denied and deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete user" });
+  }
+});
+
+router.get("/pending", requireAdmin, async (req, res) => {
+  try {
+    const all = await User.find();
+    console.log("All users in DB:");
+    all.forEach(u => console.log(`- ${u.email} | role: ${u.role}`));
+
+    const pendingUsers = await User.find({ role: "pending" });
+    console.log("Pending users:", pendingUsers.length);
+
+    res.json(pendingUsers);
+  } catch (err) {
+    console.error("Failed to fetch pending users:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 
 module.exports = router;
