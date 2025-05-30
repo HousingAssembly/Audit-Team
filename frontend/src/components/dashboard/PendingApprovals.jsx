@@ -87,9 +87,9 @@ export default function PendingApprovals() {
 
       <div className="mt-6 space-y-4">
         {loading ? (
-          <p className="text-zinc-600">Loading...</p>
+          <p className="text-zinc-700/75 font-bold">Loading...</p>
         ) : pendingUsers.length === 0 ? (
-          <p className="text-zinc-600">No pending users to review.</p>
+          <p className="text-zinc-700/75 font-bold">No pending users to review.</p>
         ) : (
           pendingUsers.map((user) => (
             <div

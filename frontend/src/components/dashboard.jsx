@@ -50,12 +50,6 @@ export default function Dashboard() {
                   <div>Waiting List</div>
                 </div>
               </Link>
-              <Link to="statistics">
-                <div className="flex flex-row space-x-4 flex-shrink-0 cursor-pointer hover:opacity-80 transition">
-                  <img src="/statistics.png" alt="Statistics Icon" className="h-6 w-auto object-contain"/>
-                  <div>Statistics</div>
-                </div>
-              </Link>
               <Link to="export">
                 <div className="flex flex-row space-x-4 flex-shrink-0 cursor-pointer hover:opacity-80 transition">
                   <img src="/export-csv.png" alt="Export CSV Icon" className="h-6 w-auto object-contain"/>
@@ -66,6 +60,12 @@ export default function Dashboard() {
                 <div className="flex flex-row space-x-4 flex-shrink-0 cursor-pointer hover:opacity-80 transition">
                   <img src="/pending-approval.png" alt="Pending Approvals Icon" className="h-6 w-auto object-contain"/>
                   <div>Pending Approvals</div>
+                </div>
+              </Link>
+              <Link to="housing-projects">
+                <div className="flex flex-row space-x-4 flex-shrink-0 cursor-pointer hover:opacity-80 transition">
+                  <img src="/housing-projects.png" alt="Housing Projects Icon" className="h-6 w-auto object-contain"/>
+                  <div>Housing Projects</div>
                 </div>
               </Link>
             </div>

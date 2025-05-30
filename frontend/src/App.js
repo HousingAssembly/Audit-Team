@@ -11,11 +11,12 @@ import Overview from "./components/dashboard/Overview";
 import UploadAudit from "./components/dashboard/UploadAudit";
 import ViewAudit from "./components/dashboard/ViewAudit";
 import Waitlist from "./components/dashboard/Waitlist";
-import Statistics from "./components/dashboard/Statistics";
 import ExportCSV from "./components/dashboard/ExportCSV";
 import PendingApprovals from "./components/dashboard/PendingApprovals";
+import HousingProjects from "./components/dashboard/HousingProjects";
 import Account from "./components/dashboard/Account";
 import ProjectShowcasePage from "./Projects";
+
 
 function App() {
   const location = useLocation();
@@ -61,9 +62,9 @@ function App() {
           <Route path="overview" element={<Overview />} />
           <Route path="upload-audit" element={<UploadAudit />} />
           <Route path="waitlist" element={<Waitlist />} />
-          <Route path="statistics" element={<Statistics />} />
           <Route path="export" element={<ExportCSV />} />
           <Route path="pending-approvals" element={<PendingApprovals />} />
+          <Route path="housing-projects" element={<HousingProjects />} />
           <Route path="account" element={<Account />} />
         </Route>
 
