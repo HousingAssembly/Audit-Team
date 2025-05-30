@@ -31,8 +31,8 @@ export default function ExportCSV() {
           <div className="flex justify-between w-full">
               <button className="bg-white border border-zinc-700/50 px-8 py-3 text-zinc-700 font-bold rounded-lg">Clear</button>
               <button className="flex flex-row space-x-4 px-5 py-3 bg-red-800 ml-auto text-white font-bold rounded-lg">
-                <img src="/save-changes.png" alt="Save Changes Icon" className="h-6 w-auto object-contain"/>
-                <div>Save Changes</div>
+                <img src="/export-csv.png" alt="Export CSV Icon" className="h-6 w-auto object-contain"/>
+                <div>Export Data</div>
               </button>
           </div>
         </div>
