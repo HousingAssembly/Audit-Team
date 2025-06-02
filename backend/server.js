@@ -22,6 +22,7 @@ const Audit = require("./models/audit");
 // routes
 const auditRoutes = require("./routes/audits");
 const userRoutes = require("./routes/users");
+const statsRoutes = require("./routes/stats");
 
 // mount routes AFTER app is defined
 app.use("/api/audits", auditRoutes);
@@ -49,7 +50,11 @@ mongoose.connect(MONGO_URI, {
     console.error("MongoDB connection error:", err);
   });
 
-// test route
+// routes 2 database
+app.use("/api/audits", auditRoutes);
+app.use("/api/users", userRoutes);  
+app.use("/api/stats", statsRoutes);  
+
 app.get("/", (req, res) => {
   res.send("Housing Audit Backend is running!");
 });
