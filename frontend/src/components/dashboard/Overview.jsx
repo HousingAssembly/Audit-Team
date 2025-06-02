@@ -135,13 +135,13 @@ const Overview = () => {
           </div>
           <div className="flex flex-col justify-center items-center">
             <ProgressCircle 
-              percent={(maleCount / totalUsers) * 100}  
+              percent={ totalUsers > 0 ? (maleCount / totalUsers) * 100 : 0 }  
               color="black"
             />
             <div className="text-zinc-700 text-2xl py-4 font-bold">Male</div>
             <div className="text-zinc-700/75 text-xl font-bold mb-8">{maleCount} people</div>
             <ProgressCircle 
-              percent={(femaleCount / totalUsers) * 100} 
+              percent={ totalUsers > 0 ? (femaleCount / totalUsers) * 100 : 0 } 
               color="#ef4444"
             />
             <div className="text-zinc-700 text-2xl py-2 font-bold">Female</div>
@@ -158,7 +158,7 @@ const Overview = () => {
               key={ageGroup}
               title={`${ageGroup} years`}
               people={`${ageGroups[ageGroup]} people`}
-              percent={`${(ageGroups[ageGroup] / totalUsers) * 100}%`} 
+              percent={`${(ageGroups[ageGroup] && totalUsers > 0) ? ((ageGroups[ageGroup] / totalUsers) * 100) : 0}%`} 
             />
           ))}
         </div>
@@ -174,7 +174,7 @@ const Overview = () => {
             key={waitingTimeRange}
             title={waitingTimeRange}
             people={`${waitingTimes[waitingTimeRange]} people`}  
-            percent={`${(waitingTimes[waitingTimeRange] / totalUsers) * 100}%`}
+            percent={`${ (waitingTimes[waitingTimeRange] && totalUsers > 0) ? (waitingTimes[waitingTimeRange] / totalUsers) * 100 : 0}%`}
           />
         ))}
       </div>
