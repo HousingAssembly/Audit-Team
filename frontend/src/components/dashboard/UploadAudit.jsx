@@ -101,18 +101,31 @@ const UploadAudit = () => {
     });
   };
 
-  const toggleCheckbox = (path) => {
-    setFormData((prev) => {
-      const copy = structuredClone(prev);
+const toggleCheckbox = (path) => {
+  setFormData((prev) => {
+    const copy = structuredClone(prev);
+    // Only apply singleselect for marital_status 
+    if (path.startsWith("marital_status.") && !["date_married", "date_divorced"].includes(path.split(".")[1])) {
+      const keyToEnable = path.split(".")[1];
+      const updatedStatus = Object.fromEntries(
+        Object.entries(copy.marital_status).map(([key, val]) => {
+          if (key === "date_married" || key === "date_divorced") return [key, val]; 
+          return [key, key === keyToEnable]; 
+        })
+      );
+      copy.marital_status = { ...updatedStatus };
+    } else {
       const keys = path.split(".");
       let current = copy;
       for (let i = 0; i < keys.length - 1; i++) {
         current = current[keys[i]];
       }
       current[keys.at(-1)] = !current[keys.at(-1)];
-      return copy;
-    });
-  };
+    }
+
+    return copy;
+  });
+};
 
   const handleSubmitAudit = async () => {
     const token = localStorage.getItem("token");
