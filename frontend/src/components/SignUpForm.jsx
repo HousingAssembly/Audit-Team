@@ -82,7 +82,7 @@ const handleSubmit = async (e) => {
             <span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span>
           </div>
           <div className="flex ml-24 mb-auto">
-            <button onClick={handleClose}>
+            <button type="button" onClick={handleClose}>
               <img src="x.png" alt="X" className="object-contain h-6 w-auto" />
             </button>
           </div>

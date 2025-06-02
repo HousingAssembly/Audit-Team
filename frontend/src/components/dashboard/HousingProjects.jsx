@@ -17,36 +17,24 @@ const Users = ({ project, isLast, onEdit, onDelete }) => {
 
   return (
     <div className={`flex flex-row space-x-4 py-4 px-6 ${isLast ? '' : 'border-b border-zinc-700/60'} text-zinc-700 font-bold items-center`}>
-      <div className="w-1/6 whitespace-nowrap overflow-hidden truncate">{project.name}</div>
-      <div className="w-1/6 whitespace-nowrap overflow-hidden truncate">{project.area}</div>
-      <div className="w-1/6 whitespace-nowrap overflow-hidden truncate">{project.year}</div>
-      <div className="w-1/6 whitespace-nowrap overflow-hidden truncate">{project.municipality}</div>
-      <div className="w-1/6 whitespace-nowrap overflow-hidden truncate">{project.status}</div>
+      <div className="w-1/6 truncate">{project.name}</div>
+      <div className="w-1/6 truncate">{project.area}</div>
+      <div className="w-1/6 truncate">{project.year}</div>
+      <div className="w-1/6 truncate">{project.municipality}</div>
+      <div className="w-1/6 truncate">{project.status}</div>
       <div className="w-1/6 relative flex justify-center items-center" ref={dropdownRef}>
         <button
           onClick={() => setOpen(!open)}
-          className="w-10 h-10 rounded-full bg-zinc-300 flex items-center justify-center text-black font-bold mr-auto"
+          className="w-10 h-10 rounded-full bg-zinc-300 flex items-center justify-center text-black font-bold"
         >
           ⋮
         </button>
         {open && (
           <div className="absolute top-full mt-2 bg-white border border-gray-300 rounded shadow-lg z-50 w-32">
-            <button
-              className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => {
-                setOpen(false);
-                onEdit(project);
-              }}
-            >
+            <button className="block w-full px-4 py-2 text-left hover:bg-gray-100" onClick={() => { setOpen(false); onEdit(project); }}>
               Edit
             </button>
-            <button
-              className="block w-full px-4 py-2 text-left text-red-700 hover:bg-gray-100"
-              onClick={() => {
-                setOpen(false);
-                onDelete(project._id);
-              }}
-            >
+            <button className="block w-full px-4 py-2 text-left text-red-700 hover:bg-gray-100" onClick={() => { setOpen(false); onDelete(project._id); }}>
               Delete
             </button>
           </div>
@@ -58,14 +46,21 @@ const Users = ({ project, isLast, onEdit, onDelete }) => {
 
 export default function HousingProjects() {
   const [projects, setProjects] = useState([]);
-  const [formData, setFormData] = useState({ name: '', area: '', year: '', municipality: '', status: '' });
+  const [formData, setFormData] = useState({ name: '', area: '', year: '', municipality: '', status: 'Upcoming' });
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
-  // States for search inputs
+  const modalRef = useRef();
+  const submitButtonRef = useRef();
+
   const [searchName, setSearchName] = useState('');
   const [searchArea, setSearchArea] = useState('');
   const [searchMunicipality, setSearchMunicipality] = useState('');
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   const fetchProjects = async () => {
     try {
@@ -76,14 +71,10 @@ export default function HousingProjects() {
     }
   };
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
   const handleAddProject = async () => {
     try {
       await axios.post('/api/projects', formData);
-      setFormData({ name: '', area: '', year: '', municipality: '', status: '' });
+      resetForm();
       fetchProjects();
     } catch (err) {
       console.error('Failed to add project:', err);
@@ -93,9 +84,7 @@ export default function HousingProjects() {
   const handleUpdateProject = async () => {
     try {
       await axios.put(`/api/projects/${editingId}`, formData);
-      setFormData({ name: '', area: '', year: '', municipality: '', status: '' });
-      setEditingId(null);
-      setIsEditing(false);
+      resetForm();
       fetchProjects();
     } catch (err) {
       console.error('Failed to update project:', err);
@@ -112,58 +101,60 @@ export default function HousingProjects() {
   };
 
   const handleEditProject = (project) => {
-    setFormData({
-      name: project.name,
-      area: project.area,
-      year: project.year,
-      municipality: project.municipality,
-      status: project.status,
-    });
+    setFormData(project);
     setEditingId(project._id);
     setIsEditing(true);
+    setShowModal(true);
   };
 
-  // ✅ Filter projects based on search fields
-  const filteredProjects = projects.filter((project) => {
-    return (
-      project.name.toLowerCase().includes(searchName.toLowerCase()) &&
-      project.area.toLowerCase().includes(searchArea.toLowerCase()) &&
-      project.municipality.toLowerCase().includes(searchMunicipality.toLowerCase())
-    );
-  });
+  const resetForm = () => {
+    setFormData({ name: '', area: '', year: '', municipality: '', status: 'Upcoming' });
+    setIsEditing(false);
+    setEditingId(null);
+  };
+
+  useEffect(() => {
+    const handleEscOrEnter = (e) => {
+      if (e.key === 'Escape') {
+        setShowModal(false);
+        resetForm();
+      } else if (e.key === 'Enter' && showModal && modalRef.current && modalRef.current.contains(document.activeElement)) {
+        submitButtonRef.current?.click();
+      }
+    };
+    window.addEventListener('keydown', handleEscOrEnter);
+    return () => window.removeEventListener('keydown', handleEscOrEnter);
+  }, [showModal]);
+
+  const filteredProjects = projects.filter((p) =>
+    p.name.toLowerCase().includes(searchName.toLowerCase()) &&
+    p.area.toLowerCase().includes(searchArea.toLowerCase()) &&
+    p.municipality.toLowerCase().includes(searchMunicipality.toLowerCase())
+  );
 
   return (
     <div className="px-6 py-8 flex flex-col">
-      <div className="text-4xl text-zinc-700 font-bold py-2">Housing Projects</div>
-      <div className="text-zinc-700/80 text-2xl font-bold py-2">Add, remove, or edit housing project details.</div>
+      <div className="flex justify-between items-center">
+        <div className="text-4xl text-zinc-700 font-bold">Housing Projects</div>
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-red-800 text-white font-bold py-2 px-4 rounded-lg"
+        >
+          Add New Project
+        </button>
+      </div>
+      <div className="text-zinc-700/80 text-lg font-semibold mt-1 mb-4">Add, remove, or edit housing project details.</div>
 
-      <div className="py-8">
-        <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.25)]">
-          {/* Search input section */}
+      <div className="py-6">
+        <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)]">
           <div className="flex flex-row space-x-4">
-            <input
-              className="py-2 px-2 w-2/5 border rounded outline-none"
-              placeholder="Search by project name"
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-            />
-            <input
-              className="py-2 px-2 w-1/5 border rounded outline-none"
-              placeholder="Area"
-              value={searchArea}
-              onChange={(e) => setSearchArea(e.target.value)}
-            />
-            <input
-              className="py-2 px-2 w-2/5 border rounded outline-none"
-              placeholder="Municipality"
-              value={searchMunicipality}
-              onChange={(e) => setSearchMunicipality(e.target.value)}
-            />
+            <input className="py-2 px-2 w-2/5 border rounded outline-none" placeholder="Search by project name" value={searchName} onChange={(e) => setSearchName(e.target.value)} />
+            <input className="py-2 px-2 w-1/5 border rounded outline-none" placeholder="Area" value={searchArea} onChange={(e) => setSearchArea(e.target.value)} />
+            <input className="py-2 px-2 w-2/5 border rounded outline-none" placeholder="Municipality" value={searchMunicipality} onChange={(e) => setSearchMunicipality(e.target.value)} />
           </div>
 
-          {/* Table header */}
-          <div className="flex flex-col rounded-lg bg-white border border-solid border-zinc-700/60">
-            <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-700/60 w-full text-zinc-700/60 font-bold">
+          <div className="flex flex-col rounded-lg bg-white border border-zinc-700/60 mt-4">
+            <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-700/60 text-zinc-700/60 font-bold">
               <div className="w-1/6">Project Name</div>
               <div className="w-1/6">Area</div>
               <div className="w-1/6">Cutoff Year</div>
@@ -171,74 +162,78 @@ export default function HousingProjects() {
               <div className="w-1/6">Status</div>
               <div className="w-1/6">Actions</div>
             </div>
-
-            {/* Project rows */}
-            {filteredProjects.map((p, idx) => (
-              <Users
-                key={p._id}
-                project={p}
-                isLast={idx === filteredProjects.length - 1}
-                onEdit={handleEditProject}
-                onDelete={handleDeleteProject}
-              />
+            {filteredProjects.map((p, i) => (
+              <Users key={p._id} project={p} isLast={i === filteredProjects.length - 1} onEdit={handleEditProject} onDelete={handleDeleteProject} />
             ))}
-          </div>
-
-          {/* Pagination + count */}
-          <div className="flex flex-row space-x-4">
-            <div className="mr-auto text-zinc-700/60 font-bold">Showing {filteredProjects.length} housing projects</div>
-            <div className="flex flex-row border px-4 py-2 rounded text-zinc-700/60">Previous</div>
-            <div className="flex flex-row border px-5 py-2 rounded text-black">1</div>
-            <div className="flex flex-row border px-4 py-2 rounded text-zinc-700/60">Next</div>
           </div>
         </div>
       </div>
 
-      {/* Project input form */}
-      <div className="flex justify-center mt-8">
-        <div className="flex flex-col items-center space-y-4 w-1/2">
-          <div className="flex flex-col py-4 bg-white rounded-lg border w-full items-end">
-            <div className="mr-auto px-8 py-4 text-zinc-700 font-bold text-4xl">{isEditing ? 'Edit Project' : 'Add New Housing Project'}</div>
-            <div className="mr-auto px-8 text-zinc-700/75 font-bold text-xl">
-              {isEditing ? 'Modify the fields and save changes.' : 'Enter the details for the new housing project.'}
+      {showModal && (
+        <div
+          className="fixed inset-0 bg-black/30 z-50 flex justify-center items-center"
+          onClick={(e) => {
+            if (modalRef.current && !modalRef.current.contains(e.target)) {
+              setShowModal(false);
+              resetForm();
+            }
+          }}
+        >
+          <div
+            ref={modalRef}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl shadow-lg w-[600px] p-6"
+          >
+            <div className="text-2xl font-bold text-zinc-700 mb-2">
+              {isEditing ? "Edit Project" : "Add New Housing Project"}
+            </div>
+            <div className="text-zinc-600 font-medium mb-4">
+              {isEditing
+                ? "Modify the fields and save changes."
+                : "Enter the details for the new housing project."}
             </div>
 
-            {/* Dynamic input fields */}
-            {["name", "area", "year", "municipality", "status"].map((field) => (
-              <div key={field} className="flex flex-row p-4 w-full items-center">
-                <div className="text-zinc-700 font-bold px-4 text-lg w-1/3">
-                  {field.charAt(0).toUpperCase() + field.slice(1)}
-                </div>
+            {["name", "area", "year", "municipality"].map((field) => (
+              <div key={field} className="flex flex-col mb-3">
+                <label className="text-zinc-700 font-semibold capitalize">{field}</label>
                 <input
-                  className="text-zinc-700/75 border border-zinc-700/50 outline-none rounded-md px-2 py-1 w-2/3"
+                  className="border border-zinc-400 px-3 py-2 rounded mt-1"
                   value={formData[field]}
                   onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
                 />
               </div>
             ))}
-          </div>
 
-          {/* Form buttons */}
-          <div className="flex justify-between w-full">
-            <button
-              className="bg-white border border-zinc-700/50 px-8 py-3 text-zinc-700 font-bold rounded-lg"
-              onClick={() => {
-                setFormData({ name: '', area: '', year: '', municipality: '', status: '' });
-                setIsEditing(false);
-                setEditingId(null);
-              }}
-            >
-              Clear
-            </button>
-            <button
-              className="px-5 py-3 text-white font-bold rounded-lg bg-red-800"
-              onClick={isEditing ? handleUpdateProject : handleAddProject}
-            >
-              {isEditing ? 'Save Changes' : 'Add Project'}
-            </button>
+            <div className="flex flex-col mb-4">
+              <label className="text-zinc-700 font-semibold">Status</label>
+              <select
+                className="border border-zinc-400 px-3 py-2 rounded mt-1"
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              >
+                <option value="Ongoing">Ongoing</option>
+                <option value="Upcoming">Upcoming</option>
+              </select>
+            </div>
+
+            <div className="flex justify-between mt-6">
+              <button className="bg-gray-200 text-zinc-800 px-4 py-2 rounded" onClick={() => { resetForm(); setShowModal(false); }}>
+                Cancel
+              </button>
+              <button
+                ref={submitButtonRef}
+                className="bg-red-800 text-white px-4 py-2 rounded font-bold"
+                onClick={() => {
+                  isEditing ? handleUpdateProject() : handleAddProject();
+                  setShowModal(false);
+                }}
+              >
+                {isEditing ? "Save Changes" : "Add Project"}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

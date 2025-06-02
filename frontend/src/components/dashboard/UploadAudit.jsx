@@ -365,6 +365,7 @@ const toggleCheckbox = (path) => {
         <button onClick={handleSubmitAudit} className="px-10 py-3 text-xl text-white font-bold rounded-lg bg-red-800">Submit Audit</button>
       </div>
     </div>
+    
   );
 };
 
