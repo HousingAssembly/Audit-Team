@@ -61,7 +61,7 @@ function LoginForm({ onLogin, closeModal, openLoginSignUp }) {
               className="px-4 py-2 w-full outline-none rounded-full"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Username"              
+              placeholder="Email"              
             />
           </div>
           <div className="flex flex-row space-x-2 items-center border-[1.5px] border-red-800 rounded-full  shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]">

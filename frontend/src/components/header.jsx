@@ -52,7 +52,7 @@ export default function Header() {
           <Link to="/">Home</Link>
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
-          <Link to="/projects">Active/Future Projects</Link>
+          <Link to="/projects">Housing Projects</Link>
         </div>
         <button
           className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto sm:ml-20 rounded-xl flex items-center justify-center leading-none hidden sm:flex"
