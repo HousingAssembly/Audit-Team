@@ -62,12 +62,13 @@ router.put("/approve/:id", requireAdmin, async (req, res) => {
     res.status(500).json({ error: "Failed to approve user" });
   }
 });
-
 router.delete("/deny/:id", requireAdmin, async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
-    if (!deletedUser) return res.status(404).json({ error: "User not found" });
-    res.json({ message: "User denied and deleted" });
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ message: "User rejected and deleted", user: deletedUser });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete user" });
   }
@@ -89,5 +90,7 @@ router.get("/pending", requireAdmin, async (req, res) => {
   }
 });
 
-
 module.exports = router;
+
+
+

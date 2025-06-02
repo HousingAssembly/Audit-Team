@@ -6,29 +6,35 @@ const MONGO_URI = process.env.MONGO_URI;
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const projectRoutes = require('./routes/projects');
+
+// create app FIRST
+const app = express();
+
+// middleware
+app.use(cors());
+app.use(express.json());
 
 // models
 const User = require("./models/user");
-const Audit = require("./models/audit")
+const Audit = require("./models/audit");
 
 // routes
 const auditRoutes = require("./routes/audits");
 const userRoutes = require("./routes/users");
 const statsRoutes = require("./routes/stats");
 
-// connection using express and mongoose and cors and a bunch of stuff 
-const app = express();
-app.use(cors());
-app.use(express.json());
+// mount routes AFTER app is defined
+app.use("/api/audits", auditRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/projects", projectRoutes); 
 
-mongoose.connect(
-  MONGO_URI,
-  {
-    dbName: "housing_audit", 
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-)
+// connect to MongoDB
+mongoose.connect(MONGO_URI, {
+  dbName: "housing_audit",
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(async () => {
     console.log("Connected to MongoDB");
 
@@ -58,3 +64,8 @@ const PORT = 5001;
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
+
+
+
+
+// Front end, Back End. Completed, Ongoing

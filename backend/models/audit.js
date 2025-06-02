@@ -27,11 +27,24 @@ const AuditSchema = new mongoose.Schema({
     landline: String
   },
   marital_status: {
-    status: String,
+    married_in_community: Boolean,
+    married_out_of_community: Boolean,
+    customary_marriage: Boolean,
+    common_law_partner: Boolean,
+    widowed: Boolean,
+    divorced_with_dependants: Boolean,
+    separated_with_dependants: Boolean,
+    single_without_dependants: Boolean,
+    engaged_to_be_married: Boolean,
     date_married: String,
     date_divorced: String
   },
-  ocr_raw_text: String,
+  special_circumstances: {
+    disability: Boolean,
+    senior_citizen: Boolean,
+    war_veteran: Boolean,
+    pregnant: Boolean
+  },
   timestamp_uploaded: { type: Date, default: Date.now }
 });
 

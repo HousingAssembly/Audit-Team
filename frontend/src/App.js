@@ -15,7 +15,7 @@ import ExportCSV from "./components/dashboard/ExportCSV";
 import PendingApprovals from "./components/dashboard/PendingApprovals";
 import HousingProjects from "./components/dashboard/HousingProjects";
 import Account from "./components/dashboard/Account";
-import ProjectShowcasePage from "./Projects";
+import ProjectShowcasePage from "./components/Projects";
 
 
 function App() {
