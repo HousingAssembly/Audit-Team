@@ -100,7 +100,7 @@ const handleSubmit = async (e) => {
               <img src="/profile-red.png" alt="Profile Icon" className="ml-4 h-5 w-auto object-contain" />
               <input
                 className="px-4 py-2 w-full outline-none rounded-full"
-                placeholder="Username"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
