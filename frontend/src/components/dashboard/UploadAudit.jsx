@@ -7,7 +7,7 @@ const Field = ({ label }) => (
 );
 
 const CheckboxField = ({ checked, onChange, disabled }) => (
-  <div className="col-span-1 flex justify-center items-center border border-zinc-700 bg-white">
+  <div className="col-span-1 flex justify-center outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 items-center border border-zinc-700 bg-white">
     <input
       type="checkbox"
       checked={checked}
@@ -19,9 +19,9 @@ const CheckboxField = ({ checked, onChange, disabled }) => (
 );
 
 const InputField = ({ value, onChange, disabled }) => (
-  <div className="col-span-1 border border-zinc-700 bg-white">
+  <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white">
     <input
-      className="w-full h-full px-2 text-lg"
+      className="w-full px-2 py-2 outline-none"
       value={value}
       onChange={onChange}
       disabled={disabled}
