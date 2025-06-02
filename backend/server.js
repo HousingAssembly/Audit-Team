@@ -13,7 +13,8 @@ const Audit = require("./models/audit")
 
 // routes
 const auditRoutes = require("./routes/audits");
-const userRoutes = require("./routes/users"); 
+const userRoutes = require("./routes/users");
+const statsRoutes = require("./routes/stats");
 
 // connection using express and mongoose and cors and a bunch of stuff 
 const app = express();
@@ -46,6 +47,7 @@ mongoose.connect(
 // routes 2 database
 app.use("/api/audits", auditRoutes);
 app.use("/api/users", userRoutes);  
+app.use("/api/stats", statsRoutes);  
 
 app.get("/", (req, res) => {
   res.send("Housing Audit Backend is running!");

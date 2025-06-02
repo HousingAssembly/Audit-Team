@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { fetchStats } from "../../statsServices";
+
 const Stats = ({title, stat, growth}) => { 
   return (
     <div className="flex flex-col px-8 py-6 bg-white rounded-lg w-full">
@@ -52,31 +55,61 @@ const ProgressCircle = ({ percent, color }) => {
   );
 };
 
-export default function Overview() {
+const Overview = () => {
+  const [statsData, setStatsData] = useState({
+    totalUsers: 0,
+    maleCount: 0,
+    femaleCount: 0,
+    ageGroups: { "18-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
+    waitingTimes: { "0-5": 0, "5-10": 0, "10+": 0 },
+    regions: {
+      "Western Cape": { people: 0, percent: 0 },
+      "Eastern Cape": { people: 0, percent: 0 },
+      "Free State": { people: 0, percent: 0 }
+    }
+  });
+
+  useEffect(() => {
+    const getStatsData = async () => {
+      const data = await fetchStats();
+      setStatsData(data);
+    };
+    getStatsData();
+  }, []);
+
+  const totalUsers = statsData.totalUsers || 0;
+  const maleCount = statsData.maleCount || 0;
+  const femaleCount = statsData.femaleCount || 0;
+  const ageGroups = statsData.ageGroups || { "18-30": 0, "31-45": 0, "46-60": 0, "60+": 0 };
+  const waitingTimes = statsData.waitingTimes || { "0-5": 0, "5-10": 0, "10+": 0 };
+  const regions = statsData.regions || {
+    "Western Cape": { people: 0, percent: 0 },
+    "Eastern Cape": { people: 0, percent: 0 },
+    "Free State": { people: 0, percent: 0 }
+  };
+
   return (
     <div className="px-6 py-8 flex flex-col">
       <div className="text-4xl text-zinc-700 font-bold py-2">Overview</div>
       <div className="text-zinc-700/80 text-2xl font-bold py-2">
-        Welcome to HouseAudit — the audit system of Housing Assembly. Here’s an overview of all audit data. 
+        Welcome to HouseAudit — the audit system of Housing Assembly. Here’s an overview of all audit data.
       </div>
-      <div className="flex flex-col">
-        <div className="flex flex-row space-x-6 py-4">
-          <Stats 
-            title="Total on Waiting List"
-            stat="500,000"
-            growth="+5% from last year"
-          />
-          <Stats 
-            title="Average Waiting Time"
-            stat="10 years"
-            growth="-0.5 years from last year"
-          />
-          <Stats 
-            title="Successful Allocations this year"
-            stat="5,000"
-            growth="+10% from last year"
-          />
-        </div>
+      <div className="flex flex-row space-x-6 py-4">
+        <Stats 
+          title="Total on Waiting List"
+          stat={totalUsers.toString()} 
+          growth="+5% from last year"
+        />
+        <Stats 
+          title="Average Waiting Time"
+          stat={`${waitingTimes["0-5"]} years`}
+          growth="-0.5 years from last year"
+        />
+        <Stats 
+          title="Successful Allocations this year"
+          stat={totalUsers.toString()}
+          growth="+10% from last year"
+        />
       </div>
       <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">Regions</div> 
       <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-8">
@@ -84,21 +117,14 @@ export default function Overview() {
         <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
           Number of people in waiting list by region
         </div>
-        <ProgressBar
-          title="Western Cape"
-          people="100,000 people"
-          percent="20%"
-        />
-        <ProgressBar
-          title="Eastern Cape"
-          people="50,000 people"
-          percent="50%"
-        />
-        <ProgressBar
-          title="Free State"
-          people="50,000 people"
-          percent="70%"
-        />
+        {Object.keys(regions).map((region) => (
+          <ProgressBar
+            key={region}
+            title={region}
+            people={`${regions[region].people} people`}  
+            percent={`${regions[region].percent}%`} 
+          />
+        ))}
       </div>
       <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">Demographics</div> 
       <div className="flex flex-row w-full">
@@ -108,18 +134,18 @@ export default function Overview() {
             Breakdown of waiting list by gender
           </div>
           <div className="flex flex-col justify-center items-center">
-              <ProgressCircle 
-                percent="5"
-                color="black"
-              />
-              <div className="text-zinc-700 text-2xl py-4 font-bold">Male</div>
-              <div className="text-zinc-700/75 text-xl font-bold mb-8">50,000 people</div>
-              <ProgressCircle 
-                percent="25"
-                color="#ef4444"
-              />
-              <div className="text-zinc-700 text-2xl py-2 font-bold">Female</div>
-              <div className="text-zinc-700/75 text-xl font-bold">150,000 people</div>
+            <ProgressCircle 
+              percent={(maleCount / totalUsers) * 100}  
+              color="black"
+            />
+            <div className="text-zinc-700 text-2xl py-4 font-bold">Male</div>
+            <div className="text-zinc-700/75 text-xl font-bold mb-8">{maleCount} people</div>
+            <ProgressCircle 
+              percent={(femaleCount / totalUsers) * 100} 
+              color="#ef4444"
+            />
+            <div className="text-zinc-700 text-2xl py-2 font-bold">Female</div>
+            <div className="text-zinc-700/75 text-xl font-bold">{femaleCount} people</div>
           </div>
         </div>
         <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-3 w-1/2">
@@ -127,21 +153,14 @@ export default function Overview() {
           <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
             Breakdown of waiting list by age
           </div>
-          <ProgressBar
-            title="18-30 years"
-            people="90,000 people"
-            percent="20%"
-          />
-          <ProgressBar
-            title="31-45 years"
-            people="50,000 people"
-            percent="50%"
-          />
-          <ProgressBar
-            title="45-60 years"
-            people="150,000 people"
-            percent="70%"
-          />
+          {Object.keys(ageGroups).map((ageGroup) => (
+            <ProgressBar
+              key={ageGroup}
+              title={`${ageGroup} years`}
+              people={`${ageGroups[ageGroup]} people`}
+              percent={`${(ageGroups[ageGroup] / totalUsers) * 100}%`} 
+            />
+          ))}
         </div>
       </div>
       <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">Waiting Time</div>
@@ -150,22 +169,17 @@ export default function Overview() {
         <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
           Number of people by waiting time duration
         </div>
-        <ProgressBar
-          title="Less than 5 years"
-          people="90,000 people"
-          percent="20%"
-        />
-        <ProgressBar
-          title="5-10 years"
-          people="50,000 people"
-          percent="50%"
-        />
-        <ProgressBar
-          title="10-15 years"
-          people="150,000 people"
-          percent="70%"
-        />
+        {Object.keys(waitingTimes).map((waitingTimeRange) => (
+          <ProgressBar
+            key={waitingTimeRange}
+            title={waitingTimeRange}
+            people={`${waitingTimes[waitingTimeRange]} people`}  
+            percent={`${(waitingTimes[waitingTimeRange] / totalUsers) * 100}%`}
+          />
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default Overview;
