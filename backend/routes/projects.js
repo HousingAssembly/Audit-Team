@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Project = require('../models/project');
 
-// 添加项目
+// Add project
 router.post('/', async (req, res) => {
   try {
     const { name, area, year, municipality, status } = req.body;
@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 获取所有项目
+// Get all the Project
 router.get('/', async (req, res) => {
   try {
     const projects = await Project.find();
@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 删除项目
+// Delet all the project
 router.delete("/:id", async (req, res) => {
   try {
     const deleted = await Project.findByIdAndDelete(req.params.id);

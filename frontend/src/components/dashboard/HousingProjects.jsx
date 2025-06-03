@@ -193,28 +193,32 @@ export default function HousingProjects() {
                 : "Enter the details for the new housing project."}
             </div>
 
-            {["name", "area", "year", "municipality"].map((field) => (
-              <div key={field} className="flex flex-col mb-3">
-                <label className="text-zinc-700 font-semibold capitalize">{field}</label>
-                <input
-                  className="border border-zinc-400 px-3 py-2 rounded mt-1"
-                  value={formData[field]}
-                  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                />
+            {/* Dynamic input fields */}
+            {["name", "area", "year", "municipality", "status"].map((field) => (
+              <div key={field} className="flex flex-row p-4 w-full items-center">
+                <div className="text-zinc-700 font-bold px-4 text-lg w-1/3">
+                  {field.charAt(0).toUpperCase() + field.slice(1)}
+                </div>
+                {field === "status" ? (
+                  <select
+                    className="text-zinc-700/75 border border-zinc-700/50 outline-none rounded-md px-1 py-0.1 w-2/3"
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  >
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Upcoming">Upcoming</option>
+                  </select>
+                ) : (
+                  <input
+                    className="text-zinc-700/75 border border-zinc-700/50 outline-none roundeded px-2 py-1 w-2/3"
+                    value={formData[field]}
+                    onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                  />
+                )}
+
               </div>
             ))}
-
-            <div className="flex flex-col mb-4">
-              <label className="text-zinc-700 font-semibold">Status</label>
-              <select
-                className="border border-zinc-400 px-3 py-2 rounded mt-1"
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              >
-                <option value="Ongoing">Ongoing</option>
-                <option value="Upcoming">Upcoming</option>
-              </select>
-            </div>
 
             <div className="flex justify-between mt-6">
               <button className="bg-gray-200 text-zinc-800 px-4 py-2 rounded" onClick={() => { resetForm(); setShowModal(false); }}>
