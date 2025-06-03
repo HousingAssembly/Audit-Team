@@ -42,20 +42,20 @@ export default function Header() {
         <Link to="/">
           <div className="flex flex-row items-center mr-7">
             <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
-            <div className="text-4xl sm:mt-5 ml-1 flex flex-row">
+            <div className="text-4xl md:mt-5 ml-1 flex flex-row">
               <div><span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span></div>
               <div><span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span></div>
             </div>
           </div>
         </Link>
-        <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold hidden sm:flex">
+        <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold hidden lg:flex">
           <Link to="/">Home</Link>
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
-          <Link to="/projects">Active/Future Projects</Link>
+          <Link to="/projects">Housing Projects</Link>
         </div>
         <button
-          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto sm:ml-20 rounded-xl flex items-center justify-center leading-none hidden sm:flex"
+          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto md:ml-20 rounded-xl flex items-center justify-center leading-none hidden xl:flex"
           onClick={() => setIsLoginOpen(true)}
           style={{ alignSelf: 'center', lineHeight: '1', paddingBottom: '5px'}}
         >

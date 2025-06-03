@@ -1,3 +1,5 @@
+import Status from '../ui/status';
+
 const Users = ({ id, name, region, priority, period, status, actions, isLast }) => {
   return (
     <div className={`flex flex-row space-x-4 py-4 px-6 ${isLast ? '' : 'border-b border-zinc-700/60'} text-zinc-700 font-bold`}>
@@ -6,7 +8,7 @@ const Users = ({ id, name, region, priority, period, status, actions, isLast }) 
       <div className="w-1/4 whitespace-nowrap overflow-hidden truncate">{region}</div>
       <div className="w-1/3 whitespace-nowrap overflow-hidden truncate">{priority}</div>
       <div className="w-1/3 whitespace-nowrap overflow-hidden truncate">{period}</div>
-      <div className="w-1/5 whitespace-nowrap overflow-hidden truncate">{status}</div>
+      <div className="w-1/5 flex items-center"><Status status={status} /></div>
       <div className="w-1/6 whitespace-nowrap overflow-hidden truncate">{actions}</div>
     </div>
   );
@@ -70,7 +72,7 @@ export default function ViewAudit() {
               region="Durban"
               priority="Single Parent"
               period="5 Years"
-              status="Active"
+              status="Inactive"
               actions="View"
               isLast={true} 
             />
