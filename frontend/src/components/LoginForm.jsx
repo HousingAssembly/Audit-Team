@@ -48,15 +48,17 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
         onSubmit={handleSubmit}
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl mt-[-117px] flex flex-col py-6 px-6"
+        className="bg-white rounded-3xl mt-[-116px] flex flex-col py-6 px-6"
       >
         <div className="flex flex-row justify-center items-end ml-24">
-          <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto" />
+          <div className="ml-[8px] mb-[1px]">
+            <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto" />
+          </div>
           <div className="px-2 text-4xl font-medium">
-            <span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span>
+            <span className="ml-[-8px] text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span>
             <span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span>
           </div>
-          <div className="flex ml-24 mb-auto">
+          <div className="flex ml-24 mb-auto hover:scale-105">
             <button type="button" onClick={closeModal}>
               <img src="x.png" alt="X" className="object-contain h-6 w-auto" />
             </button>
@@ -91,7 +93,7 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
           </div>
 
           <button
-            className="py-2 w-full bg-red-800 text-white text-xl font-bold rounded-full"
+            className="py-2 w-full bg-red-800 text-white text-xl font-bold rounded-full hover:bg-red-900 "
             type="submit"
           >
             LOGIN
