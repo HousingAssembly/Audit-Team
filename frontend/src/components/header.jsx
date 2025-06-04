@@ -37,12 +37,12 @@ export default function Header() {
   };
 
   return ( 
-    <div className="w-full py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+    <div className="w-full py-1 sm:py-2 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       <div className="flex flex-row items-center mr-7">
         <Link to="/">
-          <div className="flex flex-row items-center mr-7">
-            <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto ml-5"/>
-            <div className="text-4xl md:mt-5 ml-1 flex flex-row">
+          <div className="flex flex-row items-center mr-7 sm:ml-0 ml-[-10px]">
+            <img src="logo.png" alt="Logo" className="object-contain h-9 sm:h-16 w-auto ml-5"/>
+            <div className="text-[22px] sm:text-4xl md:mt-5 ml-1 flex flex-row mt-[11px] sm:mt-[21px]">
               <div><span className="text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span></div>
               <div><span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span></div>
             </div>
@@ -53,6 +53,9 @@ export default function Header() {
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
           <Link to="/projects">Housing Projects</Link>
+        </div>
+        <div className="lg:hidden ml-auto mr-[-13px] sm:mr-0 sm:pr-4 text-[15px] font-bold text-zinc-500 mt-[10px]">
+          <Link to="/projects">View Housing Projects</Link>
         </div>
         <button
           className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto md:ml-20 rounded-xl flex items-center justify-center leading-none hidden xl:flex"
