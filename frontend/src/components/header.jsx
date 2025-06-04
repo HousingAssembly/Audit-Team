@@ -49,13 +49,13 @@ export default function Header() {
           </div>
         </Link>
         <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold hidden lg:flex">
-          <Link to="/">Home</Link>
-          <Link to="#about" onClick={(e) => scrollToSection(e, 'about')}>About Us</Link>
-          <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</Link>
-          <Link to="/projects">Housing Projects</Link>
+          <Link to="/" className="hover:text-zinc-600 transition-colors duration-100">Home</Link>
+          <Link to="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-zinc-600 transition-colors duration-200" >About Us</Link>
+          <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-zinc-600 transition-colors duration-200">Contact</Link>
+          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-200">Housing Projects</Link>
         </div>
         <div className="lg:hidden ml-auto mr-[-13px] sm:mr-0 sm:pr-4 text-[15px] font-bold text-zinc-500 mt-[10px]">
-          <Link to="/projects">View Housing Projects</Link>
+          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-100">View Housing Projects</Link>
         </div>
         <button
           className="bg-palette-red hover:bg-red-900 font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto md:ml-20 rounded-xl flex items-center justify-center leading-none hidden xl:flex"
