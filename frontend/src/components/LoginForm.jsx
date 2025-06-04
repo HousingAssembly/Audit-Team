@@ -41,14 +41,14 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/30 flex justify-center items-center z-50"
+      className="fixed inset-0 flex justify-center items-center z-50"
       onClick={handleOutsideClick}
     >
       <form
         onSubmit={handleSubmit}
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl mt-[110px] flex flex-col py-6 px-6"
+        className="bg-white rounded-3xl mt-[-117px] flex flex-col py-6 px-6"
       >
         <div className="flex flex-row justify-center items-end ml-24">
           <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto" />
