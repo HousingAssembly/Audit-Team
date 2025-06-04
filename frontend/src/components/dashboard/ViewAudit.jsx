@@ -9,8 +9,8 @@ const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
       <div className="text-xl font-bold">Confirm Deletion</div>
       <div>Are you sure you want to delete this audit? This action cannot be undone.</div>
       <div className="flex justify-end space-x-4">
-        <button onClick={onCancel} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-        <button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+        <button onClick={onCancel} className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+        <button onClick={onConfirm} className="px-4 py-2 bg-palette-red text-white rounded-lg hover:bg-red-800">Delete</button>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@ const Users = ({ id, name, region, priority, period, status, isLast, onView, onD
       <div className="w-1/5"><Status status={status} /></div>
       <div className="w-1/6 flex space-x-6">
         <button onClick={onView} className="text-blue-600 hover:underline">View</button>
-        <button onClick={onDelete} className="text-red-600 hover:text-red-800 cursor-pointer">
+        <button onClick={onDelete} className="text-palette-red hover:text-red-800 cursor-pointer">
           <Trash2 size={18} />
         </button>
       </div>
