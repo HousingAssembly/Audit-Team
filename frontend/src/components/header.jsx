@@ -58,7 +58,7 @@ export default function Header() {
           <Link to="/projects">View Housing Projects</Link>
         </div>
         <button
-          className="bg-palette-red font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto md:ml-20 rounded-xl flex items-center justify-center leading-none hidden xl:flex"
+          className="bg-palette-red hover:bg-red-900 font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto md:ml-20 rounded-xl flex items-center justify-center leading-none hidden xl:flex"
           onClick={() => setIsLoginOpen(true)}
           style={{ alignSelf: 'center', lineHeight: '1', paddingBottom: '5px'}}
         >
