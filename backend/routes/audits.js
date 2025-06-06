@@ -1,9 +1,7 @@
-// routes/receipts.js
 const express = require("express");
 const router = express.Router();
 const Audit = require("../models/audit");
 
-// POST /api/audits 
 router.post("/", async (req, res) => {
   try {
     const newAudit = new Audit(req.body);
@@ -14,10 +12,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET /api/audits 
 router.get("/", async (req, res) => {
   try {
-    const all = await Audit.find();
+    const { from, to } = req.query;
+    let filter = {};
+
+    if (from && to) {
+      filter.application_date = { $gte: from, $lte: to };
+    }
+
+    const all = await Audit.find(filter);
     res.json(all);
   } catch (err) {
     res.status(500).json({ error: err.message });
