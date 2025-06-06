@@ -1,55 +1,228 @@
 const Audit = require("../models/audit");
-const moment = require("moment"); 
-
-const calculateAge = (dob) => {
-  const birthDate = moment(dob, "YYYY-MM-DD");
-  return moment().diff(birthDate, "years");
-};
-
-const calculateWaitingTime = (applicationDate) => {
-  const appDate = moment(applicationDate, "YYYY-MM-DD");
-  return moment().diff(appDate, "years");
-};
 
 exports.getStats = async (req, res) => {
   try {
-    const audits = await Audit.find(); 
-    
-    let totalUsers = audits.length;
+    const genderStats = await Audit.aggregate([
+    {
+      $group: {
+        _id: "$applicant.gender",  // directly use the stored gender field
+        count: { $sum: 1 }
+      }
+    },
+      {
+        $project: {
+          _id: 0,
+          gender: "$_id",
+          count: 1
+        }
+      }
+    ]);
+
     let maleCount = 0;
     let femaleCount = 0;
-    let ageGroups = { "18-30": 0, "31-45": 0, "46-60": 0, "60+": 0 };
-    let waitingTimes = { "0-5": 0, "5-10": 0, "10+": 0 };
-
-    audits.forEach((audit) => {
-      if (audit.applicant.surname && audit.spouse_or_partner.surname) {
-        maleCount += 1; 
-      } else {
-        femaleCount += 1;
-      }
-
-      const applicantAge = calculateAge(audit.applicant.date_of_birth);
-      if (applicantAge <= 30) ageGroups["18-30"] += 1;
-      else if (applicantAge <= 45) ageGroups["31-45"] += 1;
-      else if (applicantAge <= 60) ageGroups["46-60"] += 1;
-      else ageGroups["60+"] += 1;
-
-      const waitingTime = calculateWaitingTime(audit.application_date);
-      if (waitingTime <= 5) waitingTimes["0-5"] += 1;
-      else if (waitingTime <= 10) waitingTimes["5-10"] += 1;
-      else waitingTimes["10+"] += 1;
+    genderStats.forEach((entry) => {
+      if (entry.gender === "Male") maleCount = entry.count;
+      else if (entry.gender === "Female") femaleCount = entry.count;
     });
 
-    const stats = {
-      totalUsers,
+    const rawAgeGroups = await Audit.aggregate([
+      {
+        $match: {
+          "applicant.date_of_birth": { $exists: true, $ne: null, $ne: "" }
+        }
+      },
+      {
+        $addFields: {
+
+          applicantAge: {
+            $let: {
+              vars: {
+                msSinceBirth: {
+                  $subtract: [
+                    "$$NOW",
+                    {
+                      $dateFromString: {
+                        dateString: "$applicant.date_of_birth",
+                        format: "%Y-%m-%d",
+                        onError: null,
+                        onNull: null
+                      }
+                    }
+                  ]
+                }
+              },
+              in: {
+                $cond: [
+                  { $eq: ["$$msSinceBirth", null] },
+                  null,
+                  { $divide: ["$$msSinceBirth", 31536000000] }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        $bucket: {
+          groupBy: "$applicantAge",
+          boundaries: [0, 30, 45, 60, 120],
+          default: "Unknown",
+          output: { count: { $sum: 1 } }
+        }
+      }
+    ]);
+
+    const ageGroups = rawAgeGroups.reduce((acc, group) => {
+      let label;
+      if (group._id === 0) label = "0-30";
+      else if (group._id === 30) label = "31-45";
+      else if (group._id === 45) label = "46-60";
+      else if (group._id === 60) label = "60+";
+      else label = "60+";
+      acc[label] = group.count;
+      return acc;
+    }, {});
+
+    const rawWaitingTimes = await Audit.aggregate([
+      {
+        $match: {
+          application_date: { $exists: true, $ne: null, $ne: "" }
+        }
+      },
+      {
+        $addFields: {
+          waitingTime: {
+            $let: {
+              vars: {
+                msWaiting: {
+                  $subtract: [
+                    "$$NOW",
+                    {
+                      $dateFromString: {
+                        dateString: "$application_date",
+                        format: "%Y-%m-%d",
+                        onError: null,
+                        onNull: null
+                      }
+                    }
+                  ]
+                }
+              },
+              in: {
+                $cond: [
+                  { $eq: ["$$msWaiting", null] },
+                  null,
+                  { $divide: ["$$msWaiting", 31536000000] }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        $bucket: {
+          groupBy: "$waitingTime",
+          boundaries: [0, 5, 10, 100],
+          default: "Unknown",
+          output: { count: { $sum: 1 } }
+        }
+      }
+    ]);
+
+    const waitingTimes = rawWaitingTimes.reduce((acc, group) => {
+      let label;
+      if (group._id === 0) label = "0-5";
+      else if (group._id === 5) label = "5-10";
+      else if (group._id === 10) label = "10+";
+      else label = "10+";
+      acc[label] = group.count;
+      return acc;
+    }, {});
+
+    const regionalDistribution = await Audit.aggregate([
+      {
+        $group: {
+          _id: "$address.suburb",
+          totalPeopleInRegion: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          region: "$_id",
+          totalPeopleInRegion: 1
+        }
+      }
+    ]);
+
+    const waitingListStats = await Audit.aggregate([
+      {
+        $match: {
+          application_date: { $exists: true, $ne: null, $ne: "" }
+        }
+      },
+      {
+        $addFields: {
+          waitingTime: {
+            $let: {
+              vars: {
+                msWaiting: {
+                  $subtract: [
+                    "$$NOW",
+                    {
+                      $dateFromString: {
+                        dateString: "$application_date",
+                        format: "%Y-%m-%d",
+                        onError: null,
+                        onNull: null
+                      }
+                    }
+                  ]
+                }
+              },
+              in: {
+                $cond: [
+                  { $eq: ["$$msWaiting", null] },
+                  null,
+                  { $divide: ["$$msWaiting", 31536000000] }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalWaitingPeople: { $sum: 1 },
+          averageWaitingTime: { $avg: "$waitingTime" }
+        }
+      }
+    ]);
+
+    const totalWaitingPeople =
+      waitingListStats.length > 0
+        ? waitingListStats[0].totalWaitingPeople
+        : 0;
+    const averageWaitingTime =
+      waitingListStats.length > 0
+        ? waitingListStats[0].averageWaitingTime
+        : 0;
+
+    const finalStats = {
+      totalUsers: maleCount + femaleCount,
       maleCount,
       femaleCount,
       ageGroups,
-      waitingTimes
+      waitingTimes,
+      regionalDistribution,
+      totalWaitingPeople,
+      averageWaitingTime
     };
 
-    res.json(stats);
+    return res.json(finalStats);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("getStats error:", err);
+    return res.status(500).json({ message: err.message });
   }
 };
