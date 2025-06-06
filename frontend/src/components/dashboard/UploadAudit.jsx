@@ -192,6 +192,8 @@ const toggleCheckbox = (path) => {
         <InputField value={formData.applicant.id_number} onChange={(e) => updateField("applicant.id_number", e.target.value)} />
         <Field label="Date of Birth" />
         <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} />
+        <Field label="Gender" />
+        <InputField value={formData.applicant.gender} onChange={(e) => updateField("gender", e.target.value)} />
       </Section>
 
       <Section title="SPOUSE OR PARTNER">
