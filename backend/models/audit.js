@@ -8,7 +8,8 @@ const AuditSchema = new mongoose.Schema({
     surname: String,
     first_name: String,
     id_number: String,
-    date_of_birth: String
+    date_of_birth: String,
+    gender: String
   },
   spouse_or_partner: {
     surname: String,
