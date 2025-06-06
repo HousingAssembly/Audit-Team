@@ -87,6 +87,7 @@ const UploadAudit = () => {
     },
     skip_marital_status: false
   });
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const updateField = (path, value) => {
     setFormData((prev) => {
@@ -160,7 +161,55 @@ const toggleCheckbox = (path) => {
 
       const result = await res.json();
       if (res.ok) {
-        alert("Audit submitted! ID: " + result.insertedId);
+        setShowSuccess(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setFormData({
+        registration_number: "",
+        application_date: "",
+        client_copy_date: "",
+        applicant: {
+          surname: "",
+          first_name: "",
+          id_number: "",
+          date_of_birth: "",
+        },
+        spouse_or_partner: {
+          surname: "",
+          first_name: "",
+          id_number: "",
+          date_of_birth: "",
+        },
+        address: {
+          street: "",
+          suburb: "",
+          postal_code: "",
+        },
+        contact: {
+          cellphone_1: "",
+          cellphone_2: "",
+          landline: "",
+        },
+        marital_status: {
+          married_in_community: false,
+          married_out_of_community: false,
+          customary_marriage: false,
+          common_law_partner: false,
+          widowed: false,
+          date_married: "",
+          divorced_with_dependants: false,
+          separated_with_dependants: false,
+          single_without_dependants: false,
+          engaged_to_be_married: false,
+          date_divorced: "",
+        },
+        special_circumstances: {
+          disability: false,
+          senior_citizen: false,
+          war_veteran: false,
+          pregnant: false,
+        },
+        skip_marital_status: false
+      });
       } else {
         alert("Submission failed: " + result.error);
       }
@@ -170,7 +219,23 @@ const toggleCheckbox = (path) => {
     }
   };
 
-  return (
+return (
+  <>
+    {showSuccess && (
+      <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+        <div className="bg-white rounded-xl shadow-lg p-8 text-center space-y-4 max-w-sm w-full">
+          <h2 className="text-3xl font-bold text-green-700">Audit Submitted!</h2>
+          <p className="text-zinc-700">Your audit has been saved successfully.</p>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="mt-4 px-6 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )}
+    
     <div className="px-6 py-8">
       <div className="text-4xl text-zinc-700 font-bold py-2">Upload Audit</div>
 
@@ -367,7 +432,7 @@ const toggleCheckbox = (path) => {
         <button onClick={handleSubmitAudit} className="px-10 py-3 text-xl text-white font-bold rounded-lg bg-red-800">Submit Audit</button>
       </div>
     </div>
-    
+  </>
   );
 };
 

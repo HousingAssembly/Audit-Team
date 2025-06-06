@@ -1,30 +1,42 @@
+// controllers/statsController.js
+
 const Audit = require("../models/audit");
 
 exports.getStats = async (req, res) => {
   try {
+    // ─── 1) TOTAL USERS ─────────────────────────────────────────────────────────
+    const totalUsers = await Audit.countDocuments();
+
+    // ─── 2) GENDER STATS ────────────────────────────────────────────────────────
     const genderStats = await Audit.aggregate([
-    {
-      $group: {
-        _id: "$applicant.gender",  // directly use the stored gender field
-        count: { $sum: 1 }
-      }
-    },
       {
-        $project: {
-          _id: 0,
-          gender: "$_id",
-          count: 1
+        $group: {
+          _id: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$applicant.gender", "Male"] },   then: "Male"   },
+                { case: { $eq: ["$applicant.gender", "Female"] }, then: "Female" }
+              ],
+              default: "Unknown"
+            }
+          },
+          count: { $sum: 1 }
         }
+      },
+      {
+        $project: { _id: 0, gender: "$_id", count: 1 }
       }
     ]);
 
     let maleCount = 0;
     let femaleCount = 0;
     genderStats.forEach((entry) => {
-      if (entry.gender === "Male") maleCount = entry.count;
+      if (entry.gender === "Male")   maleCount = entry.count;
       else if (entry.gender === "Female") femaleCount = entry.count;
+      // entries with gender === "Unknown" are ignored for male/female totals
     });
 
+    // ─── 3) AGE GROUPS ───────────────────────────────────────────────────────────
     const rawAgeGroups = await Audit.aggregate([
       {
         $match: {
@@ -33,7 +45,6 @@ exports.getStats = async (req, res) => {
       },
       {
         $addFields: {
-
           applicantAge: {
             $let: {
               vars: {
@@ -72,17 +83,25 @@ exports.getStats = async (req, res) => {
       }
     ]);
 
-    const ageGroups = rawAgeGroups.reduce((acc, group) => {
+    // Initialize all age groups to zero
+    const ageGroups = {
+      "0-30": 0,
+      "31-45": 0,
+      "46-60": 0,
+      "60+": 0
+    };
+
+    rawAgeGroups.forEach((group) => {
       let label;
-      if (group._id === 0) label = "0-30";
+      if (group._id === 0)       label = "0-30";
       else if (group._id === 30) label = "31-45";
       else if (group._id === 45) label = "46-60";
       else if (group._id === 60) label = "60+";
-      else label = "60+";
-      acc[label] = group.count;
-      return acc;
-    }, {});
+      else                        label = "60+"; // lumps "Unknown" into 60+
+      ageGroups[label] = group.count;
+    });
 
+    // ─── 4) WAITING TIME BUCKETS ────────────────────────────────────────────────
     const rawWaitingTimes = await Audit.aggregate([
       {
         $match: {
@@ -129,17 +148,24 @@ exports.getStats = async (req, res) => {
       }
     ]);
 
-    const waitingTimes = rawWaitingTimes.reduce((acc, group) => {
+    // Initialize all waiting-time groups to zero
+    const waitingTimes = {
+      "0-5": 0,
+      "5-10": 0,
+      "10+": 0
+    };
+
+    rawWaitingTimes.forEach((group) => {
       let label;
-      if (group._id === 0) label = "0-5";
+      if (group._id === 0)      label = "0-5";
       else if (group._id === 5) label = "5-10";
       else if (group._id === 10) label = "10+";
-      else label = "10+";
-      acc[label] = group.count;
-      return acc;
-    }, {});
+      else                       label = "10+"; // lumps "Unknown" into 10+
+      waitingTimes[label] = group.count;
+    });
 
-    const regionalDistribution = await Audit.aggregate([
+    // ─── 5) REGIONAL DISTRIBUTION ───────────────────────────────────────────────
+    const rawRegional = await Audit.aggregate([
       {
         $group: {
           _id: "$address.suburb",
@@ -150,11 +176,22 @@ exports.getStats = async (req, res) => {
         $project: {
           _id: 0,
           region: "$_id",
-          totalPeopleInRegion: 1
+          count: "$totalPeopleInRegion"
         }
       }
     ]);
 
+    // Build an object { regionName: { people, percent } }
+    const regions = {};
+    rawRegional.forEach((doc) => {
+      const people = doc.count;
+      const percent = totalUsers > 0
+        ? Number(((people / totalUsers) * 100).toFixed(2))
+        : 0;
+      regions[doc.region] = { people, percent };
+    });
+
+    // ─── 6) WAITING‐LIST TOTAL & AVERAGE ────────────────────────────────────────
     const waitingListStats = await Audit.aggregate([
       {
         $match: {
@@ -209,13 +246,14 @@ exports.getStats = async (req, res) => {
         ? waitingListStats[0].averageWaitingTime
         : 0;
 
+    // ─── 7) FINAL RESPONSE ─────────────────────────────────────────────────────
     const finalStats = {
-      totalUsers: maleCount + femaleCount,
+      totalUsers,
       maleCount,
       femaleCount,
       ageGroups,
       waitingTimes,
-      regionalDistribution,
+      regions,
       totalWaitingPeople,
       averageWaitingTime
     };

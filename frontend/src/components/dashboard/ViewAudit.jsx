@@ -82,17 +82,25 @@ export default function ViewAudit() {
 
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5001/api/audits/${auditToDelete._id}`, {
+      const res = await fetch(`http://localhost:5001/api/audits/${auditToDelete._id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setAudits((prev) => prev.filter((a) => a._id !== auditToDelete._id));
-      setAuditToDelete(null);
+      const data = await res.json();
+
+      if (res.ok) {
+        setAudits((prev) => prev.filter((a) => a._id !== auditToDelete._id));
+        setAuditToDelete(null);
+      } else {
+        console.error('Delete failed:', data?.error || 'Unknown error');
+        alert('Delete failed: ' + (data?.error || 'Unknown error'));
+      }
     } catch (err) {
       console.error('Failed to delete audit:', err);
+      alert('Network or server error.');
     }
   };
 

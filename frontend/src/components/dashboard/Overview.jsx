@@ -4,7 +4,7 @@ import { fetchStats } from "../../statsServices";
 const Stats = ({ title, stat }) => {
   return (
     <div className="flex flex-col px-8 py-6 bg-white rounded-lg w-full">
-      <div className="text-zinc-700 font-bold">{title}</div>
+      <div className="text-zinc-700 text-xl font-bold">{title}</div>
       <div className="text-zinc-700 text-5xl font-bold py-4">{stat}</div>
     </div>
   );
@@ -124,10 +124,6 @@ const Overview = () => {
         <Stats
           title="Average Waiting Time"
           stat={`${waitingTimes["0-5"]} years`}
-        />
-        <Stats
-          title="Successful Allocations this year"
-          stat={totalUsers.toString()}
         />
       </div>
 
