@@ -10,7 +10,6 @@ import Dashboard from "./components/dashboard";
 import Overview from "./components/dashboard/Overview";
 import UploadAudit from "./components/dashboard/UploadAudit";
 import ViewAudit from "./components/dashboard/ViewAudit";
-import Waitlist from "./components/dashboard/Waitlist";
 import ExportCSV from "./components/dashboard/ExportCSV";
 import PendingApprovals from "./components/dashboard/PendingApprovals";
 import HousingProjects from "./components/dashboard/HousingProjects";
@@ -61,7 +60,6 @@ function App() {
           <Route path="view-audit" element={<ViewAudit />} />
           <Route path="overview" element={<Overview />} />
           <Route path="upload-audit" element={<UploadAudit />} />
-          <Route path="waitlist" element={<Waitlist />} />
           <Route path="export" element={<ExportCSV />} />
           <Route path="pending-approvals" element={<PendingApprovals />} />
           <Route path="housing-projects" element={<HousingProjects />} />
