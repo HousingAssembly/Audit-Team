@@ -49,20 +49,15 @@
   };
 
 
-  const Section = ({ title, children, className, extra }) => (
-    <div className="flex flex-col py-4">
-      <div className={`flex items-center justify-between font-bold text-4xl py-6 text-zinc-700 px-4 bg-zinc-100 ${className}`}>
-        <span>{title}</span>
-        {extra && (        
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-700 font-bold text-base">N/A</span>
-            <CheckboxField checked={extra.checked} onChange={extra.onChange} />
-          </div>
-        )}
-      </div>
-      <div className="grid grid-cols-2 gap-0">{children}</div>
+const Section = ({ title, children, className, extra }) => (
+  <div className="flex flex-col py-4">
+    <div className={`flex items-center justify-between font-bold text-4xl py-6 text-zinc-700 px-4 bg-zinc-100 ${className}`}>
+      <span>{title}</span>
+      {extra && <div className="flex items-center text-sm gap-2 font-normal text-zinc-700">N/A <input type="checkbox" {...extra} /></div>}
     </div>
-  );
+    <div className="grid grid-cols-2 gap-0">{children}</div>
+  </div>
+);
 
   const UploadAudit = () => {
     const [formData, setFormData] = useState({
@@ -265,36 +260,34 @@
       }
     };
 
-  return (
-    <>
-      {showSuccess && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center space-y-4 max-w-sm w-full">
-            <h2 className="text-3xl font-bold text-green-700">Audit Submitted!</h2>
-            <p className="text-zinc-700">Your audit has been saved successfully.</p>
-            <button
-              onClick={() => setShowSuccess(false)}
-              className="mt-4 px-6 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition"
-            >
-              Close
-            </button>
-          </div>
+return (
+  <>
+    {showSuccess && (
+      <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+        <div className="bg-white rounded-xl shadow-lg p-8 text-center space-y-4 max-w-sm w-full">
+          <h2 className="text-3xl font-bold text-green-700">Audit Submitted!</h2>
+          <p className="text-zinc-700">Your audit has been saved successfully.</p>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="mt-4 px-6 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition"
+          >
+            Close
+          </button>
         </div>
-      )}
-      
-      <div className="px-6 py-8">
-        <div className="text-4xl text-zinc-700 font-bold py-2">Upload Audit</div>
+      </div>
+    )}
+    
+    <div className="px-6 py-8">
+      <div className="text-4xl text-zinc-700 font-bold py-2">Upload Audit</div>
 
-        <Section title="AUDIT DETAILS">
-          <Field label="Registration Number" />
-          <InputField value={formData.registration_number} onChange={(e) => updateField("registration_number", e.target.value)} />
-          
-          <Field label="Application Date" />
-          <InputField value={formData.application_date} onChange={(e) => updateField("application_date", e.target.value)} enforceDateFormat/>
-          
-          <Field label="Client Copy Date" />
-          <InputField value={formData.client_copy_date} onChange={(e) => updateField("client_copy_date", e.target.value)} enforceDateFormat/>
-        </Section>
+      <Section title="AUDIT DETAILS">
+        <Field label="Registration Number" />
+        <InputField value={formData.registration_number} onChange={(e) => updateField("registration_number", e.target.value)} />
+        <Field label="Application Date" />
+        <InputField value={formData.application_date} onChange={(e) => updateField("application_date", e.target.value)} />
+        <Field label="Client Copy Date" />
+        <InputField value={formData.client_copy_date} onChange={(e) => updateField("client_copy_date", e.target.value)} />
+      </Section>
 
         <Section title="APPLICANT">
           <Field label="Surname" />
