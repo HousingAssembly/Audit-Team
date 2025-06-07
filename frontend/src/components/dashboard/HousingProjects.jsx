@@ -133,7 +133,7 @@ export default function HousingProjects() {
   );
 
   return (
-    <div className="px-6 py-8 flex flex-col">
+    <div className="px-7 py-7 flex flex-col">
       <div className="flex justify-between items-center">
         <div className="text-4xl text-zinc-700 font-bold">Housing Projects</div>
         <button
@@ -143,7 +143,7 @@ export default function HousingProjects() {
           Add New Project
         </button>
       </div>
-      <div className="text-zinc-700/80 text-lg font-semibold mt-1 mb-4">Add, remove, or edit housing project details.</div>
+      <div className="text-zinc-700/80 text-xl font-semibold py-2">Add, remove, or edit housing project details.</div>
 
       <div className="py-6">
         <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)]">

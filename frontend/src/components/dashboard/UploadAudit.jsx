@@ -51,7 +51,7 @@
 
   const Section = ({ title, children, className, extra }) => (
     <div className="flex flex-col py-4">
-      <div className={`flex items-center justify-between font-bold text-4xl py-6 text-zinc-700 px-4 bg-zinc-100 ${className}`}>
+      <div className={`flex items-center justify-between font-bold text-4xl py-6 text-zinc-700 px-4 bg-palette-dashboard ${className}`}>
         <span>{title}</span>
         {extra && (        
           <div className="flex items-center gap-2">
@@ -282,8 +282,69 @@
         </div>
       )}
       
-      <div className="px-6 py-8">
-        <div className="text-4xl text-zinc-700 font-bold py-2">Upload Audit</div>
+       <div className="px-7 py-7">
+      <div className="text-4xl text-zinc-700 font-bold py-2">Upload Files</div>
+      <div className="text-zinc-700/80 text-xl font-bold py-2">
+        Add new audit records to the system by completing the digital form and uploading the required Power of Attorney document.
+      </div>
+
+      <div className="flex flex-col items-center mt-[50px] mb-[-40px]">
+        <label htmlFor="uploadInput">
+          <div className="w-[760px] h-[310px] mt-4 border-2 border-dashed border-zinc-500/60 rounded-xl bg-white p-10 text-center cursor-pointer hover:border-zinc-500 transition">
+
+                <div className="relative flex justify-center mt-[50px]">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90px] h-[90px] rounded-full bg-red-800 opacity-20 z-0"></div>
+            <img
+              src="/red-upload.png"
+              alt="Upload File"
+              className="relative z-10 w-9 h-9 object-contain"
+            />
+          </div>
+            <div className="text-zinc-700 text-2xl font-bold font-['Sumana'] mt-[40px]">Drag and drop files here, or click to browse</div>
+            <div className="text-zinc-500 text-lg font-bold mt-2">Supports PDF, PNG, JPEG files only</div>
+          </div>
+        </label>
+        <input
+          id="uploadInput"
+          type="file"
+          accept=".pdf,.png,.jpg,.jpeg"
+          className="hidden"
+          onChange={(e) => console.log("Selected file:", e.target.files[0])}
+        />
+
+        <div className="w-full max-w-3xl mt-6">
+          <div className="flex flex-col gap-1">
+            <label className="text-zinc-700 text-xl font-bold">File Name</label>
+            <input
+              type="text"
+              placeholder="Enter file name"
+              className="px-4 py-3 rounded-md border border-zinc-300 text-lg focus:outline-none focus:border-zinc-500"
+            />
+          </div>
+
+          <div className="flex justify-between items-center mt-6">
+            <button
+              onClick={() => {
+                document.getElementById("uploadInput").value = "";
+              }}
+              className="w-32 py-3 text-lg font-bold text-zinc-700 border border-zinc-500 bg-white rounded-lg hover:bg-zinc-100 transition"
+            >
+              Clear
+            </button>
+            <button
+              className="w-48 py-3 text-lg font-bold text-white bg-red-800 rounded-lg hover:bg-red-900 transition"
+            >
+              Upload File
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-palette-dashboard shadow-[0_4px_6px_-1px_rgba(0,0,0,0.2)] w-full h-32 -mx-7 w-[calc(100%+3.5rem)]"></div>
+
+      <div className="text-center text-6xl font-bold text-zinc-700 mt-[90px] mb-[-10px] uppercase">
+        Audit Details
+      </div>
 
         <Section title="AUDIT DETAILS">
           <Field label="Registration Number" />
