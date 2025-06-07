@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ViewAudit from './ViewAudit';
+import ViewAudit from './ViewAuditGuest';
 
 export default function Home() { 
 

@@ -18,16 +18,36 @@ const CheckboxField = ({ checked, onChange, disabled }) => (
   </div>
 );
 
-const InputField = ({ value, onChange, disabled }) => (
-  <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white">
-    <input
-      className="w-full px-2 py-2 outline-none"
-      value={value}
-      onChange={onChange}
-      disabled={disabled}
-    />
-  </div>
-);
+const InputField = ({ value, onChange, disabled, enforceDateFormat = false }) => {
+  const isValidDate = (val) => /^\d{4}\/\d{2}\/\d{2}$/.test(val);
+  const showWarning = enforceDateFormat && value && !isValidDate(value);
+
+  const handleDateInput = (e) => {
+    let val = e.target.value.replace(/\D/g, "").slice(0, 8);
+    let formatted = val;
+    if (val.length > 4) formatted = val.slice(0, 4) + "/" + val.slice(4);
+    if (val.length > 6) formatted = formatted.slice(0, 7) + "/" + val.slice(6);
+    onChange({ target: { value: formatted } });
+  };
+
+  return (
+    <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white">
+      <input
+        className={`w-full px-2 py-2 outline-none ${showWarning ? 'border-2 border-red-500' : ''}`}
+        value={value}
+        onChange={enforceDateFormat ? handleDateInput : onChange}
+        disabled={disabled}
+        placeholder={enforceDateFormat ? "YYYY/MM/DD" : undefined}
+      />
+      {showWarning && (
+        <div className="text-xs text-red-600 px-2 pb-1">
+          Format must be YYYY/MM/DD
+        </div>
+      )}
+    </div>
+  );
+};
+
 
 const Section = ({ title, children, className, extra }) => (
   <div className="flex flex-col py-4">
@@ -243,9 +263,9 @@ return (
         <Field label="Registration Number" />
         <InputField value={formData.registration_number} onChange={(e) => updateField("registration_number", e.target.value)} />
         <Field label="Application Date" />
-        <InputField value={formData.application_date} onChange={(e) => updateField("application_date", e.target.value)} />
+        <InputField value={formData.application_date} onChange={(e) => updateField("application_date", e.target.value)} enforceDateFormat/>
         <Field label="Client Copy Date" />
-        <InputField value={formData.client_copy_date} onChange={(e) => updateField("client_copy_date", e.target.value)} />
+        <InputField value={formData.client_copy_date} onChange={(e) => updateField("client_copy_date", e.target.value)} enforceDateFormat/>
       </Section>
 
       <Section title="APPLICANT">
@@ -256,7 +276,7 @@ return (
         <Field label="ID Number" />
         <InputField value={formData.applicant.id_number} onChange={(e) => updateField("applicant.id_number", e.target.value)} />
         <Field label="Date of Birth" />
-        <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} />
+        <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} enforceDateFormat/>
         <Field label="Gender" />
         <InputField value={formData.applicant.gender} onChange={(e) => updateField("gender", e.target.value)} />
       </Section>
@@ -269,7 +289,7 @@ return (
         <Field label="ID Number" />
         <InputField value={formData.spouse_or_partner.id_number} onChange={(e) => updateField("spouse_or_partner.id_number", e.target.value)} />
         <Field label="Date of Birth" />
-        <InputField value={formData.spouse_or_partner.date_of_birth} onChange={(e) => updateField("spouse_or_partner.date_of_birth", e.target.value)} />
+        <InputField value={formData.spouse_or_partner.date_of_birth} onChange={(e) => updateField("spouse_or_partner.date_of_birth", e.target.value)} enforceDateFormat/>
       </Section>
 
       <Section
@@ -340,12 +360,13 @@ return (
               disabled={formData.skip_marital_status}
             />
 
-            <Field label="Date married (YYYY/MM/DD)" />
+            <Field label="Date married" />
             <InputField
               value={formData.marital_status.date_married}
               onChange={(e) =>
-                updateField("marital_status.date_married", e.target.value)
+                updateField("marital_status.date_married", e.target.value) 
               }
+              enforceDateFormat
               disabled={formData.skip_marital_status}
             />
 
@@ -385,12 +406,13 @@ return (
               disabled={formData.skip_marital_status}
             />
 
-            <Field label="Date divorced/split (YYYY/MM/DD)" />
+            <Field label="Date divorced/split" />
             <InputField
               value={formData.marital_status.date_divorced}
               onChange={(e) =>
                 updateField("marital_status.date_divorced", e.target.value)
               }
+              enforceDateFormat
               disabled={formData.skip_marital_status}
             />
           </>
