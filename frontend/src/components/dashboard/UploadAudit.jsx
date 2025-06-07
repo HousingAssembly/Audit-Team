@@ -218,6 +218,13 @@
             first_name: "",
             id_number: "",
             date_of_birth: "",
+            gender: {
+              male: false,
+              female: false,
+              other: false,
+              description: "", 
+        }, 
+
           },
           spouse_or_partner: {
             surname: "",
