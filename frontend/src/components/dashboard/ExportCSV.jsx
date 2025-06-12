@@ -86,70 +86,66 @@ export default function ExportCSV() {
       <div className="text-zinc-700/80 text-xl font-bold py-2">
         Export housing audit data to a CSV file.
       </div>
-      <div className="flex justify-center h-screen">
-        <div className="flex flex-col items-center space-y-4 py-12 w-1/2">
-          <div className="flex flex-col py-4 bg-white rounded-lg justify-center items-start border border-zinc-700/30 w-full">
-            <div className="text-zinc-700 font-bold text-lg px-8">Date Range</div>
-            <div className="w-full px-8">
-              <div className="grid grid-cols-2 gap-4 w-full">
-                <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-2 flex items-center pl-3 pointer-events-none">
-                    <img src="/calendar.png" alt="Calendar Icon" className="h-6 w-auto object-contain" />
-                  </div>
+      <div className="flex items-center justify-center bg-palette-dashboard mt-[60px]">
+        <div className="flex flex-col items-center justify-center w-full max-w-2xl">
+          <div className="flex flex-col bg-white rounded-2xl border border-zinc-400 w-full px-10 py-10">
+            <div className="mb-8">
+              <div className="text-zinc-700 font-semibold text-lg mb-4">Date Range</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col">
+                  <label className="text-zinc-600 font-medium mb-2" htmlFor="start-date">Start Date</label>
                   <input
+                    id="start-date"
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="text-zinc-700/60 font-bold border border-zinc-700/30 outline-none rounded-md p-2 pl-10 text-lg my-3 w-full"
+                    className="border border-zinc-300 rounded-md px-4 py-2 text-lg text-zinc-700 focus:ring-2 focus:ring-red-800 outline-none transition w-full"
                   />
                 </div>
-                <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-2 flex items-center pl-3 pointer-events-none">
-                    <img src="/calendar.png" alt="Calendar Icon" className="h-6 w-auto object-contain" />
-                  </div>
+                <div className="flex flex-col">
+                  <label className="text-zinc-600 font-medium mb-2" htmlFor="end-date">End Date</label>
                   <input
+                    id="end-date"
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="text-zinc-700/60 font-bold border border-zinc-700/30 outline-none rounded-md p-2 pl-10 text-lg my-3 w-full"
+                    className="border border-zinc-300 rounded-md px-4 py-2 text-lg text-zinc-700 focus:ring-2 focus:ring-red-800 outline-none transition w-full"
                   />
                 </div>
               </div>
             </div>
-
-            <div className="text-zinc-700 font-bold text-lg px-8">File Name</div>
-            <div className="px-8 w-full">
+            <div className="mb-8">
+              <label className="text-zinc-700 font-semibold text-lg mb-2 block" htmlFor="file-name">File Name</label>
               <input
+                id="file-name"
                 value={fileName}
                 onChange={(e) => setFileName(e.target.value)}
-                className="text-zinc-700/60 font-bold border border-zinc-700/30 outline-none rounded-md p-2 text-lg my-3 w-full"
+                className="border border-zinc-300 rounded-md px-4 py-2 text-lg text-zinc-700 font-medium w-full placeholder-zinc-400 placeholder:opacity-60 focus:ring-2 focus:ring-red-800 outline-none transition"
                 placeholder="Eg: audit-data-from-01-18-09-to-01-25-10"
               />
             </div>
-
-            <div className="w-full px-8 pt-2 flex flex-col gap-3 md:flex-row md:justify-between">
+            <div className="flex flex-col md:flex-row gap-4 justify-between">
               <button
                 onClick={clearForm}
-                className="bg-white border border-zinc-700/50 px-8 py-3 text-zinc-700 font-bold rounded-lg"
+                className="bg-white border border-zinc-300 px-8 py-3 text-zinc-700 font-bold rounded-lg hover:bg-zinc-50 transition"
               >
                 Clear
               </button>
               <button
                 onClick={exportToCSV}
-                className="flex flex-row space-x-4 px-5 py-3 bg-red-800 text-white font-bold rounded-lg"
+                className="flex items-center justify-center gap-2 px-8 py-3 bg-red-800 text-white font-bold rounded-lg hover:bg-red-900 transition"
               >
                 <img src="/export-csv.png" alt="Export CSV Icon" className="h-6 w-auto object-contain" />
-                <div>Export Data</div>
+                Export Data
               </button>
               <button
                 onClick={exportAllToCSV}
-                className="flex flex-row space-x-4 px-5 py-3 bg-zinc-700 text-white font-bold rounded-lg"
+                className="flex items-center justify-center gap-2 px-8 py-3 bg-zinc-700 text-white font-bold rounded-lg hover:bg-zinc-800 transition"
               >
                 <img src="/export-csv.png" alt="Export CSV Icon" className="h-6 w-auto object-contain" />
-                <div>Export All Data</div>
+                Export All Data
               </button>
             </div>
-
           </div>
         </div>
       </div>
