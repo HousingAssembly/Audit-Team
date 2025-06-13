@@ -84,57 +84,58 @@ export default function PendingApprovals() {
       <div className="text-zinc-700/80 text-xl font-bold py-2">
         Review and approve new admin account requests.
       </div>
-      <div className="mt-6 flex w-full justify-center">
-        <div className="space-y-4 w-1/2">
-          <div>
-            <div className="px-6 py-8 flex flex-col">
-              <div className="py-8">
-                <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.25)]">
-                  <div className="flex flex-row space-x-4">
-                    <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-full bg-white items-center px-2">
-                      <img src="/search.png" alt="Search Icon" className="h-4 w-auto object-contain"/>
-                      <input className="py-2 px-2 w-full outline-none" placeholder="Search by email"/>
-                    </div>
-                  </div>
-                  {loading ? (
-                    <p className="text-zinc-700/75 font-bold">Loading...</p>
-                  ) : pendingUsers.length === 0 ? (
-                    <p className="text-zinc-700/75 font-bold">No pending users to review.</p>
-                  ) : (
-                    pendingUsers.map((user, index) => (
-                      <div key={user._id} className={`flex flex-col rounded-lg bg-white ${index !== pendingUsers.length - 1 ? 'mb-4' : ''}`}>
-                        <div className="flex justify-between items-center border p-4 w-full rounded-md shadow-sm">
-                          <span className="text-lg text-zinc-800 w-3/5 overflow-hidden truncate">{user.email}</span>
-                          <div className="space-x-2 ml-auto">
-                            <button
-                              onClick={() => approveUser(user._id)}
-                              className="text-lime-900 px-4 py-1 bg-green-200 rounded-full"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => denyUser(user._id)}
-                              className="text-red-900 px-4 py-1 bg-red-200 rounded-full"
-                            >
-                              Deny
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                  <div className="flex flex-row space-x-4">
-                    <div className="mr-auto text-zinc-700/60 font-bold">Showing {pendingUsers.length} out of {pendingUsers.length} audits</div>
-                    <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 text-zinc-700/60 bg-white items-center py-2 px-4 font-bold">Previous</div>
-                    <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 text-black bg-white items-center py-2 px-5 font-bold">1</div>
-                    <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 text-zinc-700/60 bg-white items-center py-2 px-4 font-bold">Next</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="flex items-center justify-center min-h-[60vh] bg-palette-dashboard">
+  <div className="w-full max-w-xl">
+    <div className="bg-white rounded-2xl border border-zinc-400 px-8 py-8">
+      <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center w-full border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+          <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2"/>
+          <input
+            className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
+            placeholder="Search by email"
+          />
         </div>
       </div>
+      <div className="space-y-4 mb-6">
+        {loading ? (
+          <p className="text-zinc-700/75 font-bold text-center">Loading...</p>
+        ) : pendingUsers.length === 0 ? (
+          <p className="text-zinc-700/75 font-bold text-center">No pending users to review.</p>
+        ) : (
+          pendingUsers.map((user) => (
+            <div key={user._id} className="flex items-center justify-between border border-zinc-200 rounded-lg px-4 py-3 bg-zinc-50 shadow-sm">
+              <span className="text-base text-zinc-800 font-medium truncate">{user.email}</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => approveUser(user._id)}
+                  className="px-4 py-1 rounded-full bg-green-200 text-green-900 font-semibold hover:bg-green-300 transition"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => denyUser(user._id)}
+                  className="px-4 py-1 rounded-full bg-red-200 text-red-900 font-semibold hover:bg-red-300 transition"
+                >
+                  Deny
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      <div className="flex items-center justify-between text-sm text-zinc-600 font-medium">
+        <div>
+          Showing {pendingUsers.length} out of {pendingUsers.length} admin requests
+        </div>
+        <div className="flex gap-2">
+          <button className="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 transition">Previous</button>
+          <span className="px-4 py-2 rounded-lg border border-zinc-300 bg-zinc-200 text-zinc-800 font-bold">1</span>
+          <button className="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 transition">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
   );
 }

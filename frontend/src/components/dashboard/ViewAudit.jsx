@@ -18,16 +18,16 @@ const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
 
 const Users = ({ id, name, region, priority, period, status, isLast, onView, onDelete }) => {
   return (
-    <div className={`flex flex-row space-x-4 py-4 px-6 ${isLast ? '' : 'border-b border-zinc-700/60'} text-zinc-700 font-bold items-center`}>
+    <div className={`flex flex-row space-x-4 py-6 px-6 ${isLast ? '' : 'border-b border-zinc-300'} text-zinc-700 font-bold items-center`}>
       <div className="w-1/3 truncate">{id}</div>
       <div className="w-1/3 truncate">{name}</div>
       <div className="w-1/4 truncate">{region}</div>
       <div className="w-1/3 truncate">{priority}</div>
       <div className="w-1/3 truncate">{period}</div>
-      <div className="w-1/5"><Status status={status} /></div>
+      <div className="w-1/5 "><Status status={status} /></div>
       <div className="w-1/6 flex space-x-6">
         <button onClick={onView} className="text-blue-600 hover:underline">View</button>
-        <button onClick={onDelete} className="text-palette-red hover:text-red-800 cursor-pointer">
+        <button onClick={onDelete} className="text-palette-red hover:text-red-900 cursor-pointer">
           <Trash2 size={18} />
         </button>
       </div>
@@ -112,26 +112,27 @@ export default function ViewAudit() {
       </div>
 
       <div className="py-8">
-        <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.25)]">
-          <div className="flex flex-row space-x-4">
-            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-2/5 bg-white items-center px-2">
-              <img src="/search.png" alt="Search Icon" className="h-4 w-auto object-contain" />
+        <div className="flex flex-col space-y-6 p-6 bg-white rounded-2xl border border-zinc-400">
+          {/* Filters */}
+          <div className="flex flex-col md:flex-row gap-4 mb-2">
+            <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+              <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
               <input
-                className="py-2 px-2 w-full outline-none"
+                className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
                 placeholder="Search by ID or name"
                 value={searchIdOrName}
                 onChange={(e) => setSearchIdOrName(e.target.value)}
               />
             </div>
-            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-1/5 bg-white items-center px-2">
+            <div className="flex items-center w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
               <input
                 className="py-2 px-2 w-full outline-none"
-                placeholder="Region"
+                placeholder="Region (e.g. Cape Town)"
                 value={searchRegion}
                 onChange={(e) => setSearchRegion(e.target.value)}
               />
             </div>
-            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-2/5 bg-white items-center px-2">
+            <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
               <input
                 className="py-2 px-2 w-full outline-none"
                 placeholder="Priority"
@@ -141,42 +142,49 @@ export default function ViewAudit() {
             </div>
           </div>
 
-          <div className="flex flex-col rounded-lg bg-white border border-solid border-zinc-700/60 mt-4">
-            <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-700/60 w-full text-zinc-700/60 font-bold">
-              <div className="w-1/3">ID</div>
-              <div className="w-1/3">Name</div>
-              <div className="w-1/4">Region</div>
-              <div className="w-1/3">Priority</div>
-              <div className="w-1/3">Waiting Period</div>
-              <div className="w-1/5">Status</div>
-              <div className="w-1/6">Actions</div>
-            </div>
-            {filteredAudits.map((audit, index) => {
-              const id = audit.registration_number || 'N/A';
-              const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`.trim();
-              const region = audit.address?.suburb || 'N/A';
-              const priority = Object.entries(audit.special_circumstances || {})
-                .filter(([_, value]) => value === true)
-                .map(([key]) => key.replace(/_/g, ' '))
-                .join(', ') || 'None';
-              const period = audit.waiting_period || 'N/A';
-              const status = audit.status || 'Active';
+          {/* Table */}
+          <div className="overflow-x-auto rounded-lg border border-zinc-300 bg-white">
+            <div className="min-w-full">
+              <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-300 w-full text-zinc-600 font-bold bg-zinc-50">
+                <div className="w-1/3">ID</div>
+                <div className="w-1/3">Name</div>
+                <div className="w-1/4">Region</div>
+                <div className="w-1/3">Priority</div>
+                <div className="w-1/3">Waiting Period</div>
+                <div className="w-1/5">Status</div>
+                <div className="w-1/6">Actions</div>
+              </div>
+              {filteredAudits.length === 0 ? (
+                <div className="py-8 text-center text-zinc-400 font-semibold">No audits found.</div>
+              ) : (
+                filteredAudits.map((audit, index) => {
+                  const id = audit.registration_number || 'N/A';
+                  const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`.trim();
+                  const region = audit.address?.suburb || 'N/A';
+                  const priority = Object.entries(audit.special_circumstances || {})
+                    .filter(([_, value]) => value === true)
+                    .map(([key]) => key.replace(/_/g, ' '))
+                    .join(', ') || 'None';
+                  const period = audit.waiting_period || 'N/A';
+                  const status = audit.status || 'Active';
 
-              return (
-                <Users
-                  key={audit._id}
-                  id={id}
-                  name={name}
-                  region={region}
-                  priority={priority}
-                  period={period}
-                  status={status}
-                  isLast={index === filteredAudits.length - 1}
-                  onView={() => setSelectedAudit(audit)}
-                  onDelete={() => setAuditToDelete(audit)}
-                />
-              );
-            })}
+                  return (
+                    <Users
+                      key={audit._id}
+                      id={id}
+                      name={name}
+                      region={region}
+                      priority={priority}
+                      period={period}
+                      status={status}
+                      isLast={index === filteredAudits.length - 1}
+                      onView={() => setSelectedAudit(audit)}
+                      onDelete={() => setAuditToDelete(audit)}
+                    />
+                  );
+                })
+              )}
+            </div>
           </div>
 
           <AuditModal audit={selectedAudit} onClose={() => setSelectedAudit(null)} />
@@ -188,13 +196,16 @@ export default function ViewAudit() {
             />
           )}
 
-          <div className="flex flex-row space-x-4 mt-4">
-            <div className="mr-auto text-zinc-700/60 font-bold">
+          {/* Pagination */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between mt-4 gap-2">
+            <div className="text-zinc-600 text-sm font-medium">
               Showing {filteredAudits.length} out of {audits.length} audits
             </div>
-            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 text-zinc-700/60 bg-white items-center py-2 px-4 font-bold">Previous</div>
-            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 text-black bg-white items-center py-2 px-5 font-bold">1</div>
-            <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 text-zinc-700/60 bg-white items-center py-2 px-4 font-bold">Next</div>
+            <div className="flex gap-2">
+              <button className="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 transition text-zinc-600 font-semibold">Previous</button>
+              <span className="px-4 py-2 rounded-lg border border-zinc-300 bg-zinc-200 text-zinc-800 font-bold">1</span>
+              <button className="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 transition text-zinc-600 font-semibold">Next</button>
+            </div>
           </div>
         </div>
       </div>
