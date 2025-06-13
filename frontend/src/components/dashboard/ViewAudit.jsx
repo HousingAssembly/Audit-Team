@@ -26,7 +26,13 @@ const Users = ({ id, name, region, priority, period, status, isLast, onView, onD
       <div className="w-1/3 truncate">{period}</div>
       <div className="w-1/5 "><Status status={status} /></div>
       <div className="w-1/6 flex space-x-6">
-        <button onClick={onView} className="text-blue-600 hover:underline">View</button>
+       <button
+  onClick={onView}
+  className="text-blue-600 border border-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 transition"
+>
+  View
+</button>
+
         <button onClick={onDelete} className="text-palette-red hover:text-red-900 cursor-pointer">
           <Trash2 size={18} />
         </button>
