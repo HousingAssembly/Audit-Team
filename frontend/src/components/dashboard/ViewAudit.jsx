@@ -126,7 +126,7 @@ export default function ViewAudit() {
             <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-1/5 bg-white items-center px-2">
               <input
                 className="py-2 px-2 w-full outline-none"
-                placeholder="Cape Town"
+                placeholder="Region"
                 value={searchRegion}
                 onChange={(e) => setSearchRegion(e.target.value)}
               />
@@ -134,7 +134,7 @@ export default function ViewAudit() {
             <div className="flex flex-row rounded-lg border border-solid border-zinc-700/60 w-2/5 bg-white items-center px-2">
               <input
                 className="py-2 px-2 w-full outline-none"
-                placeholder="Disabled/Chronic Illness"
+                placeholder="Priority"
                 value={searchPriority}
                 onChange={(e) => setSearchPriority(e.target.value)}
               />
