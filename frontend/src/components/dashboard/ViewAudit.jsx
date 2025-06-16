@@ -1,16 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import Status from '../ui/status';
 import { Trash2 } from 'lucide-react';
 import AuditModal from '../ui/AuditModal';
 
 const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-xl shadow-lg text-zinc-700 space-y-4">
-      <div className="text-xl font-bold">Confirm Deletion</div>
-      <div>Are you sure you want to delete this audit? This action cannot be undone.</div>
-      <div className="flex justify-end space-x-4">
-        <button onClick={onCancel} className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
-        <button onClick={onConfirm} className="px-4 py-2 bg-palette-red text-white rounded-lg hover:bg-red-800">Delete</button>
+  <div className="fixed inset-0 bg-black/40 z-50 flex justify-center items-center">
+    <div
+      className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative flex flex-col items-center"
+      onClick={e => e.stopPropagation()}
+    >
+      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+        <svg className="w-10 h-10 text-red-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+        </svg>
+      </div>
+      <h2 className="text-2xl font-bold text-zinc-800 mb-2 text-center">Delete Audit?</h2>
+      <p className="text-zinc-600 mb-6 text-center">
+        Are you sure you want to delete this audit?
+        <br />
+        <span className="text-red-700 font-semibold">This action cannot be undone.</span>
+      </p>
+      <div className="flex justify-end gap-3 w-full">
+        <button
+          className="bg-white border border-zinc-400 hover:bg-zinc-100 transition text-zinc-700 px-4 py-2 rounded-lg font-medium"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button
+          className="bg-red-800 text-white px-5 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow"
+          onClick={onConfirm}
+        >
+          Yes, Delete
+        </button>
       </div>
     </div>
   </div>
@@ -18,20 +39,30 @@ const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
 
 const Users = ({ id, name, region, priority, period, status, isLast, onView, onDelete }) => {
   return (
-    <div className={`flex flex-row space-x-4 py-6 px-6 ${isLast ? '' : 'border-b border-zinc-300'} text-zinc-700 font-bold items-center`}>
+    <div className={`flex flex-row space-x-4 py-4 px-6 ${isLast ? '' : 'border-b border-zinc-300'} text-zinc-700 font-bold items-center`}>
       <div className="w-1/3 truncate">{id}</div>
       <div className="w-1/3 truncate">{name}</div>
-      <div className="w-1/4 truncate">{region}</div>
+      <div className="w-1/3 truncate">{region}</div>
       <div className="w-1/3 truncate">{priority}</div>
-      <div className="w-1/3 truncate">{period}</div>
-      <div className="w-1/5 "><Status status={status} /></div>
+      <div className="w-1/4 truncate">{period}</div>
+      <div className="w-1/6 flex  justify-left">
+        {status === 'Active' ? (
+          <span className="bg-green-200 text-green-900 font-semibold rounded-full px-4 py-1 hover:bg-green-300 transition">
+            Active
+          </span>
+        ) : (
+          <span className="bg-red-200 text-red-900 font-semibold rounded-full px-4 py-1 hover:bg-red-300 transition">
+            Inactive
+          </span>
+        )}
+      </div>
       <div className="w-1/6 flex space-x-6">
-       <button
-  onClick={onView}
-  className="text-blue-600 border border-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 transition"
->
-  View
-</button>
+        <button
+        onClick={onView}
+        className="text-blue-600 border border-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 transition"
+      >
+        View
+      </button>
 
         <button onClick={onDelete} className="text-palette-red hover:text-red-900 cursor-pointer">
           <Trash2 size={18} />
@@ -113,7 +144,7 @@ export default function ViewAudit() {
   return (
     <div className="px-7 py-7 flex flex-col">
       <div className="text-4xl text-zinc-700 font-bold py-2">View Audit</div>
-      <div className="text-zinc-700/80 text-2xl font-bold py-2">
+      <div className="text-zinc-700/80 text-xl font-bold py-2">
         Browse, search, and filter all housing audit records in the system.
       </div>
 
@@ -124,24 +155,26 @@ export default function ViewAudit() {
             <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
               <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
               <input
-                className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
+                className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400 py-1"
                 placeholder="Search by ID or name"
                 value={searchIdOrName}
                 onChange={(e) => setSearchIdOrName(e.target.value)}
               />
             </div>
-            <div className="flex items-center w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+            <div className="flex items-center w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-1 bg-zinc-50 ">
+              <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
               <input
-                className="py-2 px-2 w-full outline-none"
-                placeholder="Region (e.g. Cape Town)"
+                className="w-full bg-transparent outline-none"
+                placeholder="Search by suburb"
                 value={searchRegion}
                 onChange={(e) => setSearchRegion(e.target.value)}
               />
             </div>
-            <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+            <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-1 bg-zinc-50">
+              <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
               <input
-                className="py-2 px-2 w-full outline-none"
-                placeholder="Priority"
+                className="w-full bg-transparent outline-none"
+                placeholder="Search by priority"
                 value={searchPriority}
                 onChange={(e) => setSearchPriority(e.target.value)}
               />
@@ -154,11 +187,11 @@ export default function ViewAudit() {
               <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-300 w-full text-zinc-600 font-bold bg-zinc-50">
                 <div className="w-1/3">ID</div>
                 <div className="w-1/3">Name</div>
-                <div className="w-1/4">Region</div>
+                <div className="w-1/3">Suburb</div>
                 <div className="w-1/3">Priority</div>
-                <div className="w-1/3">Waiting Period</div>
-                <div className="w-1/5">Status</div>
-                <div className="w-1/6">Actions</div>
+                <div className="w-1/4">Waiting Period</div>
+                <div className="w-1/6 flex justify-left">Status</div>
+                <div className="w-1/6 flex justify-center items-center">Actions</div>
               </div>
               {filteredAudits.length === 0 ? (
                 <div className="py-8 text-center text-zinc-400 font-semibold">No audits found.</div>
