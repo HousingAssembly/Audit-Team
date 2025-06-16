@@ -69,9 +69,9 @@
                   className={`-rotate-[7deg] text-left sm:mt-[50px] space-y-1 text-[10px] sm:text-[20px] leading-loose sm:leading-[55px] ${isEven ? 'mt-[4px] ml-[10px] sm:ml-[55px]' : 'mt-[6px] mr-[10px] sm:mr-[60px]'}`}
                 >
                   <p><strong>Project Name:</strong> {project.name}</p>
-                  <p><strong>Area:</strong> {project.area}</p>
+                  <p><strong>City/Town:</strong> {project.area}</p>
+                  <p><strong>Suburb:</strong> {project.municipality}</p>
                   <p><strong>Cutoff Year:</strong> {project.year}</p>
-                  <p><strong>Municipality:</strong> {project.municipality}</p>
                   <p><strong>Status:</strong> {project.status}</p>
                 </div>
               </div>

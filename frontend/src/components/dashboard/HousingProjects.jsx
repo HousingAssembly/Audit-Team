@@ -1,45 +1,50 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { Trash2 } from 'lucide-react';
 
 const Users = ({ project, isLast, onEdit, onDelete }) => {
-  const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  let statusClass = "bg-gray-200 text-gray-800";
+  if (project.status === "Ongoing") statusClass = "bg-yellow-200 text-yellow-900";
+  else if (project.status === "Completed") statusClass = "bg-green-200 text-green-900";
+  else if (project.status === "Upcoming") statusClass = "bg-blue-200 text-blue-900";
+
   return (
-    <div className={`flex flex-row space-x-4 py-4 px-6 ${isLast ? '' : 'border-b border-zinc-700/60'} text-zinc-700 font-bold items-center`}>
-      <div className="w-1/6 truncate">{project.name}</div>
-      <div className="w-1/6 truncate">{project.area}</div>
+    <div className={`flex flex-row space-x-4 py-4 px-6 ${isLast ? '' : 'border-b border-zinc-300'} text-zinc-700 font-bold items-center`}>
+      <div className="w-1/3 truncate">{project.name}</div>
+      <div className="w-1/3 truncate">{project.area}</div>
+      <div className="w-1/3 truncate">{project.municipality}</div>
       <div className="w-1/6 truncate">{project.year}</div>
-      <div className="w-1/6 truncate">{project.municipality}</div>
-      <div className="w-1/6 truncate">{project.status}</div>
-      <div className="w-1/6 relative flex justify-center items-center" ref={dropdownRef}>
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-10 h-10 rounded-full bg-zinc-300 flex items-center justify-center text-black font-bold"
-        >
-          ⋮
-        </button>
-        {open && (
-          <div className="absolute top-full mt-2 bg-white border border-gray-300 rounded shadow-lg z-50 w-32">
-            <button className="block w-full px-4 py-2 text-left hover:bg-gray-100" onClick={() => { setOpen(false); onEdit(project); }}>
-              Edit
-            </button>
-            <button className="block w-full px-4 py-2 text-left text-red-700 hover:bg-gray-100" onClick={() => { setOpen(false); onDelete(project._id); }}>
-              Delete
-            </button>
-          </div>
-        )}
+      <div className="w-1/6 truncate flex justify-center items-center">
+        <span className={`${statusClass} font-semibold rounded-full px-4 py-1`}>
+          {project.status}
+        </span>
       </div>
+      <div className="w-1/6 flex justify-center items-center gap-2">
+  <button
+    onClick={() => onEdit(project)}
+    className="text-blue-600 border border-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 transition font-semibold"
+  >
+    Edit
+  </button>
+  <button
+    onClick={() => onDelete(project._id)}
+    className="text-palette-red hover:text-red-900 cursor-pointer p-2 rounded-full transition"
+    title="Delete"
+  >
+    <Trash2 size={18} />
+  </button>
+</div>
     </div>
   );
 };
@@ -57,6 +62,9 @@ export default function HousingProjects() {
   const [searchName, setSearchName] = useState('');
   const [searchArea, setSearchArea] = useState('');
   const [searchMunicipality, setSearchMunicipality] = useState('');
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     fetchProjects();
@@ -91,13 +99,21 @@ export default function HousingProjects() {
     }
   };
 
-  const handleDeleteProject = async (id) => {
+  const handleDeleteProject = async () => {
     try {
-      await axios.delete(`/api/projects/${id}`);
+      await axios.delete(`/api/projects/${deleteId}`);
       fetchProjects();
     } catch (err) {
       console.error('Failed to delete project:', err);
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteId(null);
     }
+  };
+
+  const handleAskDelete = (id) => {
+    setDeleteId(id);
+    setShowDeleteModal(true);
   };
 
   const handleEditProject = (project) => {
@@ -134,110 +150,240 @@ export default function HousingProjects() {
 
   return (
     <div className="px-7 py-7 flex flex-col">
-      <div className="flex justify-between items-center">
-        <div className="text-4xl text-zinc-700 font-bold">Housing Projects</div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-red-800 text-white font-bold py-2 px-4 rounded-lg"
-        >
-          Add New Project
-        </button>
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div>
+        <div className="text-4xl text-zinc-700 font-bold py-2">Housing Projects</div>
+        <div className="text-zinc-700/80 text-xl font-bold py-2">
+          Add, remove, or edit housing project details.
+        </div>
       </div>
-      <div className="text-zinc-700/80 text-xl font-semibold py-2">Add, remove, or edit housing project details.</div>
+      <button
+        onClick={() => setShowModal(true)}
+        className="bg-red-800 text-white font-bold py-2 px-4 rounded-lg mt-2 md:mt-0"
+      >
+        Add New Project
+      </button>
+    </div>
 
-      <div className="py-6">
-        <div className="flex flex-col space-y-2 p-6 bg-white rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)]">
-          <div className="flex flex-row space-x-4">
-            <input className="py-2 px-2 w-2/5 border rounded outline-none" placeholder="Search by project name" value={searchName} onChange={(e) => setSearchName(e.target.value)} />
-            <input className="py-2 px-2 w-1/5 border rounded outline-none" placeholder="Area" value={searchArea} onChange={(e) => setSearchArea(e.target.value)} />
-            <input className="py-2 px-2 w-2/5 border rounded outline-none" placeholder="Municipality" value={searchMunicipality} onChange={(e) => setSearchMunicipality(e.target.value)} />
+      <div className="py-8">
+      <div className="flex flex-col space-y-6 p-6 bg-white rounded-2xl border border-zinc-400">
+        <div className="flex flex-col md:flex-row gap-4 mb-2">
+          <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+            <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
+            <input
+              className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400 py-1"
+              placeholder="Search by project name"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+            />
           </div>
+          <div className="flex items-center w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-1 bg-zinc-50">
+            <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
+            <input
+              className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
+              placeholder="Search by city/town"
+              value={searchArea}
+              onChange={(e) => setSearchArea(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-1 bg-zinc-50">
+          <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
+            <input
+              className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
+              placeholder="Search by suburb"
+              value={searchMunicipality}
+              onChange={(e) => setSearchMunicipality(e.target.value)}
+            />
+          </div>
+        </div>
 
-          <div className="flex flex-col rounded-lg bg-white border border-zinc-700/60 mt-4">
-            <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-700/60 text-zinc-700/60 font-bold">
-              <div className="w-1/6">Project Name</div>
-              <div className="w-1/6">Area</div>
+        <div className="overflow-x-auto rounded-lg border border-zinc-300 bg-white">
+          <div className="min-w-full">
+            <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-300 w-full text-zinc-600 font-bold bg-zinc-50">
+              <div className="w-1/3">Project Name</div>
+              <div className="w-1/3">City/Town</div>
+              <div className="w-1/3">Suburb</div>
               <div className="w-1/6">Cutoff Year</div>
-              <div className="w-1/6">Municipality</div>
-              <div className="w-1/6">Status</div>
-              <div className="w-1/6">Actions</div>
+              <div className="w-1/6 flex justify-center">Status</div>
+              <div className="w-1/6 flex justify-center items-center">Actions</div>
             </div>
-            {filteredProjects.map((p, i) => (
-              <Users key={p._id} project={p} isLast={i === filteredProjects.length - 1} onEdit={handleEditProject} onDelete={handleDeleteProject} />
-            ))}
+            {filteredProjects.length === 0 ? (
+              <div className="py-8 text-center text-zinc-400 font-semibold">No projects found.</div>
+            ) : (
+              filteredProjects.map((p, i) => (
+                <Users
+                  key={p._id}
+                  project={p}
+                  isLast={i === filteredProjects.length - 1}
+                  onEdit={handleEditProject}
+                  onDelete={() => handleAskDelete(p._id)}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
+    </div>
 
-      {showModal && (
+     {showDeleteModal && (
+      <div className="fixed inset-0 bg-black/40 z-50 flex justify-center items-center">
         <div
-          className="fixed inset-0 bg-black/30 z-50 flex justify-center items-center"
-          onClick={(e) => {
-            if (modalRef.current && !modalRef.current.contains(e.target)) {
-              setShowModal(false);
-              resetForm();
-            }
-          }}
+          className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative flex flex-col items-center"
+          onClick={e => e.stopPropagation()}
         >
-          <div
-            ref={modalRef}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl shadow-lg w-[600px] p-6"
-          >
-            <div className="text-2xl font-bold text-zinc-700 mb-2">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+            <svg className="w-10 h-10 text-red-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-zinc-800 mb-2 text-center">Delete Project?</h2>
+          <p className="text-zinc-600 mb-6 text-center">
+            Are you sure you want to delete this project?
+            <br />
+            <span className="text-red-700 font-semibold">This action cannot be undone.</span>
+          </p>
+          <div className="flex justify-end gap-3 w-full">
+            <button
+              className="bg-white border border-zinc-400 hover:bg-zinc-100 transition text-zinc-700 px-4 py-2 rounded-lg font-medium"
+              onClick={() => { setShowDeleteModal(false); setDeleteId(null); }}
+            >
+              Cancel
+            </button>
+            <button
+              className="bg-red-800 text-white px-5 py-2 rounded-lg font-bold hover:bg-red-900 transition shadow"
+              onClick={handleDeleteProject}
+            >
+              Yes, Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
+
+    {showModal && (
+      <div
+        className="fixed inset-0 bg-black/30 z-50 flex justify-center items-center"
+        onClick={(e) => {
+          if (modalRef.current && !modalRef.current.contains(e.target)) {
+            setShowModal(false);
+            resetForm();
+          }
+        }}
+      >
+        <div
+          ref={modalRef}
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8"
+        >
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-zinc-800">
               {isEditing ? "Edit Project" : "Add New Housing Project"}
-            </div>
-            <div className="text-zinc-600 font-medium mb-4">
+            </h2>
+            <p className="text-zinc-500 mt-1">
               {isEditing
-                ? "Modify the fields and save changes."
-                : "Enter the details for the new housing project."}
+                ? "Update the details for this housing project."
+                : "Fill in the details below to add a new housing project."}
+            </p>
+          </div>
+
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              isEditing ? handleUpdateProject() : handleAddProject();
+              setShowModal(false);
+            }}
+            className="space-y-5"
+          >
+            <div>
+              <label htmlFor="name" className="block text-zinc-700 font-medium mb-1">
+                Project Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                className="w-full border border-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-800 text-zinc-800"
+                value={formData.name}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                required
+                autoFocus
+              />
             </div>
-
-            {/* Dynamic input fields */}
-            {["name", "area", "year", "municipality", "status"].map((field) => (
-              <div key={field} className="flex flex-row p-4 w-full items-center">
-                <div className="text-zinc-700 font-bold px-4 text-lg w-1/3">
-                  {field.charAt(0).toUpperCase() + field.slice(1)}
-                </div>
-                {field === "status" ? (
-                  <select
-                    className="text-zinc-700/75 border border-zinc-700/50 outline-none rounded-md px-1 py-0.1 w-2/3"
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  >
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Upcoming">Upcoming</option>
-                  </select>
-                ) : (
-                  <input
-                    className="text-zinc-700/75 border border-zinc-700/50 outline-none roundeded px-2 py-1 w-2/3"
-                    value={formData[field]}
-                    onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                  />
-                )}
-
-              </div>
-            ))}
-
-            <div className="flex justify-between mt-6">
-              <button className="bg-gray-200 text-zinc-800 px-4 py-2 rounded" onClick={() => { resetForm(); setShowModal(false); }}>
+            <div>
+              <label htmlFor="area" className="block text-zinc-700 font-medium mb-1">
+                City/Town
+              </label>
+              <input
+                id="area"
+                type="text"
+                className="w-full border border-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-800 text-zinc-800"
+                value={formData.area}
+                onChange={e => setFormData({ ...formData, area: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="municipality" className="block text-zinc-700 font-medium mb-1">
+                Suburb
+              </label>
+              <input
+                id="municipality"
+                type="text"
+                className="w-full border border-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-800 text-zinc-800"
+                value={formData.municipality}
+                onChange={e => setFormData({ ...formData, municipality: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="year" className="block text-zinc-700 font-medium mb-1">
+                Cutoff Year
+              </label>
+              <input
+                id="year"
+                type="number"
+                className="w-full border border-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-800 text-zinc-800"
+                value={formData.year}
+                onChange={e => setFormData({ ...formData, year: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="status" className="block text-zinc-700 font-medium mb-1">
+                Status
+              </label>
+              <select
+                id="status"
+                className="w-full border border-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-800 text-zinc-800 bg-white appearance-none pr-8 bg-[url('data:image/svg+xml;utf8,<svg fill=\'%236b7280\' height=\'20\' viewBox=\'0 0 20 20\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z\'/></svg>')] bg-no-repeat bg-[right_1rem_center]"
+                value={formData.status}
+                onChange={e => setFormData({ ...formData, status: e.target.value })}
+                required
+              >
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Upcoming">Upcoming</option>
+              </select>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                className="bg-white border border-zinc-400 hover:bg-zinc-100 transition text-zinc-700 px-4 py-2 rounded-lg font-medium"
+                onClick={() => { resetForm(); setShowModal(false); }}
+              >
                 Cancel
               </button>
               <button
                 ref={submitButtonRef}
-                className="bg-red-800 text-white px-4 py-2 rounded font-bold"
-                onClick={() => {
-                  isEditing ? handleUpdateProject() : handleAddProject();
-                  setShowModal(false);
-                }}
+                type="submit"
+                className="bg-red-800 text-white px-5 py-2 rounded-lg font-bold hover:bg-red-900 transition"
               >
                 {isEditing ? "Save Changes" : "Add Project"}
               </button>
             </div>
-          </div>
+          </form>
         </div>
-      )}
+      </div>
+    )}
     </div>
   );
 }
