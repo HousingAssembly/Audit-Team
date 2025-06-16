@@ -127,7 +127,7 @@ export default function ExportCSV() {
             <div className="flex flex-col md:flex-row gap-4 justify-between">
               <button
                 onClick={clearForm}
-                className="bg-white border border-zinc-300 px-8 py-3 text-zinc-700 font-bold rounded-lg hover:bg-zinc-50 transition"
+                className="bg-white border border-zinc-500 px-8 py-3 text-zinc-700 font-bold rounded-lg hover:bg-zinc-200 transition"
               >
                 Clear
               </button>

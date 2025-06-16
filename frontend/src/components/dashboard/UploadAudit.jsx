@@ -290,13 +290,13 @@
       )}
       
        <div className="px-7 py-7">
-        {/*
+      
 
       <div className="text-4xl text-zinc-700 font-bold py-2">Upload Files</div>
       <div className="text-zinc-700/80 text-xl font-bold py-2">
         Add new audit records to the system by completing the digital form and uploading the required Power of Attorney document.
       </div>
-
+{/*
       <div className="flex flex-col items-center mt-[50px] mb-[-40px]">
         <label htmlFor="uploadInput">
           <div className="w-[760px] h-[310px] mt-4 border-2 border-dashed border-zinc-500/60 rounded-xl bg-white p-10 text-center cursor-pointer hover:border-zinc-500 transition">
