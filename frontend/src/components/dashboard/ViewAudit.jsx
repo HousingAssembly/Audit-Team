@@ -148,6 +148,18 @@ const filteredAudits = audits.filter((audit) => {
     }
   };
 
+  const calculateYearsBetweenDates = (endDate) => {
+    const currentDate = Date.now();
+    const applicationDate = new Date(endDate).getTime();
+
+    const difference =  currentDate - applicationDate;
+
+    const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
+    const years = difference / millisecondsPerYear;
+
+    return years.toFixed(1) + ' years';
+  }
+
   return (
     <div className="px-7 py-7 flex flex-col">
       <div className="text-4xl text-zinc-700 font-bold py-2">View Audit</div>
@@ -216,7 +228,7 @@ const filteredAudits = audits.filter((audit) => {
                     .filter(([_, value]) => value === true)
                     .map(([key]) => SPECIAL_CIRCUMSTANCE_LABELS[key])
                     .join(', ') || 'None';
-                  const period = audit.waiting_period || 'N/A';
+                  const period = calculateYearsBetweenDates(audit.application_date) || 'N/A';
                   const status = audit.status || 'Active';
                   return (
                     <Users key={audit._id} id={id} name={name} region={region} priority={priority} period={period} status={status} isLast={index === filteredAudits.length - 1} onView={() => setSelectedAudit(audit)} onDelete={() => setAuditToDelete(audit)} />
