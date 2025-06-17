@@ -19,7 +19,6 @@ const ProgressBar = ({ title, people, percent }) => {
         <div className="text-center text-zinc-700 text-xl">{percent}</div>
       </div>
       <div className="w-full bg-zinc-300/80 rounded-full h-3.5 mt-4 mb-12">
-        {/* percent should be like "23.45%" so style={{ width: "23.45%" }} */}
         <div
           className="bg-red-500 h-3.5 rounded-full"
           style={{ width: `${percent}` }}
@@ -69,7 +68,6 @@ const ProgressCircle = ({ percent, color }) => {
         />
       </svg>
       <div className="absolute inset-0 flex justify-center items-center text-2xl font-bold text-gray-800">
-        {/* Show percent with a “%” */}
         <span>{percent}%</span>
       </div>
     </div>
@@ -83,7 +81,8 @@ const Overview = () => {
     femaleCount: 0,
     ageGroups: { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
     waitingTimes: { "0-5": 0, "5-10": 0, "10+": 0 },
-    regions: {}
+    regions: {},
+    averageWaitingTime: 0
   });
 
   const getStatsData = async () => {
@@ -123,14 +122,14 @@ const Overview = () => {
         />
         <Stats
           title="Average Waiting Time"
-          stat={`${waitingTimes["0-5"]} years`}
+          stat={`${statsData.averageWaitingTime ? statsData.averageWaitingTime.toFixed(2) : "N/A"} years`}
         />
       </div>
 
       <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">
         Regions
       </div>
-      <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-8">
+      <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-8 h-[700px] overflow-y-auto">
         <div className="text-5xl text-zinc-700 font-bold py-2">
           Regional Distributions
         </div>
