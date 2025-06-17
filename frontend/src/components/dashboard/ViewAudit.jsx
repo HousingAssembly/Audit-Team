@@ -100,7 +100,7 @@ export default function ViewAudit() {
   }, []);
 
   const filteredAudits = audits.filter((audit) => {
-    const id = audit.registration_number || '';
+    const id = audit.applicant?.id_number || '';
     const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`;
     const region = audit.address?.suburb || '';
     const priority = Object.entries(audit.special_circumstances || {})
@@ -197,7 +197,7 @@ export default function ViewAudit() {
                 <div className="py-8 text-center text-zinc-400 font-semibold">No audits found.</div>
               ) : (
                 filteredAudits.map((audit, index) => {
-                  const id = audit.registration_number || 'N/A';
+                  const id = audit.applicant?.id_number || 'N/A';
                   const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`.trim();
                   const region = audit.address?.suburb || 'N/A';
                   const priority = Object.entries(audit.special_circumstances || {})

@@ -7,18 +7,18 @@
   );
 
   const CheckboxField = ({ checked, onChange, disabled }) => (
-    <div className="col-span-1 flex justify-center outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 items-center border border-zinc-700 bg-white">
+    <div className="col-span-1 flex justify-center outline outline-[2px] outline-offset-[-2px] outline-zinc-700 items-center border border-zinc-700 bg-white">
       <input
         type="checkbox"
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className="w-6 h-6"
+        className="w-4 h-4"
       />
     </div>
   );
 
-  const InputField = ({ value, onChange, disabled, enforceDateFormat = false }) => {
+  const InputField = ({ value, onChange, disabled, enforceDateFormat = false, placeholder }) => {
     const isValidDate = (val) => /^\d{4}\/\d{2}\/\d{2}$/.test(val);
     const showWarning = enforceDateFormat && value && !isValidDate(value);
 
@@ -33,11 +33,11 @@
     return (
       <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white">
         <input
-          className={`w-full px-2 py-2 outline-none ${showWarning ? 'border-2 border-red-500' : ''}`}
+          className={`w-full px-3 py-2 outline-none ${showWarning ? 'border-2 border-red-500' : ''}`}
           value={value}
           onChange={enforceDateFormat ? handleDateInput : onChange}
           disabled={disabled}
-          placeholder={enforceDateFormat ? "YYYY/MM/DD" : undefined}
+          placeholder={placeholder || (enforceDateFormat ? "0000/00/00" : undefined)}
         />
         {showWarning && (
           <div className="text-xs text-red-600 px-2 pb-1">
@@ -51,7 +51,7 @@
 
   const Section = ({ title, children, className, extra }) => (
     <div className="flex flex-col py-4">
-      <div className={`flex items-center justify-between font-bold text-4xl py-6 text-zinc-700 px-4 bg-palette-dashboard ${className}`}>
+      <div className={`flex items-center justify-between font-bold text-3xl py-4 text-zinc-700 px-4 bg-white ${className}`}>
         <span>{title}</span>
         {extra && (        
           <div className="flex items-center gap-2">
@@ -290,307 +290,316 @@
       )}
       
        <div className="px-7 py-7">
-      
 
-      <div className="text-4xl text-zinc-700 font-bold py-2">Upload Files</div>
+
+      <div className="text-4xl text-zinc-700 font-bold py-2">Upload Audit</div>
       <div className="text-zinc-700/80 text-xl font-bold py-2">
-        Add new audit records to the system by completing the digital form and uploading the required Power of Attorney document.
-      </div>
-{/*
-      <div className="flex flex-col items-center mt-[50px] mb-[-40px]">
-        <label htmlFor="uploadInput">
-          <div className="w-[760px] h-[310px] mt-4 border-2 border-dashed border-zinc-500/60 rounded-xl bg-white p-10 text-center cursor-pointer hover:border-zinc-500 transition">
-
-                <div className="relative flex justify-center mt-[50px]">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90px] h-[90px] rounded-full bg-red-800 opacity-20 z-0"></div>
-            <img
-              src="/red-upload.png"
-              alt="Upload File"
-              className="relative z-10 w-9 h-9 object-contain"
-            />
-          </div>
-            <div className="text-zinc-700 text-2xl font-bold font-['Sumana'] mt-[40px]">Drag and drop files here, or click to browse</div>
-            <div className="text-zinc-500 text-lg font-bold mt-2">Supports PDF, PNG, JPEG files only</div>
-          </div>
-        </label>
-        <input
-          id="uploadInput"
-          type="file"
-          accept=".pdf,.png,.jpg,.jpeg"
-          className="hidden"
-          onChange={(e) => console.log("Selected file:", e.target.files[0])}
-        />
-
-        <div className="w-full max-w-3xl mt-6">
-          <div className="flex flex-col gap-1">
-            <label className="text-zinc-700 text-xl font-bold">File Name</label>
-            <input
-              type="text"
-              placeholder="Enter file name"
-              className="px-4 py-3 rounded-md border border-zinc-300 text-lg focus:outline-none focus:border-zinc-500"
-            />
-          </div>
-
-          <div className="flex justify-between items-center mt-6">
-            <button
-              onClick={() => {
-                document.getElementById("uploadInput").value = "";
-              }}
-              className="w-32 py-3 text-lg font-bold text-zinc-700 border border-zinc-500 bg-white rounded-lg hover:bg-zinc-100 transition"
-            >
-              Clear
-            </button>
-            <button
-              className="w-48 py-3 text-lg font-bold text-white bg-red-800 rounded-lg hover:bg-red-900 transition"
-            >
-              Upload File
-            </button>
-          </div>
-        </div>
+        Add new audit records to the system by completing the digital form.
       </div>
 
-      <div className="bg-palette-dashboard shadow-[0_4px_6px_-1px_rgba(0,0,0,0.2)] w-full h-32 -mx-7 w-[calc(100%+4rem)]"></div>
-*/}
+      <div className="flex justify-center w-full">
+        <div className="pb-[40px] pt-[60px] mt-8 bg-white rounded-2xl border border-zinc-400 w-[90%] mb-6">
 
-      <div className="text-center text-6xl font-bold text-zinc-700 mt-[90px] mb-[-10px] uppercase">
-        Audit Details
-      </div>
-
-        <Section title="AUDIT DETAILS">
-          <Field label="Registration Number" />
-          <InputField value={formData.registration_number} onChange={(e) => updateField("registration_number", e.target.value)} />
-          
-          <Field label="Application Date" />
-          <InputField value={formData.application_date} onChange={(e) => updateField("application_date", e.target.value)} enforceDateFormat/>
-          
-          <Field label="Client Copy Date" />
-          <InputField value={formData.client_copy_date} onChange={(e) => updateField("client_copy_date", e.target.value)} enforceDateFormat/>
-        </Section>
-
-        <Section title="APPLICANT">
-          <Field label="Surname" />
-          <InputField value={formData.applicant.surname} onChange={(e) => updateField("applicant.surname", e.target.value)} />
-
-          <Field label="First Name" />
-          <InputField value={formData.applicant.first_name} onChange={(e) => updateField("applicant.first_name", e.target.value)} />
-
-          <Field label="ID Number" />
-          <InputField value={formData.applicant.id_number} onChange={(e) => updateField("applicant.id_number", e.target.value)} />
-
-          <Field label="Date of Birth" />
-          <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} enforceDateFormat/>
-          
-        <Field label="Gender" />
-          <div className="col-span-1 flex justify-center gap-8 py-2">
-            <div className="flex items-center gap-2">
-              <CheckboxField
-                checked={formData.applicant.gender.male}
-                onChange={() => toggleCheckbox("applicant.gender.male")}
-              />
-              <span className="text-zinc-700 font-bold">Male</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckboxField
-                checked={formData.applicant.gender.female}
-                onChange={() => toggleCheckbox("applicant.gender.female")}
-              />
-              <span className="text-zinc-700 font-bold">Female</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckboxField
-                checked={formData.applicant.gender.other}
-                onChange={() => toggleCheckbox("applicant.gender.other")}
-              />
-              <span className="text-zinc-700 font-bold">Other</span>
-            </div>
+          <div className="text-center text-5xl font-bold text-zinc-700 mb-[-16px] uppercase">
+            Audit Details
           </div>
 
+          <div className="px-20">
+            <Section>
+              <Field label="Registration Number" />
+              <InputField
+                value={formData.registration_number} 
+                onChange={(e) => updateField("registration_number", e.target.value)} 
+                placeholder="000000"
+              />
 
-          {formData.applicant.gender.other && (
-          <>
-            <Field label="Specify if Other" />
-            <InputField
-              value={formData.applicant.gender.description}
-              onChange={(e) =>
-                updateField("applicant.gender.description", e.target.value)
-              }
-            />
-          </>
-        )}
+              <Field label="Application Date (YYYY/MM/DD)" />
+              <InputField 
+                value={formData.application_date} 
+                onChange={(e) => updateField("application_date", e.target.value)} enforceDateFormat
+              />
+              
+              <Field label="Client Copy Date (YYYY/MM/DD)" />
+              <InputField 
+                value={formData.client_copy_date} 
+                onChange={(e) => updateField("client_copy_date", e.target.value)} enforceDateFormat
+              />
+            </Section>
 
-          </Section>
-
-        <Section
-          title="SPOUSE OR PARTNER"
-          extra={{
-            checked: formData.skip_spouse,
-            onChange: () =>
-              setFormData((prev) => ({
-                ...prev,
-                skip_spouse: !prev.skip_spouse,
-                spouse_or_partner: !prev.skip_spouse
-                  ? {
-                      surname: "",
-                      first_name: "",
-                      id_number: "",
-                      date_of_birth: "",
-                    }
-                  : prev.spouse_or_partner,
-              })),
-          }}
-        >
-          {!formData.skip_spouse && (
-            <>
+            <Section title="APPLICANT'S PERSONAL DETAILS">
               <Field label="Surname" />
-              <InputField
-                value={formData.spouse_or_partner.surname}
-                onChange={(e) =>
-                  updateField("spouse_or_partner.surname", e.target.value)
-                }
+              <InputField 
+                value={formData.applicant.surname} 
+                onChange={(e) => updateField("applicant.surname", e.target.value)} 
+                placeholder="Doe"
               />
+
               <Field label="First Name" />
-              <InputField
-                value={formData.spouse_or_partner.first_name}
-                onChange={(e) =>
-                  updateField("spouse_or_partner.first_name", e.target.value)
-                }
+              <InputField 
+                value={formData.applicant.first_name} 
+                onChange={(e) => updateField("applicant.first_name", e.target.value)} 
+                placeholder="John"
               />
-              <Field label="ID Number" />
-              <InputField
-                value={formData.spouse_or_partner.id_number}
-                onChange={(e) =>
-                  updateField("spouse_or_partner.id_number", e.target.value)
-                }
-              />
-              <Field label="Date of Birth" />
-              <InputField
-                value={formData.spouse_or_partner.date_of_birth}
-                onChange={(e) =>
-                  updateField("spouse_or_partner.date_of_birth", e.target.value)
-                }
-                enforceDateFormat
-              />
-            </>
-          )}
-        </Section>
 
-<Section
-  title="MARITAL STATUS"
-  extra={{
-    checked: formData.skip_marital_status,
-    onChange: () =>
-      setFormData((prev) => ({
-        ...prev,
-        skip_marital_status: !prev.skip_marital_status,
-        marital_status: !prev.skip_marital_status
-          ? {
-              married_in_community: false,
-              married_out_of_community: false,
-              customary_marriage: false,
-              common_law_partner: false,
-              widowed: false,
-              date_married: "",
-              divorced_with_dependants: false,
-              separated_with_dependants: false,
-              single_without_dependants: false,
-              engaged_to_be_married: false,
-              date_divorced: "",
-            }
-          : prev.marital_status,
-      })),
-  }}
->
-  {!formData.skip_marital_status && (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-5xl flex flex-col items-center gap-6 px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4 w-full">
-          {[
-            { key: "married_in_community", label: "Married in a community of property" },
-            { key: "married_out_of_community", label: "Married by antenuptial contract (out of community of property)" },
-            { key: "customary_marriage", label: "Customary marriage or Muslim marriage" },
-            { key: "common_law_partner", label: "Common law partner" },
-            { key: "widowed", label: "Widowed" },
-            { key: "divorced_with_dependants", label: "Divorced with dependants" },
-            { key: "separated_with_dependants", label: "Separated or partner deserted with dependants" },
-            { key: "single_without_dependants", label: "Single without dependants" },
-            { key: "engaged_to_be_married", label: "Engaged to be married" },
-          ].map(({ key, label }) => (
-            <div key={key} className="flex items-center gap-3">
-              <CheckboxField
-                checked={formData.marital_status[key]}
-                onChange={() => toggleCheckbox(`marital_status.${key}`)}
-                disabled={formData.skip_marital_status}
+              <Field label="Identity (ID) Number" />
+              <InputField 
+                value={formData.applicant.id_number} 
+                onChange={(e) => updateField("applicant.id_number", e.target.value)} 
+                placeholder="0000000000000"
               />
-              <span className="text-zinc-700 font-bold">{label}</span>
+
+              <Field label="Date of Birth (YYYY/MM/DD)" />
+              <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} enforceDateFormat/>
+              
+            <Field label="Gender" />
+            <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
+              <div className="flex items-center gap-2">
+                <CheckboxField
+                  checked={formData.applicant.gender.male}
+                  onChange={() => toggleCheckbox("applicant.gender.male")}
+                />
+                <span className="text-zinc-700 font-bold">Male</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckboxField
+                  checked={formData.applicant.gender.female}
+                  onChange={() => toggleCheckbox("applicant.gender.female")}
+                />
+                <span className="text-zinc-700 font-bold">Female</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckboxField
+                  checked={formData.applicant.gender.other}
+                  onChange={() => toggleCheckbox("applicant.gender.other")}
+                />
+                <span className="text-zinc-700 font-bold">Other</span>
+              </div>
             </div>
-          ))}
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
-          <div>
-            <Field label="Date married" />
-            <InputField
-              value={formData.marital_status.date_married}
-              onChange={(e) =>
-                updateField("marital_status.date_married", e.target.value)
-              }
-              enforceDateFormat
-              disabled={formData.skip_marital_status}
-            />
+
+              {formData.applicant.gender.other && (
+              <>
+                <Field label="Specify if Other" />
+                <InputField
+                  value={formData.applicant.gender.description}
+                  onChange={(e) =>
+                    updateField("applicant.gender.description", e.target.value)
+                  }
+                  placeholder="Non-binary, Intersex, etc."
+                />
+              </>
+            )}
+
+              </Section>
+
+            <Section
+              title="SPOUSE OR PARTNER'S PERSONAL DETAILS"
+              extra={{
+                checked: formData.skip_spouse,
+                onChange: () =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    skip_spouse: !prev.skip_spouse,
+                    spouse_or_partner: !prev.skip_spouse
+                      ? {
+                          surname: "",
+                          first_name: "",
+                          id_number: "",
+                          date_of_birth: "",
+                        }
+                      : prev.spouse_or_partner,
+                  })),
+              }}
+            >
+              {!formData.skip_spouse && (
+                <>
+                  <Field label="Surname" />
+                  <InputField
+                    value={formData.spouse_or_partner.surname}
+                    onChange={(e) =>
+                      updateField("spouse_or_partner.surname", e.target.value)
+                    }
+                    placeholder="Doe"
+                  />
+                  <Field label="First Name" />
+                  <InputField
+                    value={formData.spouse_or_partner.first_name}
+                    onChange={(e) =>
+                      updateField("spouse_or_partner.first_name", e.target.value)
+                    }
+                    placeholder="Jane"
+                  />
+                  <Field label="Identity (ID) Number" />
+                  <InputField
+                    value={formData.spouse_or_partner.id_number}
+                    onChange={(e) =>
+                      updateField("spouse_or_partner.id_number", e.target.value)
+                    }
+                    placeholder="0000000000000"
+                  />
+                  <Field label="Date of Birth (YYYY/MM/DD)" />
+                  <InputField
+                    value={formData.spouse_or_partner.date_of_birth}
+                    onChange={(e) =>
+                      updateField("spouse_or_partner.date_of_birth", e.target.value)
+                    }
+                    enforceDateFormat
+                  />
+                </>
+              )}
+            </Section>
+
+            <Section title="RESIDENTIAL DETAILS">
+              <Field label="Street Number and Street Name" />
+                <InputField 
+                  value={formData.address.street} 
+                  onChange={(e) => updateField("address.street", e.target.value)} 
+                  placeholder="123 Main Street"
+                />
+              <Field label="Suburb" />
+                <InputField 
+                  value={formData.address.suburb} 
+                  onChange={(e) => updateField("address.suburb", e.target.value)} 
+                  placeholder="Eastridge"
+                />
+              <Field label="Postal Code" />
+                <InputField 
+                  value={formData.address.postal_code} 
+                  onChange={(e) => updateField("address.postal_code", e.target.value)} 
+                  placeholder="0000"
+                />
+            </Section>
+
+            <Section title="CONTACT DETAILS">
+              <Field label="Cellphone 1" />
+                <InputField 
+                  value={formData.contact.cellphone_1} 
+                  onChange={(e) => updateField("contact.cellphone_1", e.target.value)} 
+                  placeholder="0000000000"
+                />
+              <Field label="Cellphone 2" />
+                <InputField 
+                  value={formData.contact.cellphone_2} 
+                  onChange={(e) => updateField("contact.cellphone_2", e.target.value)} 
+                  placeholder="0000000000"
+                />
+              <Field label="Landline" />
+                <InputField 
+                  value={formData.contact.landline} 
+                  onChange={(e) => updateField("contact.landline", e.target.value)} 
+                  placeholder="0000000000"
+                />
+            </Section>
+
+            <Section
+              title="MARITAL STATUS"
+              extra={{
+                checked: formData.skip_marital_status,
+                onChange: () =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    skip_marital_status: !prev.skip_marital_status,
+                    marital_status: !prev.skip_marital_status
+                      ? {
+                          married_in_community: false,
+                          married_out_of_community: false,
+                          customary_marriage: false,
+                          common_law_partner: false,
+                          widowed: false,
+                          date_married: "",
+                          divorced_with_dependants: false,
+                          separated_with_dependants: false,
+                          single_without_dependants: false,
+                          engaged_to_be_married: false,
+                          date_divorced: "",
+                        }
+                      : prev.marital_status,
+                  })),
+              }}
+            >
+              {!formData.skip_marital_status && (
+                <>
+                  {[
+                    { key: "married_in_community", label: "Married in a community of property" },
+                    { key: "married_out_of_community", label: "Married by antenuptial contract (out of community of property)" },
+                    { key: "customary_marriage", label: "Customary marriage or Muslim marriage" },
+                    { key: "common_law_partner", label: "Common law partner" },
+                    { key: "widowed", label: "Widowed" },
+                    { key: "divorced_with_dependants", label: "Divorced with dependants" },
+                    { key: "separated_with_dependants", label: "Separated or partner deserted with dependants" },
+                    { key: "single_without_dependants", label: "Single without dependants" },
+                    { key: "engaged_to_be_married", label: "Engaged to be married" },
+                  ].map(({ key, label }) => (
+                    <React.Fragment key={key}>
+                      <Field label={label} />
+                      <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
+                        <div className="flex items-center gap-2">
+                          <CheckboxField
+                            checked={formData.marital_status[key]}
+                            onChange={() => toggleCheckbox(`marital_status.${key}`)}
+                            disabled={formData.skip_marital_status}
+                          />
+                        </div>
+                      </div>
+                    </React.Fragment>
+                  ))}
+
+                  <Field label="Date Married (YYYY/MM/DD)" />
+                  <InputField
+                    value={formData.marital_status.date_married}
+                    onChange={(e) =>
+                      updateField("marital_status.date_married", e.target.value)
+                    }
+                    enforceDateFormat
+                    disabled={formData.skip_marital_status}
+                  />
+
+                  <Field label="Date Divorced/Split (YYYY/MM/DD)" />
+                  <InputField
+                    value={formData.marital_status.date_divorced}
+                    onChange={(e) =>
+                      updateField("marital_status.date_divorced", e.target.value)
+                    }
+                    enforceDateFormat
+                    disabled={formData.skip_marital_status}
+                  />
+                </>
+              )}
+            </Section>
+
+            <Section title="SPECIAL CIRCUMSTANCES">
+              <Field label="Disability/Chronic Illness" />
+                <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
+                  <div className="flex items-center gap-2">
+                    <CheckboxField checked={formData.special_circumstances.disability} onChange={() => toggleCheckbox("special_circumstances.disability")} /> 
+                  </div>
+                </div>
+              <Field label="Old Age (60+)" />
+                <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
+                  <div className="flex items-center gap-2">
+                    <CheckboxField checked={formData.special_circumstances.senior_citizen} onChange={() => toggleCheckbox("special_circumstances.senior_citizen")} />
+                  </div>
+                </div>
+              <Field label="War Veteran" />
+                <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
+                  <div className="flex items-center gap-2">
+                    <CheckboxField checked={formData.special_circumstances.war_veteran} onChange={() => toggleCheckbox("special_circumstances.war_veteran")} />
+                  </div> 
+                </div>
+              <Field label="Woman/Child-Headed Household" />
+                <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
+                  <div className="flex items-center gap-2">
+                    <CheckboxField checked={formData.special_circumstances.pregnant} onChange={() => toggleCheckbox("special_circumstances.pregnant")} />
+                  </div>
+                </div>
+            </Section>
+
+              <div className="flex flex-row justify-between py-3 mt-6">
+                <button onClick={() => window.location.reload()} className="px-6 py-3 text-xl text-zinc-700 font-bold rounded-lg border border-2 border-zinc-500 hover:bg-zinc-200 transition">Clear</button>
+                <button onClick={handleSubmitAudit} className="px-10 py-3 text-xl text-white font-bold rounded-lg bg-red-800 hover:bg-red-900 transition">Submit Audit</button>
+              </div>
+            </div>
           </div>
-
-          <div>
-            <Field label="Date divorced/split" />
-            <InputField
-              value={formData.marital_status.date_divorced}
-              onChange={(e) =>
-                updateField("marital_status.date_divorced", e.target.value)
-              }
-              enforceDateFormat
-              disabled={formData.skip_marital_status}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  )}
-</Section>
-
-
-
-
-        <Section title="RESIDENTIAL DETAILS">
-          <Field label="Street" />
-          <InputField value={formData.address.street} onChange={(e) => updateField("address.street", e.target.value)} />
-          <Field label="Suburb" />
-          <InputField value={formData.address.suburb} onChange={(e) => updateField("address.suburb", e.target.value)} />
-          <Field label="Postal Code" />
-          <InputField value={formData.address.postal_code} onChange={(e) => updateField("address.postal_code", e.target.value)} />
-        </Section>
-
-        <Section title="CONTACT">
-          <Field label="Cellphone 1" />
-          <InputField value={formData.contact.cellphone_1} onChange={(e) => updateField("contact.cellphone_1", e.target.value)} />
-          <Field label="Cellphone 2" />
-          <InputField value={formData.contact.cellphone_2} onChange={(e) => updateField("contact.cellphone_2", e.target.value)} />
-          <Field label="Landline" />
-          <InputField value={formData.contact.landline} onChange={(e) => updateField("contact.landline", e.target.value)} />
-        </Section>
-
-        <Section title="SPECIAL CIRCUMSTANCES">
-          <Field label="Disability/Chronic Illness" />
-          <CheckboxField checked={formData.special_circumstances.disability} onChange={() => toggleCheckbox("special_circumstances.disability")} />
-          <Field label="Old Age (60+)" />
-          <CheckboxField checked={formData.special_circumstances.senior_citizen} onChange={() => toggleCheckbox("special_circumstances.senior_citizen")} />
-          <Field label="War Veteran" />
-          <CheckboxField checked={formData.special_circumstances.war_veteran} onChange={() => toggleCheckbox("special_circumstances.war_veteran")} />
-          <Field label="Pregnant / Woman or Child-Headed Household" />
-          <CheckboxField checked={formData.special_circumstances.pregnant} onChange={() => toggleCheckbox("special_circumstances.pregnant")} />
-        </Section>
-
-        <div className="flex flex-row justify-between py-3 mt-6">
-          <button onClick={() => window.location.reload()} className="px-6 py-3 text-xl text-zinc-700 font-bold rounded-lg border border-solid border-2 border-black/50">Clear</button>
-          <button onClick={handleSubmitAudit} className="px-10 py-3 text-xl text-white font-bold rounded-lg bg-red-800">Submit Audit</button>
         </div>
       </div>
     </>

@@ -42,7 +42,7 @@ export default function Dashboard() {
 
               <div className="flex flex-col text-white text-[17px] font-bold">
                 <Link to="overview" className="transition hover:opacity-75">Overview</Link>
-                <Link to="upload-audit" className="mt-[50px] transition hover:opacity-75">Upload Files</Link>
+                <Link to="upload-audit" className="mt-[50px] transition hover:opacity-75">Upload Audit</Link>
                 <Link to="view-audit" className="mt-[50px] transition hover:opacity-75">View Audits</Link>
                 <Link to="export" className="mt-[50px] transition hover:opacity-75">Export CSV</Link>
                 <Link to="pending-approvals" className="mt-[50px] transition hover:opacity-75">Pending Approvals</Link>
