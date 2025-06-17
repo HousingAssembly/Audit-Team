@@ -12,6 +12,7 @@ export default function ViewAuditGuest({ closeModal }) {
   const modalRef = useRef();
 
   const normalizeInput = (input) => input.trim().toLowerCase();
+  const normalizeString = (str) => str[0].toUpperCase() + str.slice(1).toLowerCase();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,9 +22,9 @@ export default function ViewAuditGuest({ closeModal }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id_number: normalizeInput(idNumber),
-          surname: normalizeInput(surname),
-          first_name: normalizeInput(firstName),
-          date_of_birth: normalizeInput(dob.replace(/\D/g, '')),
+          surname: normalizeString(surname),
+          first_name: normalizeString(firstName),
+          date_of_birth: normalizeInput(dob),
         }),
       });
 

@@ -201,7 +201,7 @@ const Overview = () => {
                       ? Number(((maleCount / totalUsers) * 100).toFixed(2))
                       : 0
                   }
-                  color="ef4444"
+                  color="black"
                 />
                 <div className="text-zinc-700 text-lg font-semibold mt-2">Male</div>
                 <div className="text-zinc-500 text-base">{maleCount} people</div>

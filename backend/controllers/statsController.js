@@ -56,7 +56,7 @@ exports.getStats = async (req, res) => {
       {
         $bucket: {
           groupBy: "$applicantAge",
-          boundaries: [0, 30, 45, 60, 120],
+          boundaries: [0, 30, 45, 60, 140],
           default: "Unknown",
           output: { count: { $sum: 1 } }
         }
@@ -72,13 +72,13 @@ exports.getStats = async (req, res) => {
 
     rawAgeGroups.forEach((group) => {
       let label;
-      if (group._id >= 0 && group._id <= 30)
+      if (group._id === 0)
         label = "0-30";
-      else if (group._id > 30 && group._id <= 45)
+      else if (group._id === 30 )
         label = "31-45";
-      else if (group._id > 45 && group._id <= 60)
+      else if (group._id === 45)
         label = "46-60";
-      else if (group._id > 60)
+      else if (group._id === 60)
         label = "60+";
       else
         label = "Unknown";
@@ -97,7 +97,7 @@ exports.getStats = async (req, res) => {
           waitingTime: {
             $divide: [
               { $subtract: [new Date(), { $toDate: "$application_date" }] },
-              31536000000
+              31536000000  
             ]
           }
         }
@@ -105,7 +105,7 @@ exports.getStats = async (req, res) => {
       {
         $bucket: {
           groupBy: "$waitingTime",
-          boundaries: [0, 5, 10, Infinity],
+          boundaries: [0, 5, 10, 140],
           default: "Unknown",
           output: { count: { $sum: 1 } }
         }
@@ -119,19 +119,19 @@ exports.getStats = async (req, res) => {
       "10+": 0
     };
 
-      rawWaitingTimes.forEach((group) => {
-         let label;
-          if (group._id >= 0 && group._id <= 5) {
-            label = "0-5";
-          } else if (group._id > 5 && group._id <= 10) {
-            label = "5-10";
-          } else if (group._id > 10) {
-            label = "10+";
-          } else {
-            label = "Unknown";
-          }
-        waitingTimes[label] = label === "Unknown" ? "Unknown" : group.count;
-    });   
+    rawWaitingTimes.forEach((group) => {
+      let label;
+      if (group._id === 0) {
+        label = "0-5";
+      } else if (group._id === 5) {
+        label = "5-10";
+      } else if (group._id === 10) {
+        label = "10+";
+      } else {
+        label = "Unknown";
+      }
+      waitingTimes[label] = group.count;
+    }); 
 
     // ─── 5) REGIONAL DISTRIBUTION ───────────────────────────────────────────────
     const rawRegional = await Audit.aggregate([
