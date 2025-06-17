@@ -88,44 +88,45 @@ export default function ViewAudit() {
     fetchAudits();
   }, []);
 
-  const customMenu = (props) => (
-    <>
-      <div className="flex justify-around px-3 pt-2 pb-1 text-sm text-zinc-600">
-        {['OR', 'AND'].map((mode) => (
-          <button
-            key={mode}
-            onClick={() => setMatchMode(mode)}
-            className={`px-2 py-1 rounded-md text-xs font-semibold ${matchMode === mode ? 'bg-blue-600 text-white' : 'bg-zinc-200'}`}
-          >
-            {mode}
-          </button>
-        ))}
-      </div>
-      <components.MenuList {...props}>{props.children}</components.MenuList>
-    </>
+const customMenu = (props) => (
+  <>
+    <div className="flex justify-around px-3 pt-2 pb-1 text-sm text-zinc-600">
+      {['OR', 'AND'].map((mode) => (
+        <button
+          key={mode}
+          onClick={() => setMatchMode(mode)}
+          className={`px-2 py-1 rounded-md text-xs font-semibold ${matchMode === mode ? 'bg-blue-600 text-white' : 'bg-zinc-200'}`}
+        >
+          {mode}
+        </button>
+      ))}
+    </div>
+    <components.MenuList {...props}>{props.children}</components.MenuList>
+  </>
+);
+
+const filteredAudits = audits.filter((audit) => {
+  const id = audit.applicant?.id_number || audit.registration_number || '';
+  const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`;
+  const region = audit.address?.suburb || '';
+
+  const readablePriorities = Object.entries(audit.special_circumstances || {})
+    .filter(([_, value]) => value === true)
+    .map(([key]) => SPECIAL_CIRCUMSTANCE_LABELS?.[key] || key.replace(/_/g, ' '));
+
+  const priorityMatch =
+    searchPriority.length === 0 ||
+    (matchMode === 'AND'
+      ? searchPriority.every((p) => readablePriorities.includes(p))
+      : searchPriority.some((p) => readablePriorities.includes(p)));
+
+  return (
+    (id + name).toLowerCase().includes(searchIdOrName.toLowerCase()) &&
+    region.toLowerCase().includes(searchRegion.toLowerCase()) &&
+    priorityMatch
   );
+});
 
-  const filteredAudits = audits
-    .filter((audit) => {
-      const id = audit.registration_number || '';
-      const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`;
-      const region = audit.address?.suburb || '';
-      const readablePriorities = Object.entries(audit.special_circumstances || {})
-        .filter(([_, value]) => value === true)
-        .map(([key]) => SPECIAL_CIRCUMSTANCE_LABELS[key]);
-
-      const priorityMatch =
-        searchPriority.length === 0 ||
-        (matchMode === 'AND'
-          ? searchPriority.every((p) => readablePriorities.includes(p))
-          : searchPriority.some((p) => readablePriorities.includes(p)));
-
-      return (
-        (id + name).toLowerCase().includes(searchIdOrName.toLowerCase()) &&
-        region.toLowerCase().includes(searchRegion.toLowerCase()) &&
-        priorityMatch
-      );
-    });
 
   const deleteAudit = async () => {
     if (!auditToDelete?._id) return;
@@ -207,8 +208,9 @@ export default function ViewAudit() {
                 <div className="py-8 text-center text-zinc-400 font-semibold">No audits found.</div>
               ) : (
                 filteredAudits.map((audit, index) => {
-                  const id = audit.registration_number || 'N/A';
-                  const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`;
+                  const id = audit.applicant?.id_number || 'N/A';
+                  const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`.trim();
+                  
                   const region = audit.address?.suburb || 'N/A';
                   const priority = Object.entries(audit.special_circumstances || {})
                     .filter(([_, value]) => value === true)
