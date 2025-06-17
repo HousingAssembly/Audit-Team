@@ -1,45 +1,45 @@
 import { useState, useEffect } from "react";
 import { fetchStats } from "../../statsServices";
 
-const Stats = ({ title, stat }) => {
-  return (
-    <div className="flex flex-col px-8 py-6 bg-white rounded-lg w-full">
-      <div className="text-zinc-700 text-xl font-bold">{title}</div>
-      <div className="text-zinc-700 text-5xl font-bold py-4">{stat}</div>
-    </div>
-  );
-};
+// Card for stats
+const Stats = ({ title, stat }) => (
+  <div className="flex flex-col items-center justify-center px-6 py-5 bg-white rounded-xl  border border-zinc-400 w-full min-w-[180px]">
+    <div className="text-zinc-600 text-lg font-semibold mb-1">{title}</div>
+    <div className="text-zinc-800 text-4xl font-extrabold">{stat}</div>
+  </div>
+);
 
-const ProgressBar = ({ title, people, percent }) => {
-  return (
-    <div>
-      <div className="text-zinc-700 text-xl font-bold py-2">{title}</div>
-      <div className="flex justify-between font-bold py-2">
-        <div className="text-center text-zinc-700/75 text-xl">{people}</div>
-        <div className="text-center text-zinc-700 text-xl">{percent}</div>
+// Progress bar for region/age/waiting time
+const ProgressBar = ({ title, people, percent }) => (
+  <div className="mb-8">
+    <div className="flex justify-between items-end mb-1">
+      <div className="flex flex-col items-start">
+        <span className="text-zinc-700 font-medium">{title}</span>
+        <span className="text-zinc-500 text-sm mt-1 mb-1">{people}</span>
       </div>
-      <div className="w-full bg-zinc-300/80 rounded-full h-3.5 mt-4 mb-12">
-        {/* percent should be like "23.45%" so style={{ width: "23.45%" }} */}
-        <div
-          className="bg-red-500 h-3.5 rounded-full"
-          style={{ width: `${percent}` }}
-        ></div>
-      </div>
+      <span className="text-zinc-700 font-bold">{percent}</span>
     </div>
-  );
-};
+    <div className="w-full bg-zinc-200 rounded-full h-3 relative">
+      <div
+        className="bg-red-500 h-3 rounded-full transition-all duration-300"
+        style={{ width: percent }}
+      ></div>
+    </div>
+  </div>
+);
 
+// Circular progress for gender
 const ProgressCircle = ({ percent, color }) => {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="relative w-32 h-32">
+    <div className="relative w-28 h-28 mb-2">
       <svg
-        className="absolute top-0 left-0 transform rotate-90"
-        width="128"
-        height="128"
+        className="absolute top-0 left-0"
+        width="112"
+        height="112"
         viewBox="0 0 120 120"
       >
         <circle
@@ -50,13 +50,6 @@ const ProgressCircle = ({ percent, color }) => {
           strokeWidth="12"
           fill="none"
         />
-      </svg>
-      <svg
-        className="absolute top-0 left-0 transform rotate-90"
-        width="128"
-        height="128"
-        viewBox="0 0 120 120"
-      >
         <circle
           cx="60"
           cy="60"
@@ -66,15 +59,24 @@ const ProgressCircle = ({ percent, color }) => {
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
+          style={{ transition: "stroke-dashoffset 0.5s" }}v
         />
       </svg>
-      <div className="absolute inset-0 flex justify-center items-center text-2xl font-bold text-gray-800">
-        {/* Show percent with a “%” */}
+      <div className="absolute inset-0 flex justify-center items-center text-xl font-bold text-gray-800">
         <span>{percent}%</span>
       </div>
     </div>
   );
 };
+
+const SectionHeader = ({ title, subtitle }) => (
+  <div className="mb-6">
+    <div className="text-2xl md:text-3xl font-bold text-zinc-700">{title}</div>
+    {subtitle && (
+      <div className="text-zinc-500 text-base md:text-lg font-medium mt-1">{subtitle}</div>
+    )}
+  </div>
+);
 
 const Overview = () => {
   const [statsData, setStatsData] = useState({
@@ -82,7 +84,7 @@ const Overview = () => {
     maleCount: 0,
     femaleCount: 0,
     ageGroups: { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
-    waitingTimes: { "0-5": 0, "5-10": 0, "10+": 0 },
+    waitingTimes: { "0-5 years": 0, "5-10 years": 0, "10+ years": 0, },
     regions: {}
   });
 
@@ -94,6 +96,14 @@ const Overview = () => {
       console.error("Error fetching stats:", error);
     }
   };
+
+  const [activeTab, setActiveTab] = useState("suburb");
+
+  const tabList = [
+    { key: "suburb", label: "Suburb Distribution" },
+    { key: "demographics", label: "Demographics" },
+    { key: "waiting", label: "Waiting Time Distribution" },
+  ];
 
   useEffect(() => {
     getStatsData();
@@ -108,135 +118,163 @@ const Overview = () => {
     regions = {}
   } = statsData;
 
+
   return (
-    <div className="px-7 py-7 flex flex-col">
+    <div className="px-7 py-7 flex flex-col w-full min-h-screen bg-palette-dashboard">
       <div className="text-4xl text-zinc-700 font-bold py-2">Overview</div>
       <div className="text-zinc-700/80 text-xl font-bold py-2">
-        Welcome to HouseAudit — the auditing system of Housing Assembly. Here’s an
-        overview of all audit data.
+        Welcome to HouseAudit — the auditing system of Housing Assembly. Here’s an overview of all audit data.
+      </div>
+      <div className="h-8" />
+
+      {/* Stats Cards */}
+      <div className="flex flex-col md:flex-row gap-6 mb-10">
+        <Stats title="Total on Waiting List" stat={totalUsers.toLocaleString()} />
+        <Stats title="Average Waiting Time" stat={`${waitingTimes["0-5"]} years`} />
       </div>
 
-      <div className="flex flex-row space-x-6 py-4">
-        <Stats
-          title="Total on Waiting List"
-          stat={totalUsers.toString()}
-        />
-        <Stats
-          title="Average Waiting Time"
-          stat={`${waitingTimes["0-5"]} years`}
-        />
-      </div>
-
-      <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">
-        Regions
-      </div>
-      <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-8">
-        <div className="text-5xl text-zinc-700 font-bold py-2">
-          Regional Distributions
-        </div>
-        <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
-          Number of people in waiting list by region
-        </div>
-        {Object.keys(regions).length > 0 ? (
-          Object.keys(regions).map((region) => (
-            <ProgressBar
-              key={region}
-              title={region}
-              people={`${regions[region].people} people`}
-              percent={`${regions[region].percent.toFixed(2)}%`}
-            />
-          ))
-        ) : (
-          <div>No regions available</div>
-        )}
-      </div>
-
-      <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">
-        Demographics
-      </div>
-      <div className="flex flex-row w-full">
-        {/* ─── Gender Distribution ───────────────────────────────────────────────── */}
-        <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-3 w-1/2">
-          <div className="text-5xl text-zinc-700 font-bold py-2">
-            Gender Distribution
-          </div>
-          <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
-            Breakdown of waiting list by gender
-          </div>
-          <div className="flex flex-col justify-center items-center">
-            <ProgressCircle
-              percent={
-                totalUsers > 0
-                  ? Number(((maleCount / totalUsers) * 100).toFixed(2))
-                  : 0
-              }
-              color="black"
-            />
-            <div className="text-zinc-700 text-2xl py-4 font-bold">Male</div>
-            <div className="text-zinc-700/75 text-xl font-bold mb-8">
-              {maleCount} people
-            </div>
-            <ProgressCircle
-              percent={
-                totalUsers > 0
-                  ? Number(((femaleCount / totalUsers) * 100).toFixed(2))
-                  : 0
-              }
-              color="#ef4444"
-            />
-            <div className="text-zinc-700 text-2xl py-2 font-bold">Female</div>
-            <div className="text-zinc-700/75 text-xl font-bold">
-              {femaleCount} people
-            </div>
-          </div>
-        </div>
-
-        {/* ─── Age Distribution ───────────────────────────────────────────────────── */}
-        <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-3 w-1/2">
-          <div className="text-5xl text-zinc-700 font-bold py-2">
-            Age Distribution
-          </div>
-          <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
-            Breakdown of waiting list by age
-          </div>
-          {Object.keys(ageGroups).map((ageGroup) => (
-            <ProgressBar
-              key={ageGroup}
-              title={`${ageGroup} years`}
-              people={`${ageGroups[ageGroup]} people`}
-              percent={
-                totalUsers > 0
-                  ? ( (ageGroups[ageGroup] / totalUsers) * 100 ).toFixed(2) + "%"
-                  : "0.00%"
-              }
-            />
+      {/* Tabs */}
+      <div className="flex justify-center mb-8">
+        <div className="flex bg-white rounded-xl border border-zinc-400 overflow-hidden">
+          {tabList.map(tab => (
+            <button
+              key={tab.key}
+              className={`px-6 py-3 text-lg font-semibold transition-colors duration-150 ${
+                activeTab === tab.key
+                  ? "bg-zinc-100 text-red-600"
+                  : "text-zinc-600 hover:bg-zinc-50"
+              }`}
+              onClick={() => setActiveTab(tab.key)}
+            >
+              {tab.label}
+            </button>
           ))}
         </div>
       </div>
 
-      <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">
-        Waiting Time
-      </div>
-      <div className="px-6 py-8 flex flex-col bg-white rounded-lg mx-8">
-        <div className="text-5xl text-zinc-700 font-bold py-2">
-          Waiting Time Distribution
+      {/* Tab Content */}
+      {activeTab === "suburb" && (
+        <div className="flex justify-center mb-12">
+          <div className="w-[1000px] bg-white rounded-xl border border-zinc-400 px-6 py-8">
+            <SectionHeader
+              title="Suburb Distribution"
+              subtitle="Number of people in waiting list by suburb"
+            />
+            <div className="grid grid-cols-1">
+              {Object.keys(regions).length > 0 ? (
+                Object.keys(regions).map((region) => (
+                  <ProgressBar
+                    key={region}
+                    title={region}
+                    people={`${regions[region].people} people`}
+                    percent={`${regions[region].percent.toFixed(2)}%`}
+                  />
+                ))
+              ) : (
+                <div className="text-zinc-400">No regions available</div>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="text-zinc-700/80 text-2xl font-bold py-2 mb-12">
-          Number of people by waiting time duration
+      )}
+
+      {activeTab === "demographics" && (
+        <div className="flex flex-col md:flex-row gap-8 mb-12">
+          {/* Gender */}
+          <div className="bg-white rounded-xl border border-zinc-400 px-6 py-8 flex-1 flex flex-col">
+            <SectionHeader
+              title="Gender Distribution"
+              subtitle="Breakdown of waiting list by gender"
+            />
+            <div className="flex flex-col md:flex-row items-center gap-[90px] w-full justify-center mt-[80px]">
+              <div className="flex flex-col items-center">
+                <ProgressCircle
+                  percent={
+                    totalUsers > 0
+                      ? Number(((maleCount / totalUsers) * 100).toFixed(2))
+                      : 0
+                  }
+                  color="ef4444"
+                />
+                <div className="text-zinc-700 text-lg font-semibold mt-2">Male</div>
+                <div className="text-zinc-500 text-base">{maleCount} people</div>
+              </div>
+              <div className="flex flex-col items-center">
+                <ProgressCircle
+                  percent={
+                    totalUsers > 0
+                      ? Number(((femaleCount / totalUsers) * 100).toFixed(2))
+                      : 0
+                  }
+                  color="#ef4444"
+                />
+                <div className="text-zinc-700 text-lg font-semibold mt-2">Female</div>
+                <div className="text-zinc-500 text-base">{femaleCount} people</div>
+              </div>
+              <div className="flex flex-col items-center">
+                <ProgressCircle
+                  percent={
+                    totalUsers > 0
+                      ? Number(((((totalUsers - maleCount - femaleCount) / totalUsers) * 100)).toFixed(2))
+                      : 0
+                  }
+                  color="#ef4444"
+                />
+                <div className="text-zinc-700 text-lg font-semibold mt-2">Other</div>
+                <div className="text-zinc-500 text-base">
+                  {totalUsers - maleCount - femaleCount} people
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Age */}
+          <div className="bg-white rounded-xl border border-zinc-400 px-6 py-8 flex-1">
+            <SectionHeader
+              title="Age Distribution"
+              subtitle="Breakdown of waiting list by age"
+            />
+            <div>
+              {Object.keys(ageGroups).map((ageGroup) => (
+                <ProgressBar
+                  key={ageGroup}
+                  title={`${ageGroup} years`}
+                  people={`${ageGroups[ageGroup]} people`}
+                  percent={
+                    totalUsers > 0
+                      ? ((ageGroups[ageGroup] / totalUsers) * 100).toFixed(2) + "%"
+                      : "0.00%"
+                  }
+                />
+              ))}
+            </div>
+          </div>
         </div>
-        {Object.keys(waitingTimes).map((waitingTimeRange) => (
-          <ProgressBar
-            key={waitingTimeRange}
-            title={waitingTimeRange}
-            people={`${waitingTimes[waitingTimeRange]} people`}
-            percent={
-              totalUsers > 0
-                ? ( (waitingTimes[waitingTimeRange] / totalUsers) * 100 ).toFixed(2) + "%"
-                : "0.00%"
-            }
-          />
-        ))}
-      </div>
+      )}
+
+      {activeTab === "waiting" && (
+        <div className="flex justify-center mb-8">
+          <div className="w-full w-[1000px] bg-white rounded-xl border border-zinc-400 px-6 py-8">
+            <SectionHeader
+              title="Waiting Time Distribution"
+              subtitle="Number of people by waiting time duration"
+            />
+            <div className="grid grid-cols-1">
+              {Object.keys(waitingTimes).map((waitingTimeRange) => (
+                <ProgressBar
+                  key={waitingTimeRange}
+                  title={`${waitingTimeRange} years`}
+                  people={`${waitingTimes[waitingTimeRange]} people`}
+                  percent={
+                    totalUsers > 0
+                      ? ((waitingTimes[waitingTimeRange] / totalUsers) * 100).toFixed(2) + "%"
+                      : "0.00%"
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

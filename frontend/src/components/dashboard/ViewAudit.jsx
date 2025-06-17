@@ -200,8 +200,8 @@ const filteredAudits = audits.filter((audit) => {
                 <div className="w-1/3">Name</div>
                 <div className="w-1/3">Suburb</div>
                 <div className="w-1/3">Priority</div>
-                <div className="w-1/3">Waiting Period</div>
-                <div className="w-1/4">Status</div>
+                <div className="w-1/4">Waiting Period</div>
+                <div className="w-1/6">Status</div>
                 <div className="w-1/6 text-center">Actions</div>
               </div>
               {filteredAudits.length === 0 ? (
