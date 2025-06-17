@@ -31,7 +31,7 @@
     };
 
     return (
-      <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white">
+      <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white p-[6px]">
         <input
           className={`w-full px-3 py-2 outline-none ${showWarning ? 'border-2 border-red-500' : ''}`}
           value={value}
@@ -40,13 +40,15 @@
           placeholder={placeholder || (enforceDateFormat ? "0000/00/00" : undefined)}
         />
         {showWarning && (
-          <div className="text-xs text-red-600 px-2 pb-1">
+          <div className="text-xs text-red-600 px-2 pt-1">
             Format must be YYYY/MM/DD
           </div>
         )}
       </div>
     );
   };
+
+
 
 
   const Section = ({ title, children, className, extra }) => (
@@ -224,7 +226,6 @@
               other: false,
               description: "", 
         }, 
-
           },
           spouse_or_partner: {
             surname: "",
@@ -261,7 +262,8 @@
             war_veteran: false,
             pregnant: false,
           },
-          skip_marital_status: false
+          skip_marital_status: false,
+          skip_spouse: false
         });
         } else {
           alert("Submission failed: " + result.error);

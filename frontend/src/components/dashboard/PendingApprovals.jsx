@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 export default function PendingApprovals() {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchEmail, setSearchEmail] = useState('');
 
   const Refresh = async () => {
     try {
@@ -91,9 +92,12 @@ export default function PendingApprovals() {
         <div className="flex items-center w-full border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
           <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2"/>
           <input
-            className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
-            placeholder="Search by email"
-          />
+  className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
+  placeholder="Search by email"
+  value={searchEmail}
+  onChange={(e) => setSearchEmail(e.target.value)}
+/>
+
         </div>
       </div>
       <div className="space-y-4 mb-6">
@@ -102,7 +106,9 @@ export default function PendingApprovals() {
         ) : pendingUsers.length === 0 ? (
           <p className="text-zinc-700/75 font-bold text-center">No pending users to review.</p>
         ) : (
-          pendingUsers.map((user) => (
+pendingUsers
+  .filter(user => user.email.toLowerCase().includes(searchEmail.toLowerCase()))
+  .map((user) => (
             <div key={user._id} className="flex items-center justify-between border border-zinc-200 rounded-lg px-4 py-3 bg-zinc-50 shadow-sm">
               <span className="text-base text-zinc-800 font-medium truncate">{user.email}</span>
               <div className="flex gap-2">
@@ -123,16 +129,9 @@ export default function PendingApprovals() {
           ))
         )}
       </div>
-      <div className="flex items-center justify-between text-sm text-zinc-600 font-medium">
-        <div>
-          Showing {pendingUsers.length} out of {pendingUsers.length} admin requests
-        </div>
-        <div className="flex gap-2">
-          <button className="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 transition">Previous</button>
-          <span className="px-4 py-2 rounded-lg border border-zinc-300 bg-zinc-200 text-zinc-800 font-bold">1</span>
-          <button className="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-50 transition">Next</button>
-        </div>
-      </div>
+<p className="text-sm text-zinc-600 font-medium text-center">
+  Showing {pendingUsers.length} pending admin request{pendingUsers.length !== 1 ? 's' : ''}
+</p>
     </div>
   </div>
 </div>
