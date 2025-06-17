@@ -14,8 +14,8 @@ exports.getStats = async (req, res) => {
           _id: {
             $switch: {
               branches: [
-                { case: { $eq: ["$applicant.gender", "Male"] },   then: "Male"   },
-                { case: { $eq: ["$applicant.gender", "Female"] }, then: "Female" }
+                { case: { $eq: ["$applicant.gender", "male"] },   then: "Male"   },
+                { case: { $eq: ["$applicant.gender", "female"] }, then: "Female" }
               ],
               default: "Unknown"
             }
@@ -46,30 +46,10 @@ exports.getStats = async (req, res) => {
       {
         $addFields: {
           applicantAge: {
-            $let: {
-              vars: {
-                msSinceBirth: {
-                  $subtract: [
-                    "$$NOW",
-                    {
-                      $dateFromString: {
-                        dateString: "$applicant.date_of_birth",
-                        format: "%Y-%m-%d",
-                        onError: null,
-                        onNull: null
-                      }
-                    }
-                  ]
-                }
-              },
-              in: {
-                $cond: [
-                  { $eq: ["$$msSinceBirth", null] },
-                  null,
-                  { $divide: ["$$msSinceBirth", 31536000000] }
-                ]
-              }
-            }
+            $divide: [
+              { $subtract: [new Date(), { $toDate: "$applicant.date_of_birth" }] },
+              31536000000
+            ]
           }
         }
       },
@@ -82,7 +62,6 @@ exports.getStats = async (req, res) => {
         }
       }
     ]);
-
     // Initialize all age groups to zero
     const ageGroups = {
       "0-30": 0,
@@ -93,12 +72,17 @@ exports.getStats = async (req, res) => {
 
     rawAgeGroups.forEach((group) => {
       let label;
-      if (group._id === 0)       label = "0-30";
-      else if (group._id === 30) label = "31-45";
-      else if (group._id === 45) label = "46-60";
-      else if (group._id === 60) label = "60+";
-      else                        label = "60+"; // lumps "Unknown" into 60+
-      ageGroups[label] = group.count;
+      if (group._id >= 0 && group._id <= 30)
+        label = "0-30";
+      else if (group._id > 30 && group._id <= 45)
+        label = "31-45";
+      else if (group._id > 45 && group._id <= 60)
+        label = "46-60";
+      else if (group._id > 60)
+        label = "60+";
+      else
+        label = "Unknown";
+      ageGroups[label] = label === "Unknown" ? "Unknown" : group.count;
     });
 
     // ─── 4) WAITING TIME BUCKETS ────────────────────────────────────────────────
@@ -111,37 +95,17 @@ exports.getStats = async (req, res) => {
       {
         $addFields: {
           waitingTime: {
-            $let: {
-              vars: {
-                msWaiting: {
-                  $subtract: [
-                    "$$NOW",
-                    {
-                      $dateFromString: {
-                        dateString: "$application_date",
-                        format: "%Y-%m-%d",
-                        onError: null,
-                        onNull: null
-                      }
-                    }
-                  ]
-                }
-              },
-              in: {
-                $cond: [
-                  { $eq: ["$$msWaiting", null] },
-                  null,
-                  { $divide: ["$$msWaiting", 31536000000] }
-                ]
-              }
-            }
+            $divide: [
+              { $subtract: [new Date(), { $toDate: "$application_date" }] },
+              31536000000
+            ]
           }
         }
       },
       {
         $bucket: {
           groupBy: "$waitingTime",
-          boundaries: [0, 5, 10, 100],
+          boundaries: [0, 5, 10, Infinity],
           default: "Unknown",
           output: { count: { $sum: 1 } }
         }
@@ -155,14 +119,19 @@ exports.getStats = async (req, res) => {
       "10+": 0
     };
 
-    rawWaitingTimes.forEach((group) => {
-      let label;
-      if (group._id === 0)      label = "0-5";
-      else if (group._id === 5) label = "5-10";
-      else if (group._id === 10) label = "10+";
-      else                       label = "10+"; // lumps "Unknown" into 10+
-      waitingTimes[label] = group.count;
-    });
+      rawWaitingTimes.forEach((group) => {
+         let label;
+          if (group._id >= 0 && group._id <= 5) {
+            label = "0-5";
+          } else if (group._id > 5 && group._id <= 10) {
+            label = "5-10";
+          } else if (group._id > 10) {
+            label = "10+";
+          } else {
+            label = "Unknown";
+          }
+        waitingTimes[label] = label === "Unknown" ? "Unknown" : group.count;
+    });   
 
     // ─── 5) REGIONAL DISTRIBUTION ───────────────────────────────────────────────
     const rawRegional = await Audit.aggregate([
