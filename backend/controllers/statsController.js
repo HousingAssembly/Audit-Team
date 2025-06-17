@@ -160,7 +160,7 @@ exports.getStats = async (req, res) => {
       regions[doc.region] = { people, percent };
     });
 
-    // ─── 6) WAITING‐LIST TOTAL & AVERAGE ────────────────────────────────────────
+    // ─── 6) WAITING-LIST TOTAL & AVERAGE ──────────────────────────────────────── 
     const waitingListStats = await Audit.aggregate([
       {
         $match: {
@@ -178,7 +178,7 @@ exports.getStats = async (req, res) => {
                     {
                       $dateFromString: {
                         dateString: "$application_date",
-                        format: "%Y-%m-%d",
+                        format: "%Y/%m/%d",
                         onError: null,
                         onNull: null
                       }
@@ -198,22 +198,24 @@ exports.getStats = async (req, res) => {
         }
       },
       {
+        $match: { waitingTime: { $ne: null } }
+      },
+      {
         $group: {
           _id: null,
           totalWaitingPeople: { $sum: 1 },
-          averageWaitingTime: { $avg: "$waitingTime" }
+          totalWaitingTime: { $sum: "$waitingTime" }
         }
       }
     ]);
 
-    const totalWaitingPeople =
-      waitingListStats.length > 0
-        ? waitingListStats[0].totalWaitingPeople
-        : 0;
-    const averageWaitingTime =
-      waitingListStats.length > 0
-        ? waitingListStats[0].averageWaitingTime
-        : 0;
+    const totalWaitingPeople = 
+      waitingListStats.length > 0 ? waitingListStats[0].totalWaitingPeople : 0;
+    const totalWaitingTime = 
+      waitingListStats.length > 0 ? waitingListStats[0].totalWaitingTime : 0;
+
+    const averageWaitingTime = 
+      totalWaitingPeople > 0 ? totalWaitingTime / totalWaitingPeople : 0;
 
     // ─── 7) FINAL RESPONSE ─────────────────────────────────────────────────────
     const finalStats = {

@@ -113,8 +113,11 @@ const Overview = () => {
     femaleCount = 0,
     ageGroups = { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
     waitingTimes = { "0-5": 0, "5-10": 0, "10+": 0 },
-    regions = {}
+    regions = {},
+    averageWaitingTime = 0
   } = statsData;
+
+  console.log("Stats Data:", statsData);
 
 
   return (
@@ -132,7 +135,7 @@ const Overview = () => {
         />
         <Stats
           title="Average Waiting Time"
-          stat={`${statsData.averageWaitingTime ? statsData.averageWaitingTime.toFixed(2) : "N/A"} years`}
+          stat={`${averageWaitingTime ? averageWaitingTime.toFixed(1) : "N/A"} years`}
         />
       </div>
 
