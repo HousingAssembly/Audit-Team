@@ -69,7 +69,7 @@
                   className={`-rotate-[7deg] text-left sm:mt-[50px] space-y-1 text-[10px] sm:text-[20px] leading-loose sm:leading-[55px] ${isEven ? 'mt-[4px] ml-[10px] sm:ml-[55px]' : 'mt-[6px] mr-[10px] sm:mr-[60px]'}`}
                 >
                   <p><strong>Project Name:</strong> {project.name}</p>
-                  <p><strong>City/Town:</strong> {project.area}</p>
+                  <p><strong>Region:</strong> {project.area}</p>
                   <p><strong>Suburb:</strong> {project.municipality}</p>
                   <p><strong>Cutoff Year:</strong> {project.year}</p>
                   <p><strong>Status:</strong> {project.status}</p>
@@ -116,7 +116,7 @@
           </div>
           {/* Header */}
           <div className="text-[18px] sm:text-3xl font-bold whitespace-nowrap text-center px-6 shrink-0">
-            ACTIVE PROJECTS
+            ACTIVE HOUSING PROJECTS
           </div>
           {/* Right Rectangles */}
           <div className="flex flex-col space-y-[4px] sm:space-y-[5px] flex-grow sm:ml-0 ml-[-10px] sm:pl-1">
@@ -139,7 +139,7 @@
             <div className="h-[6px] sm:h-[10px] bg-black outline outline-[1px] outline-offset-[-2px] outline-black"></div>
           </div>
           <div className="text-[18px] sm:text-3xl font-bold whitespace-nowrap text-center px-6 shrink-0">
-            FUTURE PROJECTS
+            FUTURE HOUSING PROJECTS
           </div>
           {/* Right Rectangles */}
           <div className="flex flex-col space-y-[4px] sm:space-y-[5px] flex-grow sm:ml-0 ml-[-10px] sm:pl-1">

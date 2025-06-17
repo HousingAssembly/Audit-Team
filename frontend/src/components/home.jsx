@@ -15,7 +15,7 @@ export default function Home() {
       if (targetElement) {
         setTimeout(() => {
           targetElement.scrollIntoView({ behavior: 'smooth' });
-        }, 100); // 等待 DOM 渲染
+        }, 100);
       }
     }
   }, [location]);
