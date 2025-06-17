@@ -35,6 +35,9 @@ app.get("/", (req, res) => {
   res.send("Housing Audit Backend is running!");
 });
 
+// Password Change
+app.use('/api/users', userRoutes); 
+
 // MongoDB Connection
 mongoose.connect(MONGO_URI, {
   dbName: "housing_audit",

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user"); 
 const router = express.Router();
 const requireAdmin = require("../middleware/requireAdmin");
+const verifyToken = require("../middleware/verifyToken");
 
 // POST /api/users/register
 router.post("/register", async (req, res) => {
@@ -89,6 +90,26 @@ router.get("/pending", requireAdmin, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+router.put("/update-password", verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { newPassword } = req.body;
+
+    if (!newPassword || newPassword.length < 5) {
+      return res.status(400).json({ error: "Password must be at least 5 characters" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Update password failed:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 
 module.exports = router;
 
