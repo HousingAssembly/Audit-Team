@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import { Trash2 } from 'lucide-react';
 import AuditModal from '../ui/AuditModal';
 
@@ -57,6 +57,7 @@ export default function ViewAudit() {
   const [searchIdOrName, setSearchIdOrName] = useState('');
   const [searchRegion, setSearchRegion] = useState('');
   const [searchPriority, setSearchPriority] = useState([]);
+  const [matchMode, setMatchMode] = useState('OR');
   const [priorityOptions, setPriorityOptions] = useState([]);
   const [selectedAudit, setSelectedAudit] = useState(null);
   const [auditToDelete, setAuditToDelete] = useState(null);
@@ -87,21 +88,44 @@ export default function ViewAudit() {
     fetchAudits();
   }, []);
 
-  const filteredAudits = audits.filter((audit) => {
-    const id = audit.registration_number || '';
-    const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`;
-    const region = audit.address?.suburb || '';
-    const readablePriorities = Object.entries(audit.special_circumstances || {})
-      .filter(([_, value]) => value === true)
-      .map(([key]) => SPECIAL_CIRCUMSTANCE_LABELS[key]);
-    const priorityMatch = searchPriority.length === 0 || searchPriority.some((p) => readablePriorities.includes(p));
+  const customMenu = (props) => (
+    <>
+      <div className="flex justify-around px-3 pt-2 pb-1 text-sm text-zinc-600">
+        {['OR', 'AND'].map((mode) => (
+          <button
+            key={mode}
+            onClick={() => setMatchMode(mode)}
+            className={`px-2 py-1 rounded-md text-xs font-semibold ${matchMode === mode ? 'bg-blue-600 text-white' : 'bg-zinc-200'}`}
+          >
+            {mode}
+          </button>
+        ))}
+      </div>
+      <components.MenuList {...props}>{props.children}</components.MenuList>
+    </>
+  );
 
-    return (
-      (id + name).toLowerCase().includes(searchIdOrName.toLowerCase()) &&
-      region.toLowerCase().includes(searchRegion.toLowerCase()) &&
-      priorityMatch
-    );
-  });
+  const filteredAudits = audits
+    .filter((audit) => {
+      const id = audit.registration_number || '';
+      const name = `${audit.applicant?.first_name || ''} ${audit.applicant?.surname || ''}`;
+      const region = audit.address?.suburb || '';
+      const readablePriorities = Object.entries(audit.special_circumstances || {})
+        .filter(([_, value]) => value === true)
+        .map(([key]) => SPECIAL_CIRCUMSTANCE_LABELS[key]);
+
+      const priorityMatch =
+        searchPriority.length === 0 ||
+        (matchMode === 'AND'
+          ? searchPriority.every((p) => readablePriorities.includes(p))
+          : searchPriority.some((p) => readablePriorities.includes(p)));
+
+      return (
+        (id + name).toLowerCase().includes(searchIdOrName.toLowerCase()) &&
+        region.toLowerCase().includes(searchRegion.toLowerCase()) &&
+        priorityMatch
+      );
+    });
 
   const deleteAudit = async () => {
     if (!auditToDelete?._id) return;
@@ -130,46 +154,44 @@ export default function ViewAudit() {
 
       <div className="py-8">
         <div className="flex flex-col space-y-6 p-6 bg-white rounded-2xl border border-zinc-400">
-          {/* Filters */}
           <div className="flex flex-col md:flex-row gap-4 mb-2">
             <input className="w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50 outline-none" placeholder="Search by ID or name" value={searchIdOrName} onChange={(e) => setSearchIdOrName(e.target.value)} />
             <input className="w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50 outline-none" placeholder="Search by suburb" value={searchRegion} onChange={(e) => setSearchRegion(e.target.value)} />
             <div className="w-full md:w-2/5">
               <Select
-  isMulti
-  options={priorityOptions.map((label) => ({ value: label, label }))}
-  value={searchPriority.map((label) => ({ value: label, label }))}
-  onChange={(selected) => setSearchPriority(selected.map((s) => s.value))}
-  placeholder="Filter by priority"
-  styles={{
-    control: (base, state) => ({
-      ...base,
-      border: '1px solid #d4d4d8',          
-      borderRadius: '0.5rem',               
-      backgroundColor: '#f4f4f5',           
-      boxShadow: state.isFocused ? '0 0 0 1px #3b82f6' : 'none',
-      padding: '2px 6px',
-      minHeight: '40px',
-    }),
-    multiValue: (base) => ({
-      ...base,
-      backgroundColor: '#e4e4e7',           
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      color: '#27272a',                    
-    }),
-    placeholder: (base) => ({
-      ...base,
-      color: '#a1a1aa',                
-    }),
-  }}
-/>
-
+                isMulti
+                components={{ MenuList: customMenu }}
+                options={priorityOptions.map((label) => ({ value: label, label }))}
+                value={searchPriority.map((label) => ({ value: label, label }))}
+                onChange={(selected) => setSearchPriority(selected.map((s) => s.value))}
+                placeholder="Filter by priority"
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    border: '1px solid #d4d4d8',
+                    borderRadius: '0.5rem',
+                    backgroundColor: '#f4f4f5',
+                    boxShadow: state.isFocused ? '0 0 0 1px #3b82f6' : 'none',
+                    padding: '2px 6px',
+                    minHeight: '40px',
+                  }),
+                  multiValue: (base) => ({
+                    ...base,
+                    backgroundColor: '#e4e4e7',
+                  }),
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    color: '#27272a',
+                  }),
+                  placeholder: (base) => ({
+                    ...base,
+                    color: '#a1a1aa',
+                  }),
+                }}
+              />
             </div>
           </div>
 
-          {/* Table */}
           <div className="overflow-x-auto rounded-lg border border-zinc-300 bg-white">
             <div className="min-w-full">
               <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-300 w-full text-zinc-600 font-bold bg-zinc-50">
@@ -177,8 +199,8 @@ export default function ViewAudit() {
                 <div className="w-1/3">Name</div>
                 <div className="w-1/3">Suburb</div>
                 <div className="w-1/3">Priority</div>
-                <div className="w-1/4">Waiting Period</div>
-                <div className="w-1/6">Status</div>
+                <div className="w-1/3">Waiting Period</div>
+                <div className="w-1/4">Status</div>
                 <div className="w-1/6 text-center">Actions</div>
               </div>
               {filteredAudits.length === 0 ? (
