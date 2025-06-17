@@ -181,7 +181,7 @@ export default function HousingProjects() {
             <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
             <input
               className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400"
-              placeholder="Search by city/town"
+              placeholder="Search by region"
               value={searchArea}
               onChange={(e) => setSearchArea(e.target.value)}
             />
@@ -201,7 +201,7 @@ export default function HousingProjects() {
           <div className="min-w-full">
             <div className="flex flex-row space-x-4 border-b py-4 px-6 border-zinc-300 w-full text-zinc-600 font-bold bg-zinc-50">
               <div className="w-1/3">Project Name</div>
-              <div className="w-1/3">City/Town</div>
+              <div className="w-1/3">Region</div>
               <div className="w-1/3">Suburb</div>
               <div className="w-1/6">Cutoff Year</div>
               <div className="w-1/6 flex justify-center">Status</div>
@@ -311,7 +311,7 @@ export default function HousingProjects() {
             </div>
             <div>
               <label htmlFor="area" className="block text-zinc-700 font-medium mb-1">
-                City/Town
+                Region
               </label>
               <input
                 id="area"
