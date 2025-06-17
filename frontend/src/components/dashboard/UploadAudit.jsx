@@ -226,7 +226,6 @@
               other: false,
               description: "", 
         }, 
-
           },
           spouse_or_partner: {
             surname: "",
@@ -263,7 +262,8 @@
             war_veteran: false,
             pregnant: false,
           },
-          skip_marital_status: false
+          skip_marital_status: false,
+          skip_spouse: false
         });
         } else {
           alert("Submission failed: " + result.error);
