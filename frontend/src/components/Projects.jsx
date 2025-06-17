@@ -116,7 +116,7 @@
           </div>
           {/* Header */}
           <div className="text-[18px] sm:text-3xl font-bold whitespace-nowrap text-center px-6 shrink-0">
-            ACTIVE PROJECTS
+            ACTIVE HOUSING PROJECTS
           </div>
           {/* Right Rectangles */}
           <div className="flex flex-col space-y-[4px] sm:space-y-[5px] flex-grow sm:ml-0 ml-[-10px] sm:pl-1">
@@ -139,7 +139,7 @@
             <div className="h-[6px] sm:h-[10px] bg-black outline outline-[1px] outline-offset-[-2px] outline-black"></div>
           </div>
           <div className="text-[18px] sm:text-3xl font-bold whitespace-nowrap text-center px-6 shrink-0">
-            FUTURE PROJECTS
+            FUTURE HOUSING PROJECTS
           </div>
           {/* Right Rectangles */}
           <div className="flex flex-col space-y-[4px] sm:space-y-[5px] flex-grow sm:ml-0 ml-[-10px] sm:pl-1">

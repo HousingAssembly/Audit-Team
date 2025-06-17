@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchStats } from "../../statsServices";
 
-// Card for stats
 const Stats = ({ title, stat }) => (
   <div className="flex flex-col items-center justify-center px-6 py-5 bg-white rounded-xl  border border-zinc-400 w-full min-w-[180px]">
     <div className="text-zinc-600 text-lg font-semibold mb-1">{title}</div>
@@ -9,7 +8,6 @@ const Stats = ({ title, stat }) => (
   </div>
 );
 
-// Progress bar for region/age/waiting time
 const ProgressBar = ({ title, people, percent }) => (
   <div className="mb-8">
     <div className="flex justify-between items-end mb-1">
@@ -28,7 +26,6 @@ const ProgressBar = ({ title, people, percent }) => (
   </div>
 );
 
-// Circular progress for gender
 const ProgressCircle = ({ percent, color }) => {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
@@ -84,8 +81,9 @@ const Overview = () => {
     maleCount: 0,
     femaleCount: 0,
     ageGroups: { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
-    waitingTimes: { "0-5 years": 0, "5-10 years": 0, "10+ years": 0, },
-    regions: {}
+    waitingTimes: { "0-5": 0, "5-10": 0, "10+": 0 },
+    regions: {},
+    averageWaitingTime: 0
   });
 
   const getStatsData = async () => {
@@ -127,10 +125,19 @@ const Overview = () => {
       </div>
       <div className="h-8" />
 
-      {/* Stats Cards */}
-      <div className="flex flex-col md:flex-row gap-6 mb-10">
-        <Stats title="Total on Waiting List" stat={totalUsers.toLocaleString()} />
-        <Stats title="Average Waiting Time" stat={`${waitingTimes["0-5"]} years`} />
+      <div className="flex flex-row space-x-6 py-4">
+        <Stats
+          title="Total on Waiting List"
+          stat={totalUsers.toString()}
+        />
+        <Stats
+          title="Average Waiting Time"
+          stat={`${statsData.averageWaitingTime ? statsData.averageWaitingTime.toFixed(2) : "N/A"} years`}
+        />
+      </div>
+
+      <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">
+        Demographics
       </div>
 
       {/* Tabs */}
@@ -194,7 +201,7 @@ const Overview = () => {
                       ? Number(((maleCount / totalUsers) * 100).toFixed(2))
                       : 0
                   }
-                  color="ef4444"
+                  color="black"
                 />
                 <div className="text-zinc-700 text-lg font-semibold mt-2">Male</div>
                 <div className="text-zinc-500 text-base">{maleCount} people</div>
