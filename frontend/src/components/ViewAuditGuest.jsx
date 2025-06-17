@@ -6,7 +6,7 @@ export default function ViewAuditGuest({ closeModal }) {
   const [idNumber, setIdNumber] = useState('');
   const [surname, setSurname] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [dob, setDob] = useState({ day: '', month: '', year: '' });
+  const [dob, setDob] = useState('');
   const [auditData, setAuditData] = useState(null);
   const [showAuditModal, setShowAuditModal] = useState(false);
   const modalRef = useRef();
@@ -15,8 +15,6 @@ export default function ViewAuditGuest({ closeModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dateOfBirth = `${dob.year.trim()}/${dob.month.trim().padStart(2, '0')}/${dob.day.trim().padStart(2, '0')}`;
-
     try {
       const res = await fetch('http://localhost:5001/api/audits/search', {
         method: 'POST',
@@ -25,7 +23,7 @@ export default function ViewAuditGuest({ closeModal }) {
           id_number: normalizeInput(idNumber),
           surname: normalizeInput(surname),
           first_name: normalizeInput(firstName),
-          date_of_birth: dateOfBirth,
+          date_of_birth: normalizeInput(dob.replace(/\D/g, '')),
         }),
       });
 
@@ -68,6 +66,15 @@ export default function ViewAuditGuest({ closeModal }) {
     </div>
   );
 
+  const handleDobChange = (e) => {
+    let value = e.target.value.replace(/\D/g, ''); 
+
+    if (value.length > 4) value = value.slice(0, 4) + '/' + value.slice(4); 
+    if (value.length > 7) value = value.slice(0, 7) + '/' + value.slice(7);
+
+    setDob(value);
+  };
+
   return (
     <>
       <div
@@ -106,24 +113,13 @@ export default function ViewAuditGuest({ closeModal }) {
 
           <div className="w-full py-3 mb-4">
             <label className="px-5 text-zinc-700 font-bold text-[15px] sm:text-[17px]">Date of Birth</label>
-            <div className="flex items-center w-full space-x-2">
+            <div className="flex border-[1.5px] border-red-800 rounded-full shadow-md sm:h-[40px] h-[35px] w-full">
               <input
-                className="w-1/4 border border-red-800 rounded-full px-5 py-2 text-[14px] sm:text-[16px] outline-none"
-                placeholder="Day"
-                value={dob.day}
-                onChange={(e) => setDob({ ...dob, day: e.target.value })}
-              />
-              <input
-                className="w-2/4 border border-red-800 rounded-full px-5 py-2 text-[14px] sm:text-[16px] outline-none"
-                placeholder="Month"
-                value={dob.month}
-                onChange={(e) => setDob({ ...dob, month: e.target.value })}
-              />
-              <input
-                className="w-1/4 border border-red-800 rounded-full px-5 py-2 text-[14px] sm:text-[16px] outline-none"
-                placeholder="Year"
-                value={dob.year}
-                onChange={(e) => setDob({ ...dob, year: e.target.value })}
+                className="px-5 py-2 rounded-full w-full outline-none text-[14px] sm:text-[16px]"
+                placeholder="YYYY/MM/DD"
+                value={dob}
+                onChange={handleDobChange}
+                maxLength="10"
               />
             </div>
           </div>
