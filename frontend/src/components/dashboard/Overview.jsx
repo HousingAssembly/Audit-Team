@@ -117,8 +117,6 @@ const Overview = () => {
     averageWaitingTime = 0
   } = statsData;
 
-  console.log("Stats Data:", statsData);
-
 
   return (
     <div className="px-7 py-7 flex flex-col w-full min-h-screen bg-palette-dashboard">
