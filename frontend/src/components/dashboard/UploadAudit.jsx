@@ -18,9 +18,10 @@
     </div>
   );
 
-  const InputField = ({ value, onChange, disabled, enforceDateFormat = false, placeholder }) => {
+  const InputField = ({ value, onChange, disabled, isRequired, enforceDateFormat = false, placeholder }) => {
     const isValidDate = (val) => /^\d{4}\/\d{2}\/\d{2}$/.test(val);
     const showWarning = enforceDateFormat && value && !isValidDate(value);
+    const [isFieldEmpty, setIsFieldEmpty] = useState(false);
 
     const handleDateInput = (e) => {
       let val = e.target.value.replace(/\D/g, "").slice(0, 8);
@@ -30,18 +31,45 @@
       onChange({ target: { value: formatted } });
     };
 
+    const checkEmpty = (e) => {
+      return e.target.value.trim() === "";
+    };
+
+    const handleBlur = (e) => {
+      if (isRequired) {
+        const isEmpty = checkEmpty(e);
+        setIsFieldEmpty(isEmpty); 
+      }
+    };
+
+    const handleChange = (e) => {
+      onChange(e);
+      if (isRequired) {
+        const isEmpty = checkEmpty(e);
+        setIsFieldEmpty(isEmpty);
+      }
+    };
+
+
     return (
       <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white p-[6px]">
         <input
           className={`w-full px-3 py-2 outline-none ${showWarning ? 'border-2 border-red-500' : ''}`}
           value={value}
-          onChange={enforceDateFormat ? handleDateInput : onChange}
+          onChange={enforceDateFormat ? handleDateInput : handleChange}
+          onBlur={handleBlur}
           disabled={disabled}
           placeholder={placeholder || (enforceDateFormat ? "0000/00/00" : undefined)}
+          style={{height: "36px"}}
         />
         {showWarning && (
           <div className="text-xs text-red-600 px-2 pt-1">
             Format must be YYYY/MM/DD
+          </div>
+        )}
+        {isFieldEmpty && isRequired && (
+          <div className="text-xs text-red-600 px-2 pt-1">
+            This field is required
           </div>
         )}
       </div>
@@ -313,18 +341,21 @@
                 value={formData.registration_number} 
                 onChange={(e) => updateField("registration_number", e.target.value)} 
                 placeholder="000000"
+                isRequired={true}
               />
 
               <Field label="Application Date (YYYY/MM/DD)" />
               <InputField 
                 value={formData.application_date} 
                 onChange={(e) => updateField("application_date", e.target.value)} enforceDateFormat
+                isRequired={true}
               />
               
               <Field label="Client Copy Date (YYYY/MM/DD)" />
               <InputField 
                 value={formData.client_copy_date} 
                 onChange={(e) => updateField("client_copy_date", e.target.value)} enforceDateFormat
+                isRequired={true}
               />
             </Section>
 
@@ -334,6 +365,7 @@
                 value={formData.applicant.surname} 
                 onChange={(e) => updateField("applicant.surname", e.target.value)} 
                 placeholder="Doe"
+                isRequired={true}
               />
 
               <Field label="First Name" />
@@ -341,6 +373,7 @@
                 value={formData.applicant.first_name} 
                 onChange={(e) => updateField("applicant.first_name", e.target.value)} 
                 placeholder="John"
+                isRequired={true}
               />
 
               <Field label="Identity (ID) Number" />
@@ -348,10 +381,11 @@
                 value={formData.applicant.id_number} 
                 onChange={(e) => updateField("applicant.id_number", e.target.value)} 
                 placeholder="0000000000000"
+                isRequired={true}
               />
 
               <Field label="Date of Birth (YYYY/MM/DD)" />
-              <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} enforceDateFormat/>
+              <InputField value={formData.applicant.date_of_birth} onChange={(e) => updateField("applicant.date_of_birth", e.target.value)} enforceDateFormat isRequired={true}/>
               
             <Field label="Gender" />
             <div className="col-span-1 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 border border-zinc-700 bg-white flex justify-center gap-8 py-2">
@@ -388,6 +422,7 @@
                     updateField("applicant.gender.description", e.target.value)
                   }
                   placeholder="Non-binary, Intersex, etc."
+                  isRequired={true}
                 />
               </>
             )}
@@ -457,18 +492,21 @@
                   value={formData.address.street} 
                   onChange={(e) => updateField("address.street", e.target.value)} 
                   placeholder="123 Main Street"
+                  isRequired={true}
                 />
               <Field label="Suburb" />
                 <InputField 
                   value={formData.address.suburb} 
                   onChange={(e) => updateField("address.suburb", e.target.value)} 
                   placeholder="Eastridge"
+                  isRequired={true}
                 />
               <Field label="Postal Code" />
                 <InputField 
                   value={formData.address.postal_code} 
                   onChange={(e) => updateField("address.postal_code", e.target.value)} 
                   placeholder="0000"
+                  isRequired={true}
                 />
             </Section>
 
@@ -478,6 +516,7 @@
                   value={formData.contact.cellphone_1} 
                   onChange={(e) => updateField("contact.cellphone_1", e.target.value)} 
                   placeholder="0000000000"
+                  isRequired={true}
                 />
               <Field label="Cellphone 2" />
                 <InputField 
