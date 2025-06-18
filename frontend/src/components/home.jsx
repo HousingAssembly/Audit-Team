@@ -1,24 +1,35 @@
-import { useState } from 'react';
 import ViewAudit from './ViewAuditGuest';
+import { useLocation } from 'react-router-dom'; 
+import { useState, useEffect } from 'react';
 
 export default function Home() { 
 
   const [isViewAuditOpen, setIsViewAuditOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        setTimeout(() => {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
 
   const closeModal = () => {
-    setIsViewAuditOpen(false); 
+    setIsViewAuditOpen(false);
   };
-
-  const openViewAudit = () => {
-    setIsViewAuditOpen(!isViewAuditOpen);
-  }
 
   return ( 
     <>
 
       {isViewAuditOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-start py-10 overflow-y-auto">
-          <ViewAudit openViewAudit={openViewAudit} closeModal={closeModal} />
+<ViewAudit openViewAudit={() => setIsViewAuditOpen(true)} closeModal={closeModal} />
         </div>
       )}
 
