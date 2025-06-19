@@ -168,8 +168,24 @@ const filteredAudits = audits.filter((audit) => {
       <div className="py-8">
         <div className="flex flex-col space-y-6 p-6 bg-white rounded-2xl border border-zinc-400">
           <div className="flex flex-col md:flex-row gap-4 mb-2">
-            <input className="w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50 outline-none" placeholder="Search by ID or name" value={searchIdOrName} onChange={(e) => setSearchIdOrName(e.target.value)} />
-            <input className="w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50 outline-none" placeholder="Search by suburb" value={searchRegion} onChange={(e) => setSearchRegion(e.target.value)} />
+            <div className="flex items-center w-full md:w-2/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+              <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
+              <input
+                className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400 py-1"
+                placeholder="Search by ID or name"
+                value={searchIdOrName}
+                onChange={(e) => setSearchIdOrName(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center w-full md:w-1/5 border border-zinc-300 rounded-lg px-3 py-2 bg-zinc-50">
+              <img src="/search.png" alt="Search Icon" className="h-4 w-4 object-contain opacity-60 mr-2" />
+              <input
+                className="w-full bg-transparent outline-none text-zinc-700 placeholder-zinc-400 py-1"
+                placeholder="Search by suburb"
+                value={searchRegion}
+                onChange={(e) => setSearchRegion(e.target.value)}
+              />
+            </div>
             <div className="w-full md:w-2/5">
               <Select
                 isMulti
@@ -183,10 +199,14 @@ const filteredAudits = audits.filter((audit) => {
                     ...base,
                     border: '1px solid #d4d4d8',
                     borderRadius: '0.5rem',
-                    backgroundColor: '#f4f4f5',
+                    backgroundColor: '#f9fafb',
                     boxShadow: state.isFocused ? '0 0 0 1px #3b82f6' : 'none',
-                    padding: '2px 6px',
+                    padding: '0 0.5rem',
                     minHeight: '40px',
+                    height: '50px', 
+                    '&:hover': {
+                      backgroundColor: '#f9fafb',
+                    },
                   }),
                   multiValue: (base) => ({
                     ...base,
