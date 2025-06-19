@@ -93,8 +93,8 @@
       <div className="grid grid-cols-2 gap-0">{children}</div>
     </div>
   );
-
   const UploadAudit = () => {
+    const [showStorageLimit, setShowStorageLimit] = useState(false); 
     const [formData, setFormData] = useState({
       registration_number: "",
       application_date: "",
@@ -292,8 +292,12 @@
           },
           skip_marital_status: false,
           skip_spouse: false
-        });
-        } else {
+        });}
+        else if (res.status === 507) {
+  setShowStorageLimit(true);
+}
+
+        else {
           alert("Submission failed: " + result.error);
         }
       } catch (err) {
@@ -304,6 +308,23 @@
 
   return (
     <>
+      {showStorageLimit && (
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+      <div className="bg-white rounded-xl shadow-lg p-8 text-center space-y-4 max-w-sm w-full">
+        <h2 className="text-3xl font-bold text-red-700">Submission Failed</h2>
+        <p className="text-zinc-700">
+          Database storage limit reached. Please contact the admin.
+        </p>
+        <button
+          onClick={() => setShowStorageLimit(false)}
+          className="mt-4 px-6 py-2 bg-red-700 text-white rounded hover:bg-red-800 transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  )}
+
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center space-y-4 max-w-sm w-full">

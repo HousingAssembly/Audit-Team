@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchStats } from "../../statsServices";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const Stats = ({ title, stat }) => (
   <div className="flex flex-col items-center justify-center px-6 py-5 bg-white rounded-xl  border border-zinc-400 w-full min-w-[180px]">
@@ -56,7 +58,7 @@ const ProgressCircle = ({ percent, color }) => {
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
-          style={{ transition: "stroke-dashoffset 0.5s" }}v
+          style={{ transition: "stroke-dashoffset 0.5s" }}
         />
       </svg>
       <div className="absolute inset-0 flex justify-center items-center text-xl font-bold text-gray-800">
@@ -76,6 +78,23 @@ const SectionHeader = ({ title, subtitle }) => (
 );
 
 const Overview = () => {
+  const reportRef = useRef();
+
+  const handleExportPDF = async () => {
+    const input = reportRef.current;
+    const canvas = await html2canvas(input, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: [canvas.width, canvas.height],
+    });
+
+    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+    pdf.save("overview_report.pdf");
+  };
+
   const [statsData, setStatsData] = useState({
     totalUsers: 0,
     maleCount: 0,
@@ -83,7 +102,7 @@ const Overview = () => {
     ageGroups: { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
     waitingTimes: { "0-5": 0, "5-10": 0, "10+": 0 },
     regions: {},
-    averageWaitingTime: 0
+    averageWaitingTime: 0,
   });
 
   const getStatsData = async () => {
@@ -114,175 +133,181 @@ const Overview = () => {
     ageGroups = { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
     waitingTimes = { "0-5": 0, "5-10": 0, "10+": 0 },
     regions = {},
-    averageWaitingTime = 0
+    averageWaitingTime = 0,
   } = statsData;
-
 
   return (
     <div className="px-7 py-7 flex flex-col w-full min-h-screen bg-palette-dashboard">
-      <div className="text-4xl text-zinc-700 font-bold py-2">Overview</div>
-      <div className="text-zinc-700/80 text-xl font-bold py-2">
-        Welcome to HouseAudit — the auditing system of Housing Assembly. Here’s an overview of all audit data.
-      </div>
-      <div className="h-8" />
-
-      <div className="flex flex-row space-x-6 py-4">
-        <Stats
-          title="Total on Waiting List"
-          stat={totalUsers.toString()}
-        />
-        <Stats
-          title="Average Waiting Time"
-          stat={`${averageWaitingTime ? averageWaitingTime.toFixed(1) : "N/A"} years`}
-        />
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={handleExportPDF}
+          className="px-4 py-2 bg-red-700 text-white font-bold rounded hover:bg-red-800 transition"
+        >
+          Export as PDF
+        </button>
       </div>
 
-      <div className="text-center text-4xl text-zinc-700 font-bold mt-12 mb-6">
-        Demographics
-      </div>
-
-      {/* Tabs */}
-      <div className="flex justify-center mb-8">
-        <div className="flex bg-white rounded-xl border border-zinc-400 overflow-hidden">
-          {tabList.map(tab => (
-            <button
-              key={tab.key}
-              className={`px-6 py-3 text-lg font-semibold transition-colors duration-150 ${
-                activeTab === tab.key
-                  ? "bg-zinc-100 text-red-600"
-                  : "text-zinc-600 hover:bg-zinc-50"
-              }`}
-              onClick={() => setActiveTab(tab.key)}
-            >
-              {tab.label}
-            </button>
-          ))}
+      {/* 页面内容区域，导出时会截图这一块 */}
+      <div ref={reportRef}>
+        <div className="text-4xl text-zinc-700 font-bold py-2">Overview</div>
+        <div className="text-zinc-700/80 text-xl font-bold py-2">
+          Welcome to HouseAudit — the auditing system of Housing Assembly. Here’s an overview of all audit data.
         </div>
-      </div>
+        <div className="h-8" />
 
-      {/* Tab Content */}
-      {activeTab === "suburb" && (
-        <div className="flex justify-center mb-12">
-          <div className="w-[1000px] bg-white rounded-xl border border-zinc-400 px-6 py-8">
-            <SectionHeader
-              title="Suburb Distribution"
-              subtitle="Number of people in waiting list by suburb"
-            />
-            <div className="grid grid-cols-1">
-              {Object.keys(regions).length > 0 ? (
-                Object.keys(regions).map((region) => (
-                  <ProgressBar
-                    key={region}
-                    title={region}
-                    people={`${regions[region].people} people`}
-                    percent={`${regions[region].percent.toFixed(2)}%`}
-                  />
-                ))
-              ) : (
-                <div className="text-zinc-400">No regions available</div>
-              )}
-            </div>
+        <div className="flex flex-row space-x-6 py-4">
+          <Stats title="Total on Waiting List" stat={totalUsers.toString()} />
+          <Stats
+            title="Average Waiting Time"
+            stat={`${averageWaitingTime ? averageWaitingTime.toFixed(1) : "N/A"} years`}
+          />
+        </div>
+
+        <div className="text-center text-4xl text-zinc-700 font-bold mt-12 mb-6">
+          Demographics
+        </div>
+
+        <div className="flex justify-center mb-8">
+          <div className="flex bg-white rounded-xl border border-zinc-400 overflow-hidden">
+            {tabList.map((tab) => (
+              <button
+                key={tab.key}
+                className={`px-6 py-3 text-lg font-semibold transition-colors duration-150 ${
+                  activeTab === tab.key
+                    ? "bg-zinc-100 text-red-600"
+                    : "text-zinc-600 hover:bg-zinc-50"
+                }`}
+                onClick={() => setActiveTab(tab.key)}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
-      )}
 
-      {activeTab === "demographics" && (
-        <div className="flex flex-col md:flex-row gap-8 mb-12">
-          {/* Gender */}
-          <div className="bg-white rounded-xl border border-zinc-400 px-6 py-8 flex-1 flex flex-col">
-            <SectionHeader
-              title="Gender Distribution"
-              subtitle="Breakdown of waiting list by gender"
-            />
-            <div className="flex flex-col md:flex-row items-center gap-[90px] w-full justify-center mt-[80px]">
-              <div className="flex flex-col items-center">
-                <ProgressCircle
-                  percent={
-                    totalUsers > 0
-                      ? Number(((maleCount / totalUsers) * 100).toFixed(2))
-                      : 0
-                  }
-                  color="black"
-                />
-                <div className="text-zinc-700 text-lg font-semibold mt-2">Male</div>
-                <div className="text-zinc-500 text-base">{maleCount} people</div>
+        {activeTab === "suburb" && (
+          <div className="flex justify-center mb-12">
+            <div className="w-[1000px] bg-white rounded-xl border border-zinc-400 px-6 py-8">
+              <SectionHeader
+                title="Suburb Distribution"
+                subtitle="Number of people in waiting list by suburb"
+              />
+              <div className="grid grid-cols-1">
+                {Object.keys(regions).length > 0 ? (
+                  Object.keys(regions).map((region) => (
+                    <ProgressBar
+                      key={region}
+                      title={region}
+                      people={`${regions[region].people} people`}
+                      percent={`${regions[region].percent.toFixed(2)}%`}
+                    />
+                  ))
+                ) : (
+                  <div className="text-zinc-400">No regions available</div>
+                )}
               </div>
-              <div className="flex flex-col items-center">
-                <ProgressCircle
-                  percent={
-                    totalUsers > 0
-                      ? Number(((femaleCount / totalUsers) * 100).toFixed(2))
-                      : 0
-                  }
-                  color="#ef4444"
-                />
-                <div className="text-zinc-700 text-lg font-semibold mt-2">Female</div>
-                <div className="text-zinc-500 text-base">{femaleCount} people</div>
-              </div>
-              <div className="flex flex-col items-center">
-                <ProgressCircle
-                  percent={
-                    totalUsers > 0
-                      ? Number(((((totalUsers - maleCount - femaleCount) / totalUsers) * 100)).toFixed(2))
-                      : 0
-                  }
-                  color="#ef4444"
-                />
-                <div className="text-zinc-700 text-lg font-semibold mt-2">Other</div>
-                <div className="text-zinc-500 text-base">
-                  {totalUsers - maleCount - femaleCount} people
+            </div>
+          </div>
+        )}
+
+        {activeTab === "demographics" && (
+          <div className="flex flex-col md:flex-row gap-8 mb-12">
+            <div className="bg-white rounded-xl border border-zinc-400 px-6 py-8 flex-1 flex flex-col">
+              <SectionHeader
+                title="Gender Distribution"
+                subtitle="Breakdown of waiting list by gender"
+              />
+              <div className="flex flex-col md:flex-row items-center gap-[90px] w-full justify-center mt-[80px]">
+                <div className="flex flex-col items-center">
+                  <ProgressCircle
+                    percent={
+                      totalUsers > 0
+                        ? Number(((maleCount / totalUsers) * 100).toFixed(2))
+                        : 0
+                    }
+                    color="black"
+                  />
+                  <div className="text-zinc-700 text-lg font-semibold mt-2">Male</div>
+                  <div className="text-zinc-500 text-base">{maleCount} people</div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <ProgressCircle
+                    percent={
+                      totalUsers > 0
+                        ? Number(((femaleCount / totalUsers) * 100).toFixed(2))
+                        : 0
+                    }
+                    color="#ef4444"
+                  />
+                  <div className="text-zinc-700 text-lg font-semibold mt-2">Female</div>
+                  <div className="text-zinc-500 text-base">{femaleCount} people</div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <ProgressCircle
+                    percent={
+                      totalUsers > 0
+                        ? Number(
+                            (((totalUsers - maleCount - femaleCount) / totalUsers) * 100).toFixed(2)
+                          )
+                        : 0
+                    }
+                    color="#ef4444"
+                  />
+                  <div className="text-zinc-700 text-lg font-semibold mt-2">Other</div>
+                  <div className="text-zinc-500 text-base">
+                    {totalUsers - maleCount - femaleCount} people
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* Age */}
-          <div className="bg-white rounded-xl border border-zinc-400 px-6 py-8 flex-1">
-            <SectionHeader
-              title="Age Distribution"
-              subtitle="Breakdown of waiting list by age"
-            />
-            <div>
-              {Object.keys(ageGroups).map((ageGroup) => (
-                <ProgressBar
-                  key={ageGroup}
-                  title={`${ageGroup} years`}
-                  people={`${ageGroups[ageGroup]} people`}
-                  percent={
-                    totalUsers > 0
-                      ? ((ageGroups[ageGroup] / totalUsers) * 100).toFixed(2) + "%"
-                      : "0.00%"
-                  }
-                />
-              ))}
+            <div className="bg-white rounded-xl border border-zinc-400 px-6 py-8 flex-1">
+              <SectionHeader
+                title="Age Distribution"
+                subtitle="Breakdown of waiting list by age"
+              />
+              <div>
+                {Object.keys(ageGroups).map((ageGroup) => (
+                  <ProgressBar
+                    key={ageGroup}
+                    title={`${ageGroup} years`}
+                    people={`${ageGroups[ageGroup]} people`}
+                    percent={
+                      totalUsers > 0
+                        ? ((ageGroups[ageGroup] / totalUsers) * 100).toFixed(2) + "%"
+                        : "0.00%"
+                    }
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {activeTab === "waiting" && (
-        <div className="flex justify-center mb-8">
-          <div className="w-full w-[1000px] bg-white rounded-xl border border-zinc-400 px-6 py-8">
-            <SectionHeader
-              title="Waiting Time Distribution"
-              subtitle="Number of people by waiting time duration"
-            />
-            <div className="grid grid-cols-1">
-              {Object.keys(waitingTimes).map((waitingTimeRange) => (
-                <ProgressBar
-                  key={waitingTimeRange}
-                  title={`${waitingTimeRange} years`}
-                  people={`${waitingTimes[waitingTimeRange]} people`}
-                  percent={
-                    totalUsers > 0
-                      ? ((waitingTimes[waitingTimeRange] / totalUsers) * 100).toFixed(2) + "%"
-                      : "0.00%"
-                  }
-                />
-              ))}
+        {activeTab === "waiting" && (
+          <div className="flex justify-center mb-8">
+            <div className="w-full w-[1000px] bg-white rounded-xl border border-zinc-400 px-6 py-8">
+              <SectionHeader
+                title="Waiting Time Distribution"
+                subtitle="Number of people by waiting time duration"
+              />
+              <div className="grid grid-cols-1">
+                {Object.keys(waitingTimes).map((waitingTimeRange) => (
+                  <ProgressBar
+                    key={waitingTimeRange}
+                    title={`${waitingTimeRange} years`}
+                    people={`${waitingTimes[waitingTimeRange]} people`}
+                    percent={
+                      totalUsers > 0
+                        ? ((waitingTimes[waitingTimeRange] / totalUsers) * 100).toFixed(2) + "%"
+                        : "0.00%"
+                    }
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
