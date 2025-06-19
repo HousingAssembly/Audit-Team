@@ -99,7 +99,7 @@ const Overview = () => {
 
   const tabList = [
     { key: "suburb", label: "Suburb Distribution" },
-    { key: "demographics", label: "Demographics" },
+    { key: "demographics", label: "Age and Gender Distribution" },
     { key: "waiting", label: "Waiting Time Distribution" },
   ];
 
@@ -137,7 +137,7 @@ const Overview = () => {
         />
       </div>
 
-      <div className="text-center text-3xl text-zinc-700 font-bold mt-12 mb-6">
+      <div className="text-center text-4xl text-zinc-700 font-bold mt-12 mb-6">
         Demographics
       </div>
 
