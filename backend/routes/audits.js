@@ -1,72 +1,73 @@
-const express = require("express");
-const router = express.Router();
-const Audit = require("../models/audit");
+import dbConnect from "../lib/dbConnect";
+import Audit from "../models/audit";
 
-// CREATE new audit
-router.post("/", async (req, res) => {
-  try {
-    const newAudit = new Audit(req.body);
-    const saved = await newAudit.save();
-    res.status(201).json({ insertedId: saved._id });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+export default async function handler(req, res) {
+  await dbConnect();
 
-// GET all audits (optionally filter by application_date)
-router.get("/", async (req, res) => {
-  try {
-    const { from, to } = req.query;
-    let filter = {};
+  const { method, query, body } = req;
 
-    if (from && to) {
-      filter.application_date = { $gte: from, $lte: to };
+  // Handle GET /api/audits
+  if (method === "GET") {
+    try {
+      const { from, to } = query;
+      let filter = {};
+
+      if (from && to) {
+        filter.application_date = { $gte: from, $lte: to };
+      }
+
+      const audits = await Audit.find(filter);
+      return res.status(200).json(audits);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
     }
-
-    const all = await Audit.find(filter);
-    res.json(all);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
   }
-});
 
-// DELETE audit by ID
-router.delete("/:id", async (req, res) => {
-  try {
-    const deleted = await Audit.findByIdAndDelete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ error: "Audit not found" });
+  // Handle POST /api/audits (create) or /api/audits?search=true (search)
+  if (method === "POST") {
+    try {
+      // Check if it's a search
+      if (query.search === "true") {
+        const { id_number, surname, first_name, date_of_birth } = body;
+
+        if (!id_number || !surname || !first_name || !date_of_birth) {
+          return res.status(400).json({ message: "Missing required fields." });
+        }
+
+        const audit = await Audit.findOne({
+          "applicant.id_number": id_number,
+          "applicant.surname": surname,
+          "applicant.first_name": first_name,
+          "applicant.date_of_birth": date_of_birth,
+        });
+
+        if (!audit) return res.status(404).json({ message: "Audit not found." });
+
+        return res.status(200).json(audit);
+      }
+
+      // Otherwise create a new audit
+      const newAudit = new Audit(body);
+      const saved = await newAudit.save();
+      return res.status(201).json({ insertedId: saved._id });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
     }
-    res.status(200).json({ message: "Audit deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// SEARCH audit by ID number, surname, first name, and date of birth
-router.post("/search", async (req, res) => {
-  const { id_number, surname, first_name, date_of_birth } = req.body;
-
-  if (!id_number || !surname || !first_name || !date_of_birth) {
-    return res.status(400).json({ message: "Missing required fields." });
   }
 
-  try {
-    const audit = await Audit.findOne({
-      "applicant.id_number": id_number,
-      "applicant.surname": surname,
-      "applicant.first_name": first_name,
-      "applicant.date_of_birth": date_of_birth, // Must match format in DB
-    });
-
-    if (!audit) {
-      return res.status(404).json({ message: "Audit not found." });
+  // Handle DELETE /api/audits?id=XYZ
+  if (method === "DELETE") {
+    try {
+      const { id } = query;
+      const deleted = await Audit.findByIdAndDelete(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Audit not found" });
+      }
+      return res.status(200).json({ message: "Audit deleted successfully" });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
     }
-
-    res.status(200).json(audit);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
   }
-});
 
-module.exports = router;
+  return res.status(405).end(); // Method Not Allowed
+}
