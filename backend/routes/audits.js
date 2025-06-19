@@ -1,8 +1,9 @@
-import express from "express";
-import dbConnect from "../lib/dbConnect";
-import Audit from "../models/audit";
+const express = require("express");
+const dbConnect = require("../lib/dbConnect");
+const Audit = require("../models/audit");
 
 const router = express.Router();
+
 const MAX_AUDITS = 500000;
 
 // CREATE new audit
@@ -62,4 +63,5 @@ router.post("/search", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
+
