@@ -7,11 +7,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-// da models
+// models
 const User = require("./models/user");
 const Audit = require("./models/audit");
 
-// da routes
+// routes
 const auditRoutes = require("./routes/audits");
 const userRoutes = require("./routes/users");
 const projectRoutes = require("./routes/projects");
@@ -21,7 +21,10 @@ const statsRoutes = require("./routes/stats");
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://your-frontend.vercel.app",
+  credentials: true,
+}));
 app.use(express.json());
 
 // route mounting
@@ -35,9 +38,6 @@ app.get("/", (req, res) => {
   res.send("Housing Audit Backend is running!");
 });
 
-// Password Change
-app.use('/api/users', userRoutes); 
-
 // MongoDB Connection
 mongoose.connect(MONGO_URI, {
   dbName: "housing_audit",
@@ -45,18 +45,18 @@ mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
 })
   .then(async () => {
-    console.log("yippee, connected!");
+    console.log("✅ Connected to MongoDB");
 
     const audits = await Audit.find();
     const users = await User.find();
-    console.log(`Loaded ${audits.length} audits, ${users.length} users`);
+    console.log(`📊 Loaded ${audits.length} audits, ${users.length} users`);
   })
   .catch((err) => {
-    console.error("error with mongodb:", err);
+    console.error("❌ MongoDB connection error:", err);
   });
 
-// to start server
-const PORT = 5001;
+// start server
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
