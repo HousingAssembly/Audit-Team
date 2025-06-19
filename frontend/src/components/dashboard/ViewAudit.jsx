@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Select, { components } from 'react-select';
 import { Trash2 } from 'lucide-react';
 import AuditModal from '../ui/AuditModal';
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
 
 const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
@@ -68,7 +67,7 @@ export default function ViewAudit() {
     const fetchAudits = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${BASE_URL}/api/audits`, {
+        const res = await fetch(`${import.meta.env.BASE_URL}/api/audits`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -134,7 +133,7 @@ const filteredAudits = audits.filter((audit) => {
     if (!auditToDelete?._id) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${BASE_URL}/api/audits/${auditToDelete._id}`, {
+      const res = await fetch(`${import.meta.env.BASE_URL}/api/audits/${auditToDelete._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
 export default function SignUpForm({ closeModal, openLoginSignUp }) {
   const [email, setEmail] = useState("");
@@ -58,7 +57,7 @@ const handleSubmit = async (e) => {
 
   if (hasError) return;
 
-const res = await fetch(`${BASE_URL}/api/users/register`, {
+const res = await fetch(`${import.meta.env.BASE_URL}/api/users/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
