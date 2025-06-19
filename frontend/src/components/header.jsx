@@ -61,10 +61,12 @@ export default function Header() {
           <Link to="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-zinc-600 transition-colors duration-200">About Us</Link>
           <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-zinc-600 transition-colors duration-200">Contact</Link>
           <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-200">Housing Projects</Link>
+          <Link to="/statistics" className="hover:text-zinc-600 transition-colors duration-200">Statistics</Link>
         </div>
 
         <div className="lg:hidden ml-auto mr-[-13px] sm:mr-0 sm:pr-4 text-[15px] font-bold text-zinc-500 mt-[10px]">
-          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-100">View Housing Projects</Link>
+          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-100">Housing Projects</Link>
+          <Link to="/statistics" className="hover:text-zinc-600 transition-colors duration-100 ml-4">Statistics</Link>
         </div>
 
         <button

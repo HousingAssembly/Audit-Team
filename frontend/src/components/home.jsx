@@ -82,12 +82,13 @@ export default function Home() {
                       fairness to the audit process through simple, accessible technology.
                     </p>
                     <p>
-                      Our platform enables Housing Assembly to digitally capture, organize, 
-                      and monitor audit data—allowing communities to see which housing 
-                      projects are completed, which remain pending, and how long 
-                      individuals have been waiting. By replacing fragmented paperwork 
-                      with a centralized system, HouseAudit empowers communities to 
-                      track progress and hold decision-makers accountable.
+                      Our platform allows Housing Assembly to digitally capture, organize, 
+                      and manage audit records—giving communities access to meaningful statistics 
+                      such as waiting time, regional distribution, and demographic breakdowns. 
+                      These insights help expose patterns of inequality and potential corruption 
+                      in housing allocation. By replacing scattered paper forms with a unified 
+                      digital system, HouseAudit makes it easier to track progress, promote 
+                      transparency, and hold decision-makers accountable.
                     </p>
                   </div>
                 </div>

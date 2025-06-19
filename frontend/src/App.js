@@ -15,6 +15,7 @@ import PendingApprovals from "./components/dashboard/PendingApprovals";
 import HousingProjects from "./components/dashboard/HousingProjects";
 import Account from "./components/dashboard/Account";
 import ProjectShowcasePage from "./components/Projects";
+import Statistics from "./components/Statistics";
 
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
         {/* public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<ProjectShowcasePage />} />
+        <Route path="/statistics" element={<Statistics />} />
+
 
         {/* admin only stuff */} 
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
