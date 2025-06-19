@@ -1,12 +1,16 @@
-import dbConnect from "../lib/dbConnect";
-import { getStats } from "../controllers/statsController";
+const express = require("express");
+const dbConnect = require("../lib/dbConnect");
+const { getStats } = require("../controllers/statsController");
 
-export default async function handler(req, res) {
+const router = express.Router();
+
+// Connect to MongoDB before each request
+router.use(async (req, res, next) => {
   await dbConnect();
+  next();
+});
 
-  if (req.method === "GET") {
-    return getStats(req, res);
-  }
+// GET /api/stats
+router.get("/", getStats);
 
-  res.status(405).end(); // Method Not Allowed
-}
+module.exports = router;
