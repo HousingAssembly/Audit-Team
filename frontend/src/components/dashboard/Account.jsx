@@ -53,8 +53,8 @@ export default function Account() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-palette-dashboard min-h-screen">
-      <div className="text-zinc-700 font-bold text-4xl mb-8 mt-[120px] text-center uppercase tracking-wide">
+    <div className="flex flex-col items-center justify-center bg-palette-dashboard">
+      <div className="text-zinc-700 font-bold text-4xl mb-8 mt-[120px] text-center uppercase">
         Account Details
       </div>
       <div className="w-full max-w-md">
@@ -79,7 +79,7 @@ export default function Account() {
                 id="password"
                 type="password"
                 className="w-full border border-zinc-300 rounded-md px-4 py-2 text-[18px] text-zinc-700 focus:ring-2 focus:ring-red-800 outline-none transition"
-                placeholder="New password"
+                placeholder="Enter new password"
                 autoComplete="new-password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
