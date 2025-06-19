@@ -16,7 +16,7 @@ export default function ViewAuditGuest({ closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    const res = await fetch(`${import.meta.env.BASE_URL}/api/audits/search`, {
+    const res = await fetch(`/api/audits/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

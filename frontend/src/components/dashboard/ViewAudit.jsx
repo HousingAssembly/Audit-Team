@@ -67,7 +67,7 @@ export default function ViewAudit() {
     const fetchAudits = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${import.meta.env.BASE_URL}/api/audits`, {
+        const res = await fetch(`/api/audits`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -133,7 +133,7 @@ const filteredAudits = audits.filter((audit) => {
     if (!auditToDelete?._id) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${import.meta.env.BASE_URL}/api/audits/${auditToDelete._id}`, {
+      const res = await fetch(`/api/audits/${auditToDelete._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

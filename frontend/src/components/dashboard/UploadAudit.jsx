@@ -226,7 +226,7 @@
     payload.special_circumstances = formData.special_circumstances;
 
       try {
-          const res = await fetch(`${import.meta.env.BASE_URL}/api/audits`, {
+          const res = await fetch(`/api/audits`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

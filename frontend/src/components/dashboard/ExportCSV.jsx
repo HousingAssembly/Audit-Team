@@ -46,7 +46,7 @@ export default function ExportCSV() {
     }
 
     try {
-     const response = await axios.get(`${import.meta.env.BASE_URL}/api/audits`, {
+     const response = await axios.get(`/api/audits`, {
   params: { from: startDate, to: endDate },
 });
 
@@ -65,7 +65,7 @@ export default function ExportCSV() {
 
   const exportAllToCSV = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.BASE_URL}/api/audits`);
+      const response = await axios.get(`/api/audits`);
       const data = response.data;
       if (!data.length) return alert("No audit data found in the database.");
       const safeFileName = fileName.trim() || `audit-data-all`;

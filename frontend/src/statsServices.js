@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const fetchStats = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.BASE_URL}/api/stats`);
+    const response = await axios.get(`/api/stats`);
     return response.data;
   } catch (error) {
     console.error("Error fetching stats:", error);

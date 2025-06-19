@@ -22,7 +22,7 @@ export default function Home() {
 
   const closeModal = () => {
     setIsViewAuditOpen(false);
-  };
+  };// or import.meta.env.VITE_BASE_URL
 
   return ( 
     <>
