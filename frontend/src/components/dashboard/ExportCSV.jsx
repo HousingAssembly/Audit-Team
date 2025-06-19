@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+
 
 export default function ExportCSV() {
   const [startDate, setStartDate] = useState("");
@@ -45,9 +47,10 @@ export default function ExportCSV() {
     }
 
     try {
-      const response = await axios.get("http://localhost:5001/api/audits", {
-        params: { from: startDate, to: endDate },
-      });
+     const response = await axios.get(`${BASE_URL}/api/audits`, {
+  params: { from: startDate, to: endDate },
+});
+
 
       const data = response.data;
       if (!data.length) return alert("No data found for selected date range.");
@@ -63,7 +66,7 @@ export default function ExportCSV() {
 
   const exportAllToCSV = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/api/audits");
+      const response = await axios.get(`${BASE_URL}/api/audits`);
       const data = response.data;
       if (!data.length) return alert("No audit data found in the database.");
       const safeFileName = fileName.trim() || `audit-data-all`;

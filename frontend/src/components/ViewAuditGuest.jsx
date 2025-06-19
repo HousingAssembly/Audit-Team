@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import AuditModal from './ui/AuditModal';
-
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
 export default function ViewAuditGuest({ closeModal }) {
   const [idNumber, setIdNumber] = useState('');
@@ -17,7 +17,7 @@ export default function ViewAuditGuest({ closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5001/api/audits/search', {
+    const res = await fetch(`${BASE_URL}/api/audits/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

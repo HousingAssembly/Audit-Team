@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+// don't lock it
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
 export default function Account() {
   const [email, setEmail] = useState("");
@@ -23,7 +25,7 @@ export default function Account() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5001/api/users/update-password", {
+const res = await fetch(`${BASE_URL}/api/users/update-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

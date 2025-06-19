@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+
 
 export default function PendingApprovals() {
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -10,12 +12,13 @@ export default function PendingApprovals() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5001/api/users/pending", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Cache-Control": "no-cache",
-        },
-      });
+const res = await fetch(`${BASE_URL}/api/users/pending`, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Cache-Control": "no-cache",
+  },
+});
+
 
       if (!res.ok) {
         throw new Error(`Server responded with status ${res.status}`);
@@ -39,13 +42,14 @@ export default function PendingApprovals() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:5001/api/users/approve/${userId}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Cache-Control": "no-cache",
-        },
-      });
+const res = await fetch(`${BASE_URL}/api/users/approve/${userId}`, {
+  method: "PUT",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Cache-Control": "no-cache",
+  },
+});
+
 
       if (res.ok) {
         Refresh();
@@ -61,13 +65,14 @@ export default function PendingApprovals() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:5001/api/users/deny/${userId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Cache-Control": "no-cache",
-        },
-      });
+const res = await fetch(`${BASE_URL}/api/users/deny/${userId}`, {
+  method: "DELETE",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Cache-Control": "no-cache",
+  },
+});
+
 
       if (res.ok) {
         Refresh();
