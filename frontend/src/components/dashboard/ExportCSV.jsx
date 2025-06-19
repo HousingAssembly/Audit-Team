@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 
-
 export default function ExportCSV() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -46,10 +45,12 @@ export default function ExportCSV() {
     }
 
     try {
-     const response = await axios.get(`/api/audits`, {
-  params: { from: startDate, to: endDate },
-});
-
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/audits`,
+        {
+          params: { from: startDate, to: endDate },
+        }
+      );
 
       const data = response.data;
       if (!data.length) return alert("No data found for selected date range.");
@@ -65,7 +66,9 @@ export default function ExportCSV() {
 
   const exportAllToCSV = async () => {
     try {
-      const response = await axios.get(`/api/audits`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/api/audits`
+      );
       const data = response.data;
       if (!data.length) return alert("No audit data found in the database.");
       const safeFileName = fileName.trim() || `audit-data-all`;
@@ -92,10 +95,17 @@ export default function ExportCSV() {
         <div className="flex flex-col items-center justify-center w-full max-w-2xl">
           <div className="flex flex-col bg-white rounded-2xl border border-zinc-400 w-full px-10 py-10">
             <div className="mb-8">
-              <div className="text-zinc-700 font-semibold text-lg mb-4">Date Range</div>
+              <div className="text-zinc-700 font-semibold text-lg mb-4">
+                Date Range
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col">
-                  <label className="text-zinc-600 font-medium mb-2" htmlFor="start-date">Start Date</label>
+                  <label
+                    className="text-zinc-600 font-medium mb-2"
+                    htmlFor="start-date"
+                  >
+                    Start Date
+                  </label>
                   <input
                     id="start-date"
                     type="date"
@@ -105,7 +115,12 @@ export default function ExportCSV() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label className="text-zinc-600 font-medium mb-2" htmlFor="end-date">End Date</label>
+                  <label
+                    className="text-zinc-600 font-medium mb-2"
+                    htmlFor="end-date"
+                  >
+                    End Date
+                  </label>
                   <input
                     id="end-date"
                     type="date"
@@ -117,7 +132,12 @@ export default function ExportCSV() {
               </div>
             </div>
             <div className="mb-8">
-              <label className="text-zinc-700 font-semibold text-lg mb-2 block" htmlFor="file-name">File Name</label>
+              <label
+                className="text-zinc-700 font-semibold text-lg mb-2 block"
+                htmlFor="file-name"
+              >
+                File Name
+              </label>
               <input
                 id="file-name"
                 value={fileName}
@@ -137,14 +157,22 @@ export default function ExportCSV() {
                 onClick={exportToCSV}
                 className="flex items-center justify-center gap-2 px-8 py-3 bg-red-800 text-white font-bold rounded-lg hover:bg-red-900 transition"
               >
-                <img src="/export-csv.png" alt="Export CSV Icon" className="h-6 w-auto object-contain" />
+                <img
+                  src="/export-csv.png"
+                  alt="Export CSV Icon"
+                  className="h-6 w-auto object-contain"
+                />
                 Export Data
               </button>
               <button
                 onClick={exportAllToCSV}
                 className="flex items-center justify-center gap-2 px-8 py-3 bg-zinc-700 text-white font-bold rounded-lg hover:bg-zinc-800 transition"
               >
-                <img src="/export-csv.png" alt="Export CSV Icon" className="h-6 w-auto object-contain" />
+                <img
+                  src="/export-csv.png"
+                  alt="Export CSV Icon"
+                  className="h-6 w-auto object-contain"
+                />
                 Export All Data
               </button>
             </div>

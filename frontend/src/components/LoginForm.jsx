@@ -8,11 +8,14 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      const res = await fetch(`/api/users/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/api/users/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      }
+    );
 
     const data = await res.json();
 
@@ -52,11 +55,19 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
       >
         <div className="flex flex-row justify-center items-end ml-24">
           <div className="ml-[8px] mb-[1px]">
-            <img src="logo.png" alt="Logo" className="object-contain h-16 w-auto" />
+            <img
+              src="logo.png"
+              alt="Logo"
+              className="object-contain h-16 w-auto"
+            />
           </div>
           <div className="px-2 text-4xl font-medium">
-            <span className="ml-[-8px] text-palette-red font-['Chelsea_Market']">H</span><span className="font-['Chelsea_Market']">ouse</span>
-            <span className="text-palette-red font-['Chelsea_Market']">A</span><span className="font-['Chelsea_Market']">udit</span>
+            <span className="ml-[-8px] text-palette-red font-['Chelsea_Market']">
+              H
+            </span>
+            <span className="font-['Chelsea_Market']">ouse</span>
+            <span className="text-palette-red font-['Chelsea_Market']">A</span>
+            <span className="font-['Chelsea_Market']">udit</span>
           </div>
           <div className="flex ml-24 mb-auto hover:scale-105">
             <button type="button" onClick={closeModal}>
@@ -72,7 +83,11 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
 
         <div className="flex flex-col space-y-8 py-4">
           <div className="flex flex-row space-x-2 items-center border-[1.5px] border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]">
-            <img src="/profile-red.png" alt="Profile Icon" className="ml-4 h-5 w-auto object-contain" />
+            <img
+              src="/profile-red.png"
+              alt="Profile Icon"
+              className="ml-4 h-5 w-auto object-contain"
+            />
             <input
               className="px-4 py-2 w-full outline-none rounded-full"
               value={email}
@@ -82,7 +97,11 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
           </div>
 
           <div className="flex flex-row space-x-2 items-center border-[1.5px] border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]">
-            <img src="/lock.png" alt="Lock Icon" className="ml-4 h-5 w-auto object-contain" />
+            <img
+              src="/lock.png"
+              alt="Lock Icon"
+              className="ml-4 h-5 w-auto object-contain"
+            />
             <input
               className="px-4 py-2 w-full outline-none rounded-full"
               type="password"
@@ -102,7 +121,11 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
 
         <div className="text-center font-bold text-[13px] mt-12">
           DON'T HAVE AN ACCOUNT?{" "}
-          <button onClick={openLoginSignUp} type="button" className="text-palette-red">
+          <button
+            onClick={openLoginSignUp}
+            type="button"
+            className="text-palette-red"
+          >
             SIGN UP
           </button>
         </div>

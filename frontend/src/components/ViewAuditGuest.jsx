@@ -1,42 +1,46 @@
-import { useState, useEffect, useRef } from 'react';
-import AuditModal from './ui/AuditModal';
+import { useState, useEffect, useRef } from "react";
+import AuditModal from "./ui/AuditModal";
 
 export default function ViewAuditGuest({ closeModal }) {
-  const [idNumber, setIdNumber] = useState('');
-  const [surname, setSurname] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [dob, setDob] = useState('');
+  const [idNumber, setIdNumber] = useState("");
+  const [surname, setSurname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [dob, setDob] = useState("");
   const [auditData, setAuditData] = useState(null);
   const [showAuditModal, setShowAuditModal] = useState(false);
   const modalRef = useRef();
 
   const normalizeInput = (input) => input.trim().toLowerCase();
-  const normalizeString = (str) => str[0].toUpperCase() + str.slice(1).toLowerCase();
+  const normalizeString = (str) =>
+    str[0].toUpperCase() + str.slice(1).toLowerCase();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    const res = await fetch(`/api/audits/search`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_number: normalizeInput(idNumber),
-          surname: normalizeString(surname),
-          first_name: normalizeString(firstName),
-          date_of_birth: normalizeInput(dob),
-        }),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/api/audits/search`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_number: normalizeInput(idNumber),
+            surname: normalizeString(surname),
+            first_name: normalizeString(firstName),
+            date_of_birth: normalizeInput(dob),
+          }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {
         setAuditData(data);
         setShowAuditModal(true);
       } else {
-        alert(data.message || 'Audit not found.');
+        alert(data.message || "Audit not found.");
       }
     } catch (err) {
-      console.error('Fetch error:', err);
-      alert('Something went wrong.');
+      console.error("Fetch error:", err);
+      alert("Something went wrong.");
     }
   };
 
@@ -46,15 +50,17 @@ export default function ViewAuditGuest({ closeModal }) {
 
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === "Escape") closeModal();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [closeModal]);
 
   const renderInputField = (label, value, setValue, placeholder) => (
     <div className="flex flex-col space-y-1 py-3 w-full">
-      <label className="px-5 text-zinc-700 font-bold text-[15px] sm:text-[17px]">{label}</label>
+      <label className="px-5 text-zinc-700 font-bold text-[15px] sm:text-[17px]">
+        {label}
+      </label>
       <div className="flex border-[1.5px] border-red-800 rounded-full shadow-md sm:h-[40px] h-[35px] w-full">
         <input
           className="px-5 py-2 rounded-full w-full outline-none text-[14px] sm:text-[16px]"
@@ -67,10 +73,10 @@ export default function ViewAuditGuest({ closeModal }) {
   );
 
   const handleDobChange = (e) => {
-    let value = e.target.value.replace(/\D/g, ''); 
+    let value = e.target.value.replace(/\D/g, "");
 
-    if (value.length > 4) value = value.slice(0, 4) + '/' + value.slice(4); 
-    if (value.length > 7) value = value.slice(0, 7) + '/' + value.slice(7);
+    if (value.length > 4) value = value.slice(0, 4) + "/" + value.slice(4);
+    if (value.length > 7) value = value.slice(0, 7) + "/" + value.slice(7);
 
     setDob(value);
   };
@@ -87,16 +93,32 @@ export default function ViewAuditGuest({ closeModal }) {
           onClick={(e) => e.stopPropagation()}
           className="bg-white rounded-3xl flex flex-col items-center py-4 px-7 mt-10 overflow-y-auto w-[450px] sm:w-[650px] relative"
         >
-          <button type="button" onClick={closeModal} className="absolute top-4 right-4 hover:scale-105">
-            <img src="x.png" alt="Close" className="object-contain h-5 sm:h-6 w-auto" />
+          <button
+            type="button"
+            onClick={closeModal}
+            className="absolute top-4 right-4 hover:scale-105"
+          >
+            <img
+              src="x.png"
+              alt="Close"
+              className="object-contain h-5 sm:h-6 w-auto"
+            />
           </button>
 
           <div className="flex flex-row justify-center items-end mt-1">
-            <img src="logo.png" alt="Logo" className="object-contain h-10 sm:h-16 w-auto" />
+            <img
+              src="logo.png"
+              alt="Logo"
+              className="object-contain h-10 sm:h-16 w-auto"
+            />
             <div className="px-2 text-[25px] sm:text-4xl font-medium">
-              <span className="ml-[-8px] text-palette-red font-['Chelsea_Market']">H</span>
+              <span className="ml-[-8px] text-palette-red font-['Chelsea_Market']">
+                H
+              </span>
               <span className="font-['Chelsea_Market']">ouse</span>
-              <span className="text-palette-red font-['Chelsea_Market']">A</span>
+              <span className="text-palette-red font-['Chelsea_Market']">
+                A
+              </span>
               <span className="font-['Chelsea_Market']">udit</span>
             </div>
           </div>
@@ -105,14 +127,28 @@ export default function ViewAuditGuest({ closeModal }) {
             Decent Housing For All
           </p>
 
-          <h2 className="text-center text-[18px] sm:text-[25px] mb-4 font-bold">ENTER PERSONAL INFORMATION</h2>
+          <h2 className="text-center text-[18px] sm:text-[25px] mb-4 font-bold">
+            ENTER PERSONAL INFORMATION
+          </h2>
 
-          {renderInputField('ID Number', idNumber, setIdNumber, 'Enter ID Number')}
-          {renderInputField('Surname', surname, setSurname, 'Enter Surname')}
-          {renderInputField('First Name', firstName, setFirstName, 'Enter First Name')}
+          {renderInputField(
+            "ID Number",
+            idNumber,
+            setIdNumber,
+            "Enter ID Number"
+          )}
+          {renderInputField("Surname", surname, setSurname, "Enter Surname")}
+          {renderInputField(
+            "First Name",
+            firstName,
+            setFirstName,
+            "Enter First Name"
+          )}
 
           <div className="w-full py-3 mb-4">
-            <label className="px-5 text-zinc-700 font-bold text-[15px] sm:text-[17px]">Date of Birth</label>
+            <label className="px-5 text-zinc-700 font-bold text-[15px] sm:text-[17px]">
+              Date of Birth
+            </label>
             <div className="flex border-[1.5px] border-red-800 rounded-full shadow-md sm:h-[40px] h-[35px] w-full">
               <input
                 className="px-5 py-2 rounded-full w-full outline-none text-[14px] sm:text-[16px]"
@@ -134,7 +170,10 @@ export default function ViewAuditGuest({ closeModal }) {
       </div>
 
       {showAuditModal && auditData && (
-        <AuditModal audit={auditData} onClose={() => setShowAuditModal(false)} />
+        <AuditModal
+          audit={auditData}
+          onClose={() => setShowAuditModal(false)}
+        />
       )}
     </>
   );

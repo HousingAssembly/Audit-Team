@@ -24,14 +24,17 @@ export default function Account() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/api/users/update-password`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ newPassword }),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/api/users/update-password`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ newPassword }),
+        }
+      );
 
       const data = await res.json();
 

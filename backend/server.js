@@ -21,10 +21,7 @@ const statsRoutes = require("./routes/stats");
 const app = express();
 
 // middleware
-app.use(cors({
-  origin: "https://your-frontend.vercel.app",
-  credentials: true,
-}));
+app.use(cors());
 app.use(express.json());
 
 // route mounting
@@ -39,11 +36,12 @@ app.get("/", (req, res) => {
 });
 
 // MongoDB Connection
-mongoose.connect(MONGO_URI, {
-  dbName: "housing_audit",
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(MONGO_URI, {
+    dbName: "housing_audit",
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(async () => {
     console.log("✅ Connected to MongoDB");
 

@@ -28,3 +28,4 @@ backend/.env.local
 frontend/.env.local
 backend/.env.*.local
 frontend/.env.*.local
+frontend/.env.prod
