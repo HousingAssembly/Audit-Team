@@ -57,7 +57,7 @@ const handleSubmit = async (e) => {
 
   if (hasError) return;
 
-const res = await fetch(`${import.meta.env.BASE_URL}/api/users/register`, {
+const res = await fetch(`/api/users/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),

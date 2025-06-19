@@ -10,7 +10,7 @@ export default function PendingApprovals() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-const res = await fetch(`${import.meta.env.BASE_URL}/api/users/pending`, {
+const res = await fetch(`/api/users/pending`, {
   headers: {
     Authorization: `Bearer ${token}`,
     "Cache-Control": "no-cache",
@@ -40,7 +40,7 @@ const res = await fetch(`${import.meta.env.BASE_URL}/api/users/pending`, {
     try {
       const token = localStorage.getItem("token");
 
-const res = await fetch(`${import.meta.env.BASE_URL}/api/users/approve/${userId}`, {
+const res = await fetch(`/api/users/approve/${userId}`, {
   method: "PUT",
   headers: {
     Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const res = await fetch(`${import.meta.env.BASE_URL}/api/users/approve/${userId}
     try {
       const token = localStorage.getItem("token");
 
-const res = await fetch(`${import.meta.env.BASE_URL}/api/users/deny/${userId}`, {
+const res = await fetch(`/api/users/deny/${userId}`, {
   method: "DELETE",
   headers: {
     Authorization: `Bearer ${token}`,
