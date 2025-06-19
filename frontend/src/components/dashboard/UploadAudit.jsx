@@ -1,5 +1,4 @@
   import React, { useState } from "react";
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
   const Field = ({ label }) => (
     <div className="py-2 outline outline-[3px] outline-offset-[-1.5px] outline-zinc-700 text-zinc-700 text-start px-4 bg-white font-bold text-xl">
@@ -227,7 +226,7 @@ const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
     payload.special_circumstances = formData.special_circumstances;
 
       try {
-          const res = await fetch(`${BASE_URL}/api/audits`, {
+          const res = await fetch(`${import.meta.env.BASE_URL}/api/audits`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
 export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
   const [email, setEmail] = useState("");
@@ -9,7 +8,7 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      const res = await fetch(`${BASE_URL}/api/users/login`, {
+      const res = await fetch(`${import.meta.env.BASE_URL}/api/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
