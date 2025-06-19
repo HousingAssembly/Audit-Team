@@ -1,7 +1,12 @@
-const express = require("express");
-const router = express.Router();
-const statsController = require("../controllers/statsController");
+import dbConnect from "../lib/dbConnect";
+import { getStats } from "../controllers/statsController";
 
-router.get("/", statsController.getStats); 
+export default async function handler(req, res) {
+  await dbConnect();
 
-module.exports = router;
+  if (req.method === "GET") {
+    return getStats(req, res);
+  }
+
+  res.status(405).end(); // Method Not Allowed
+}
