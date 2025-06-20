@@ -97,6 +97,11 @@ export default function Header() {
           </Link>
         </div>
 
+         <div className="lg:hidden ml-auto mr-[-13px] sm:mr-0 sm:pr-4 text-[15px] font-bold text-zinc-500 mt-[10px]">
+          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-100">Housing Projects</Link>
+          <Link to="/statistics" className="hover:text-zinc-600 transition-colors duration-100 ml-4">Statistics</Link>
+        </div>
+
         <button
           className="bg-palette-red hover:bg-red-900 font-bold text-white text-[25px] h-[48px] w-fit px-6 ml-auto md:ml-20 rounded-xl flex items-center justify-center leading-none hidden xl:flex"
           onClick={() => setIsLoginOpen(true)}
