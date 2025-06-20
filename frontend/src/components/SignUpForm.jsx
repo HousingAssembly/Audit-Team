@@ -34,7 +34,7 @@ export default function SignUpForm({ closeModal, openLoginSignUp }) {
     } else if (!emailRegex.test(email)) {
       setEmailError("Invalid email format.");
       hasError = true;
-    } else if (!email.endsWith("@housingassembly.za")) {
+    } else if (!email.endsWith("@housingassembly.org.za")) {
       setEmailError("Invalid email format.");
       hasError = true;
     }

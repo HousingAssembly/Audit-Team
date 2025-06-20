@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchStats } from "../statsServices";
 
+
 const Stats = ({ title, stat }) => (
   <div className="flex flex-col items-center justify-center px-6 py-5 bg-white rounded-xl border border-zinc-400 w-full min-w-[180px] shadow-sm">
     <div className="text-zinc-600 text-[15px] sm:text-lg font-semibold mb-1">{title}</div>
@@ -109,6 +110,7 @@ export default function Statistics() {
   } = statsData;
 
   return (
+    <div className="flex flex-col min-h-screen w-full">
     <div className="flex flex-col w-full py-7 sm:py-12 overflow-hidden">
       {/* Logo - same as Projects.jsx */}
       <div className="flex flex-col items-center">
@@ -160,6 +162,10 @@ export default function Statistics() {
           stat={`${averageWaitingTime ? averageWaitingTime.toFixed(1) : "N/A"} years`}
         />
       </div>
+
+      <div className="text-center text-3xl sm:text-5xl text-white font-bold mt-3 sm:mt-12 mb-6">
+          Demographics
+        </div>
 
       {/* Tabs */}
       <div className="flex justify-center mb-8">
@@ -306,10 +312,10 @@ export default function Statistics() {
       </div>
       </div>
 
-      <div className="text-black text-[8px] sm:text-base font-semibold items-center sm:mb-6 sm:mt-[30px] px-[60px] sm:px-[300px] flex justify-left mt-[20px]">
-              Please note: these statistics only reflect audits that have been submitted to Housing Assembly and entered on this website.
-              Not everyone who has applied for housing has provided their audit information, so these figures represent only the data available to Housing Assembly and may not capture all housing applicants.
-            </div>
+      <div className="text-black text-[8px] sm:text-base font-semibold mb-0 sm:mb-6 mt-[20px] max-w-7xl mx-auto px-[60px] sm:px-[60px] text-left">
+  Please note: these statistics only reflect audits that have been submitted to Housing Assembly and entered on this website.
+  Not everyone who has applied for housing has provided their audit information, so these figures represent only the data available to Housing Assembly and may not capture all housing applicants.
+</div>
 
       {/* Back to Homepage Button */}
       <div className="flex justify-center mt-[30px] sm:mt-[50px] sm:mb-[20px]">
@@ -325,6 +331,7 @@ export default function Statistics() {
           </div>
         </a>
       </div>
+    </div>
     </div>
   );
 }

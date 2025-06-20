@@ -138,22 +138,24 @@ const Overview = () => {
 
   return (
     <div className="px-7 py-7 flex flex-col w-full min-h-screen bg-palette-dashboard">
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={handleExportPDF}
-          className="px-4 py-2 bg-red-700 text-white font-bold rounded hover:bg-red-800 transition"
-        >
-          Export as PDF
-        </button>
-      </div>
-
-      {/* 页面内容区域，导出时会截图这一块 */}
-      <div ref={reportRef}>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+      <div>
         <div className="text-4xl text-zinc-700 font-bold py-2">Overview</div>
         <div className="text-zinc-700/80 text-xl font-bold py-2">
           Welcome to HouseAudit — the auditing system of Housing Assembly. Here’s an overview of all audit data.
         </div>
-        <div className="h-8" />
+      </div>
+      <button
+        onClick={handleExportPDF}
+        className="bg-red-800 text-white font-bold py-2 px-4 rounded-lg mt-2 md:mt-0 hover:bg-red-900 transition"
+      >
+        Export as PDF
+      </button>
+    </div>
+
+    <div ref={reportRef}></div>
+
+      <div ref={reportRef}>
 
         <div className="flex flex-row space-x-6 py-4">
           <Stats title="Total on Waiting List" stat={totalUsers.toString()} />
