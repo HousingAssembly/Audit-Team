@@ -88,6 +88,7 @@ export default function Statistics() {
   });
 
   const [activeTab, setActiveTab] = useState("suburb");
+  const [loading, setLoading] = useState(true); 
 
   const tabList = [
     { key: "suburb", label: "Suburb Distribution" },
@@ -96,8 +97,13 @@ export default function Statistics() {
   ];
 
   useEffect(() => {
-    fetchStats().then(setStatsData).catch(console.error);
+    setLoading(true); // Start loading
+    fetchStats()
+      .then(setStatsData)
+      .catch(console.error)
+      .finally(() => setLoading(false)); // Stop loading
   }, []);
+
 
   const {
     totalUsers = 0,
@@ -108,6 +114,20 @@ export default function Statistics() {
     regions = {},
     averageWaitingTime = 0
   } = statsData;
+
+  if (loading) {
+    return (
+      
+      <div
+        className="flex flex-col w-full py-7 sm:py-12 overflow-hidden items-center justify-center min-h-[calc(100vh-28.7vw)] sm:min-h-[calc(100vh-13.7vw)]"
+      >
+        <img src="/LoadingScreen.gif" alt="Loading..." className="w-20 h-20 sm:w-32 sm:h-32" />
+        <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+          Fetching data...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen w-full">

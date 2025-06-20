@@ -4,6 +4,7 @@ export default function PendingApprovals() {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchEmail, setSearchEmail] = useState("");
+  
 
   const Refresh = async () => {
     try {
@@ -35,6 +36,7 @@ export default function PendingApprovals() {
   };
 
   useEffect(() => {
+    
     Refresh();
   }, []);
 
@@ -87,6 +89,17 @@ export default function PendingApprovals() {
       console.error("Failed to deny user:", err);
     }
   };
+
+  if (loading) {
+  return (
+    <div className="flex flex-col w-full py-7 sm:py-12 overflow-hidden items-center justify-center min-h-[calc(100vh-4.6vw)] bg-white">
+      <img src="/LoadingScreen.gif" alt="Loading..." className="w-20 h-20 sm:w-32 sm:h-32" />
+      <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+        Fetching data...
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="px-7 py-7 flex flex-col">

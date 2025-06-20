@@ -4,6 +4,7 @@ import axios from "axios";
 export default function ProjectShowcasePage() {
   const [activeProjects, setActiveProjects] = useState([]);
   const [futureProjects, setFutureProjects] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const imageList = [
@@ -11,38 +12,41 @@ export default function ProjectShowcasePage() {
       "Projectspictures/SecHouse.png",
       "Projectspictures/ThirdHouse.png",
     ];
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/projects`)
-      .then((res) => {
-        const data = res.data;
+    setLoading(true); // Ensure loading is true at the start
+  // Remove setTimeout, call axios directly
+  axios
+    .get(`${process.env.REACT_APP_BASE_URL}/api/projects`)
+    .then((res) => {
+      const data = res.data;
 
-        const actives = data
-          .filter((p) => p.status === "Ongoing" || p.status === "Completed")
-          .sort((a, b) => b.year - a.year);
+      const actives = data
+        .filter((p) => p.status === "Ongoing" || p.status === "Completed")
+        .sort((a, b) => b.year - a.year);
 
-        const futures = data
-          .filter((p) => p.status === "Upcoming")
-          .sort((a, b) => b.year - a.year);
+      const futures = data
+        .filter((p) => p.status === "Upcoming")
+        .sort((a, b) => b.year - a.year);
 
-        const activeWithImages = actives.map((p, i) => ({
-          ...p,
-          image: imageList[i % imageList.length],
-          grayscale: false,
-          color: `${i % 2 === 0 ? "bg-red-800" : "bg-black"} text-white`,
-        }));
+      const activeWithImages = actives.map((p, i) => ({
+        ...p,
+        image: imageList[i % imageList.length],
+        grayscale: false,
+        color: `${i % 2 === 0 ? "bg-red-800" : "bg-black"} text-white`,
+      }));
 
-        const futureWithImages = futures.map((p, i) => ({
-          ...p,
-          image: imageList[i % imageList.length],
-          grayscale: true,
-          color: `${i % 2 === 0 ? "bg-zinc-500" : "bg-black"} text-white`,
-        }));
+      const futureWithImages = futures.map((p, i) => ({
+        ...p,
+        image: imageList[i % imageList.length],
+        grayscale: true,
+        color: `${i % 2 === 0 ? "bg-zinc-500" : "bg-black"} text-white`,
+      }));
 
-        setActiveProjects(activeWithImages);
-        setFutureProjects(futureWithImages);
-      })
-      .catch((err) => console.error("Failed to load projects:", err));
-  }, []);
+      setActiveProjects(activeWithImages);
+      setFutureProjects(futureWithImages);
+    })
+    .catch((err) => console.error("Failed to load projects:", err))
+    .finally(() => setLoading(false));
+}, []);
 
   const renderProjects = (list) =>
     list.map((project, index) => {
@@ -113,6 +117,20 @@ export default function ProjectShowcasePage() {
   const totalActiveProjects = activeProjects.length;
   const shouldOffsetFuture = totalActiveProjects % 2 !== 0;
 
+   if (loading) {
+  return (
+    <div
+      className="flex flex-col w-full py-7 sm:py-12 overflow-hidden items-center justify-center min-h-[calc(100vh-28.7vw)] sm:min-h-[calc(100vh-13.7vw)]"
+    >
+      <img src="/LoadingScreen.gif" alt="Loading..." className="w-20 h-20 sm:w-32 sm:h-32" />
+      <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+        Fetching data...
+      </div>
+    </div>
+  );
+}
+
+
   return (
     <div className="flex flex-col w-full py-7 sm:py-12 overflow-hidden">
       {/* Logo */}
@@ -165,7 +183,7 @@ export default function ProjectShowcasePage() {
         {activeProjects.length > 0 ? (
           renderProjects(activeProjects)
         ) : (
-          <div className="text-center text-2xl font-bold text-zinc-500 mt-[30px]">
+          <div className="text-center text-2xl font-bold text-zinc-500 mt-[30px] mb-[50px]">
             No active projects available.
           </div>
         )}
@@ -198,7 +216,7 @@ export default function ProjectShowcasePage() {
         {futureProjects.length > 0 ? (
           renderProjects(futureProjects)
         ) : (
-          <div className="text-center text-2xl font-bold text-zinc-500 mt-[30px]">
+          <div className="text-center text-2xl font-bold text-zinc-500 mt-[30px] mb-[50px]">
             No future projects available.
           </div>
         )}

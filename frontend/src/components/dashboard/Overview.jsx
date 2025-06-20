@@ -105,12 +105,17 @@ const Overview = () => {
     averageWaitingTime: 0,
   });
 
+  const [loading, setLoading] = useState(true);
+
   const getStatsData = async () => {
     try {
+      setLoading(true); // Start loading
       const data = await fetchStats();
       setStatsData(data);
     } catch (error) {
       console.error("Error fetching stats:", error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -135,6 +140,17 @@ const Overview = () => {
     regions = {},
     averageWaitingTime = 0,
   } = statsData;
+
+  if (loading) {
+  return (
+    <div className="flex flex-col w-full py-7 sm:py-12 overflow-hidden items-center justify-center min-h-[calc(100vh-4.6vw)] bg-white">
+      <img src="/LoadingScreen.gif" alt="Loading..." className="w-20 h-20 sm:w-32 sm:h-32" />
+      <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+        Fetching data...
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="px-7 py-7 flex flex-col w-full min-h-screen bg-palette-dashboard">
