@@ -57,6 +57,7 @@ const Users = ({ project, isLast, onEdit, onDelete }) => {
 };
 
 export default function HousingProjects() {
+  const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -85,12 +86,15 @@ export default function HousingProjects() {
 
   const fetchProjects = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/projects`
       );
       setProjects(res.data);
     } catch (err) {
       console.error("Failed to load projects:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -182,6 +186,17 @@ export default function HousingProjects() {
       p.area.toLowerCase().includes(searchArea.toLowerCase()) &&
       p.municipality.toLowerCase().includes(searchMunicipality.toLowerCase())
   );
+
+  if (loading) {
+  return (
+    <div className="flex flex-col w-full py-7 sm:py-12 overflow-hidden items-center justify-center min-h-[calc(100vh-4.6vw)] bg-white">
+      <img src="/LoadingScreen.gif" alt="Loading..." className="w-20 h-20 sm:w-32 sm:h-32" />
+      <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+        Fetching data...
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="px-7 py-7 flex flex-col">

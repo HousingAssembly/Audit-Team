@@ -117,10 +117,12 @@ export default function ViewAudit() {
   const [priorityOptions, setPriorityOptions] = useState([]);
   const [selectedAudit, setSelectedAudit] = useState(null);
   const [auditToDelete, setAuditToDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAudits = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token");
         const res = await fetch(
           `${process.env.REACT_APP_BASE_URL}/api/audits`,
@@ -141,6 +143,8 @@ export default function ViewAudit() {
         setPriorityOptions(labels);
       } catch (err) {
         console.error("Failed to fetch audits:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -226,6 +230,17 @@ export default function ViewAudit() {
 
     return years.toFixed(1) + " years";
   };
+
+  if (loading) {
+  return (
+    <div className="flex flex-col w-full py-7 sm:py-12 overflow-hidden items-center justify-center min-h-[calc(100vh-4.6vw)] bg-white">
+      <img src="/LoadingScreen.gif" alt="Loading..." className="w-20 h-20 sm:w-32 sm:h-32" />
+      <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+        Fetching data...
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="px-7 py-7 flex flex-col">

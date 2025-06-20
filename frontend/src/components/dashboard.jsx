@@ -1,10 +1,14 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const isMediumScreen = useMediaQuery({ maxWidth: 768 });
+
+  const isActive = (path) => location.pathname.includes(path);
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -29,32 +33,86 @@ export default function Dashboard() {
                   {/* Top Section */}
                   <div className="flex flex-col">
                     <Link to="overview">
-                      <img src="/overview.png" alt="Overview Icon" className="h-7 w-auto object-contain transition hover:opacity-75" />
+                      <img
+                        src="/overview.png"
+                        alt="Overview Icon"
+                        className={`h-7 w-auto object-contain transition hover:opacity-75`}
+                      />
                     </Link>
                     <Link to="upload-audit">
-                      <img src="/upload-audit.png" alt="Upload Audit Icon" className="h-5 w-auto object-contain mt-[51px] transition hover:opacity-75" />
+                      <img
+                        src="/upload-audit.png"
+                        alt="Upload Audit Icon"
+                        className={`h-5 w-auto object-contain mt-[51px] transition hover:opacity-75`}
+                      />
                     </Link>
                     <Link to="view-audit">
-                      <img src="/view-audit.png" alt="View Audit Icon" className="h-6 w-auto object-contain mt-[54px] transition hover:opacity-75" />
+                      <img
+                        src="/view-audit.png"
+                        alt="View Audit Icon"
+                        className={`h-6 w-auto object-contain mt-[54px] transition hover:opacity-75`}
+                      />
                     </Link>
                     <Link to="export">
-                      <img src="/export-csv.png" alt="Export CSV Icon" className="h-5 w-auto object-contain mt-[53px] transition hover:opacity-75" />
+                      <img
+                        src="/export-csv.png"
+                        alt="Export CSV Icon"
+                        className={`h-5 w-auto object-contain mt-[53px] transition hover:opacity-75`}
+                      />
                     </Link>
                     <Link to="pending-approvals">
-                      <img src="/pending-approval.png" alt="Pending Approvals Icon" className="h-7 w-auto object-contain mt-[52px] transition hover:opacity-75" />
+                      <img
+                        src="/pending-approval.png"
+                        alt="Pending Approvals Icon"
+                        className={`h-7 w-auto object-contain mt-[52px] transition hover:opacity-75`}
+                      />
                     </Link>
                     <Link to="housing-projects">
-                      <img src="/housing-projects.png" alt="Housing Projects Icon" className="h-5 w-auto object-contain mt-[52px] transition hover:opacity-75" />
+                      <img
+                        src="/housing-projects.png"
+                        alt="Housing Projects Icon"
+                        className={`h-5 w-auto object-contain mt-[52px] transition hover:opacity-75`}
+                      />
                     </Link>
                   </div>
 
                   <div className="flex flex-col text-white text-[17px] font-bold">
-                    <Link to="overview" className="transition hover:opacity-75">Overview</Link>
-                    <Link to="upload-audit" className="mt-[50px] transition hover:opacity-75">Upload Audit</Link>
-                    <Link to="view-audit" className="mt-[50px] transition hover:opacity-75">View Audits</Link>
-                    <Link to="export" className="mt-[50px] transition hover:opacity-75">Export CSV</Link>
-                    <Link to="pending-approvals" className="mt-[50px] transition hover:opacity-75">Pending Approvals</Link>
-                    <Link to="housing-projects" className="mt-[50px] transition hover:opacity-75">Housing Projects</Link>
+                    <Link
+                      to="overview"
+                      className={`transition ${isActive("overview") ? "opacity-75" : ""} hover:opacity-75`}
+                    >
+                      Overview
+                    </Link>
+                    <Link
+                      to="upload-audit"
+                      className={`mt-[50px] transition ${isActive("upload-audit") ? "opacity-75" : ""} hover:opacity-75`}
+                    >
+                      Upload Audit
+                    </Link>
+                    <Link
+                      to="view-audit"
+                      className={`mt-[50px] transition ${isActive("view-audit") ? "opacity-75" : ""} hover:opacity-75`}
+                    >
+                      View Audits
+                    </Link>
+                    <Link
+                      to="export"
+                      className={`mt-[50px] transition ${isActive("export") ? "opacity-75" : ""} hover:opacity-75`}
+                    >
+                      Export CSV
+                    </Link>
+                    <Link
+                      to="pending-approvals"
+                      className={`mt-[50px] transition ${isActive("pending-approvals") ? "opacity-75" : ""} hover:opacity-75`}
+                    >
+                      Pending Approvals
+                    </Link>
+                    <Link
+                      to="housing-projects"
+                      className={`mt-[50px] transition ${isActive("housing-projects") ? "opacity-75" : ""} hover:opacity-75`}
+                    >
+                      Housing Projects
+                    </Link>
                   </div>
                 </div>
 
@@ -69,7 +127,12 @@ export default function Dashboard() {
                     </button>
                   </div>
                   <div className="flex flex-col mt-[7px]">
-                    <Link to="account" className="transition hover:opacity-75">Account</Link>
+                    <Link
+                      to="account"
+                      className={`transition hover:opacity-75 ${isActive("account") ? "opacity-75" : ""}`}
+                    >
+                      Account
+                    </Link>
                     <button onClick={handleLogout} className="text-left mt-[50px] transition hover:opacity-75">Logout</button>
                   </div>
                 </div>
