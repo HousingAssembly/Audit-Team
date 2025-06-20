@@ -81,19 +81,36 @@ const Overview = () => {
   const reportRef = useRef();
 
   const handleExportPDF = async () => {
-    const input = reportRef.current;
-    const canvas = await html2canvas(input, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
+  const input = reportRef.current;
+  const canvas = await html2canvas(input, { scale: 2, useCORS: true });
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "px",
-      format: [canvas.width, canvas.height],
-    });
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF("p", "mm", "a4");
 
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-    pdf.save("overview_report.pdf");
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
+
+  const imgProps = {
+    width: pdfWidth,
+    height: (canvas.height * pdfWidth) / canvas.width,
   };
+
+  let heightLeft = imgProps.height;
+  let position = 0;
+
+  pdf.addImage(imgData, "PNG", 0, position, imgProps.width, imgProps.height);
+  heightLeft -= pdfHeight;
+
+  while (heightLeft > 0) {
+    position -= pdfHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, "PNG", 0, position, imgProps.width, imgProps.height);
+    heightLeft -= pdfHeight;
+  }
+
+  pdf.save("overview_report.pdf");
+};
+
 
   const [statsData, setStatsData] = useState({
     totalUsers: 0,
@@ -169,7 +186,6 @@ const Overview = () => {
       </button>
     </div>
 
-    <div ref={reportRef}></div>
 
       <div ref={reportRef}>
 
