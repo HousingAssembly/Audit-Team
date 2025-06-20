@@ -4,10 +4,11 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const modalRef = useRef();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Start loading
     const res = await fetch(
       `${process.env.REACT_APP_BASE_URL}/api/users/login`,
       {
@@ -18,6 +19,8 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
     );
 
     const data = await res.json();
+
+    setLoading(false); // Stop loading
 
     if (res.status === 403 && data.error === "Account not approved yet.") {
       alert("Your account is pending admin approval.");
@@ -79,7 +82,20 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
         <div className="flex justify-center pb-7 text-xl text-palette-text font-bold">
           Decent Housing For All
         </div>
+
+        {loading ? (
+          <div className="flex flex-col items-center justify-center min-h-[250px]">
+            <img src="/LoadingScreen.gif" alt="Loading..." className="w-16 h-16 sm:w-24 sm:h-24" />
+            <div className="mt-6 text-[15px] sm:text-[20px] text-zinc-700 font-semibold">
+              Logging in...
+            </div>
+          </div>
+        ) : (
+          <>
+
         <div className="text-center text-3xl mt-4 mb-2 font-bold">LOGIN</div>
+        
+        
 
         <div className="flex flex-col space-y-8 py-4">
           <div className="flex flex-row space-x-2 items-center border-[1.5px] border-red-800 rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.2)]">
@@ -119,6 +135,8 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
           </button>
         </div>
 
+        
+
         <div className="text-center font-bold text-[13px] mt-12">
           DON'T HAVE AN ACCOUNT?{" "}
           <button
@@ -129,6 +147,8 @@ export default function LoginModal({ onLogin, closeModal, openLoginSignUp }) {
             SIGN UP
           </button>
         </div>
+        </>
+        )}
       </form>
     </div>
   );
