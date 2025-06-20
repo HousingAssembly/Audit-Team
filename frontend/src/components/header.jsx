@@ -57,16 +57,44 @@ export default function Header() {
         </Link>
 
         <div className="flex flex-row items-center space-x-20 text-[25px] ml-auto text-zinc-500 font-bold hidden lg:flex">
-          <Link to="/" className="hover:text-zinc-600 transition-colors duration-100">Home</Link>
-          <Link to="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-zinc-600 transition-colors duration-200">About Us</Link>
-          <Link to="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-zinc-600 transition-colors duration-200">Contact</Link>
-          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-200">Housing Projects</Link>
-          <Link to="/statistics" className="hover:text-zinc-600 transition-colors duration-200">Statistics</Link>
-        </div>
-
-        <div className="lg:hidden ml-auto mr-[-13px] sm:mr-0 sm:pr-4 text-[15px] font-bold text-zinc-500 mt-[10px]">
-          <Link to="/projects" className="hover:text-zinc-600 transition-colors duration-100">Housing Projects</Link>
-          <Link to="/statistics" className="hover:text-zinc-600 transition-colors duration-100 ml-4">Statistics</Link>
+          <Link
+            to="/"
+            className={`hover:text-red-900 transition-colors duration-100 ${
+              location.pathname === "/" ? "text-red-900" : ""
+            }`}
+          >
+            Home
+          </Link>
+          <Link
+            to="#about"
+            onClick={(e) => scrollToSection(e, 'about')}
+            className="hover:text-red-900 transition-colors duration-200"
+          >
+            About Us
+          </Link>
+          <Link
+            to="#contact"
+            onClick={(e) => scrollToSection(e, 'contact')}
+            className="hover:text-red-900 transition-colors duration-200"
+          >
+            Contact
+          </Link>
+          <Link
+            to="/projects"
+            className={`hover:text-red-900 transition-colors duration-200 ${
+              location.pathname === "/projects" ? "text-red-900" : ""
+            }`}
+          >
+            Housing Projects
+          </Link>
+          <Link
+            to="/statistics"
+            className={`hover:text-red-900 transition-colors duration-200 ${
+              location.pathname === "/statistics" ? "text-red-900" : ""
+            }`}
+          >
+            Statistics
+          </Link>
         </div>
 
         <button
