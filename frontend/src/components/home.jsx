@@ -87,7 +87,7 @@ export default function Home() {
                   <div className="w-full md:w-1/3 text-center font-bold text-[20px] sm:text-[48px] mt-[-25px] sm:mt-[-5px] mb-0 sm:mb-12 tracking-wider">
                     ABOUT US
                   </div>
-                  <div className="w-full md:w-2/3 space-y-8 text-[15px] lg:text-[28px] leading-[35px] sm:leading-[55px] mt-[30px] sm:mt-[70px] sm:mt-[7rem] mb-[7rem] px-4 sm:px-0">
+                  <div className="w-full md:w-2/3 space-y-8 text-[12px] sm:text-[18px] lg:text-[28px] leading-[35px] sm:leading-[55px] mt-[30px] sm:mt-[70px] sm:mt-[7rem] mb-[7rem] px-4 sm:px-0">
                     <p>
                       HouseAudit is a digital platform developed by Housing
                       Assembly, a grassroots movement serving over 20
