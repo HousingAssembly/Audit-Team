@@ -46,12 +46,30 @@ exports.getStats = async (req, res) => {
       {
         $addFields: {
           applicantAge: {
-            $divide: [
-              { $subtract: [new Date(), { $toDate: "$applicant.date_of_birth" }] },
-              31536000000
-            ]
+            $let: {
+              vars: {
+                parsedDate: {
+                  $dateFromString: {
+                    dateString: "$applicant.date_of_birth",
+                    format: "%Y/%m/%d",
+                    onError: null,
+                    onNull: null
+                  }
+                }
+              },
+              in: {
+                $cond: [
+                  { $eq: ["$$parsedDate", null] },
+                  null,
+                  { $divide: [{ $subtract: [new Date(), "$$parsedDate"] }, 31536000000] }
+                ]
+              }
+            }
           }
         }
+      },
+      {
+        $match: { applicantAge: { $ne: null } }
       },
       {
         $bucket: {
@@ -80,9 +98,11 @@ exports.getStats = async (req, res) => {
         label = "46-60";
       else if (group._id === 60)
         label = "60+";
-      else
-        label = "Unknown";
-      ageGroups[label] = label === "Unknown" ? "Unknown" : group.count;
+
+      // Only add to ageGroups if it's a valid label (not Unknown)
+      if (label && ageGroups.hasOwnProperty(label)) {
+        ageGroups[label] = group.count;
+      }
     });
 
     // ─── 4) WAITING TIME BUCKETS ────────────────────────────────────────────────
@@ -95,12 +115,30 @@ exports.getStats = async (req, res) => {
       {
         $addFields: {
           waitingTime: {
-            $divide: [
-              { $subtract: [new Date(), { $toDate: "$application_date" }] },
-              31536000000  
-            ]
+            $let: {
+              vars: {
+                parsedDate: {
+                  $dateFromString: {
+                    dateString: "$application_date",
+                    format: "%Y/%m/%d",
+                    onError: null,
+                    onNull: null
+                  }
+                }
+              },
+              in: {
+                $cond: [
+                  { $eq: ["$$parsedDate", null] },
+                  null,
+                  { $divide: [{ $subtract: [new Date(), "$$parsedDate"] }, 31536000000] }
+                ]
+              }
+            }
           }
         }
+      },
+      {
+        $match: { waitingTime: { $ne: null } }
       },
       {
         $bucket: {
@@ -127,17 +165,24 @@ exports.getStats = async (req, res) => {
         label = "5-10";
       } else if (group._id === 10) {
         label = "10+";
-      } else {
-        label = "Unknown";
       }
-      waitingTimes[label] = group.count;
+
+      // Only add to waitingTimes if it's a valid label (not Unknown)
+      if (label && waitingTimes.hasOwnProperty(label)) {
+        waitingTimes[label] = group.count;
+      }
     }); 
 
     // ─── 5) REGIONAL DISTRIBUTION ───────────────────────────────────────────────
     const rawRegional = await Audit.aggregate([
       {
+        $match: {
+          "address.suburb": { $exists: true, $ne: null, $ne: "" }
+        }
+      },
+      {
         $group: {
-          _id: "$address.suburb",
+          _id: { $toUpper: "$address.suburb" }, // Normalize to uppercase
           totalPeopleInRegion: { $sum: 1 }
         }
       },
@@ -150,14 +195,26 @@ exports.getStats = async (req, res) => {
       }
     ]);
 
-    // Build an object { regionName: { people, percent } }
+    // Build an array of regions with their data, then sort by number of people
+    const regionsArray = rawRegional
+      .filter((doc) => doc.region && doc.region !== "") // Filter out null/empty regions
+      .map((doc) => {
+        const people = doc.count;
+        const percent = totalUsers > 0
+          ? Number(((people / totalUsers) * 100).toFixed(2))
+          : 0;
+        return {
+          name: doc.region,
+          people,
+          percent
+        };
+      })
+      .sort((a, b) => b.people - a.people); // Sort by number of people descending
+
+    // Convert back to object format for backwards compatibility
     const regions = {};
-    rawRegional.forEach((doc) => {
-      const people = doc.count;
-      const percent = totalUsers > 0
-        ? Number(((people / totalUsers) * 100).toFixed(2))
-        : 0;
-      regions[doc.region] = { people, percent };
+    regionsArray.forEach((region) => {
+      regions[region.name] = { people: region.people, percent: region.percent };
     });
 
     // ─── 6) WAITING-LIST TOTAL & AVERAGE ──────────────────────────────────────── 
@@ -225,10 +282,12 @@ exports.getStats = async (req, res) => {
       ageGroups,
       waitingTimes,
       regions,
+      regionsArray, // Include sorted array for guaranteed order
       totalWaitingPeople,
       averageWaitingTime
     };
 
+    console.log(`Stats: ${totalUsers} users, ${Object.keys(regions).length} regions, ${regionsArray.length} unique suburbs`);
     return res.json(finalStats);
   } catch (err) {
     console.error("getStats error:", err);

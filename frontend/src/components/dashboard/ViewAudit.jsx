@@ -133,13 +133,7 @@ export default function ViewAudit() {
         const data = await res.json();
         setAudits(data);
 
-        const keys = data.flatMap((audit) =>
-          Object.entries(audit.special_circumstances || {})
-            .filter(([_, value]) => value === true)
-            .map(([key]) => key)
-        );
-        const uniqueKeys = Array.from(new Set(keys));
-        const labels = uniqueKeys.map((k) => SPECIAL_CIRCUMSTANCE_LABELS[k]);
+        const labels = Object.values(SPECIAL_CIRCUMSTANCE_LABELS);
         setPriorityOptions(labels);
       } catch (err) {
         console.error("Failed to fetch audits:", err);

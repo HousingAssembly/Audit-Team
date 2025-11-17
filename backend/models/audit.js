@@ -49,4 +49,12 @@ const AuditSchema = new mongoose.Schema({
   timestamp_uploaded: { type: Date, default: Date.now }
 });
 
+// Pre-save hook to normalize suburb to uppercase for consistency
+AuditSchema.pre("save", function (next) {
+  if (this.address && this.address.suburb) {
+    this.address.suburb = this.address.suburb.toUpperCase();
+  }
+  next();
+});
+
 module.exports = mongoose.model("Audit", AuditSchema);
