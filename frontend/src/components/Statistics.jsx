@@ -84,6 +84,8 @@ export default function Statistics() {
     ageGroups: { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
     waitingTimes: { "0-5": 0, "5-10": 0, "10+": 0 },
     regions: {},
+    regionsArray: [],
+    totalWaitingPeople: 0,
     averageWaitingTime: 0
   });
 
@@ -97,11 +99,25 @@ export default function Statistics() {
   ];
 
   useEffect(() => {
+    console.log("useEffect triggered - fetching stats");
     setLoading(true); // Start loading
     fetchStats()
-      .then(setStatsData)
-      .catch(console.error)
-      .finally(() => setLoading(false)); // Stop loading
+      .then((data) => {
+        console.log("Stats data received:", data);
+        if (data && Object.keys(data).length > 0) {
+          setStatsData(data);
+          console.log("Stats data set successfully");
+        } else {
+          console.warn("Received empty or invalid data");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching stats:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+        console.log("Loading finished");
+      });
   }, []);
 
 
@@ -112,8 +128,12 @@ export default function Statistics() {
     ageGroups = { "0-30": 0, "31-45": 0, "46-60": 0, "60+": 0 },
     waitingTimes = { "0-5": 0, "5-10": 0, "10+": 0 },
     regions = {},
+    regionsArray = [],
+    totalWaitingPeople = 0,
     averageWaitingTime = 0
   } = statsData;
+
+  console.log("Rendering with regionsArray:", regionsArray);
 
   if (loading) {
     return (
@@ -215,13 +235,13 @@ export default function Statistics() {
               subtitle="Number of people in waiting list by suburb"
             />
             <div className="grid grid-cols-1">
-              {Object.keys(regions).length > 0 ? (
-                Object.keys(regions).map((region) => (
+              {regionsArray.length > 0 ? (
+                regionsArray.map((region) => (
                   <ProgressBar
-                    key={region}
-                    title={region}
-                    people={`${regions[region].people} people`}
-                    percent={`${regions[region].percent.toFixed(2)}%`}
+                    key={region.name}
+                    title={region.name}
+                    people={`${region.people} people`}
+                    percent={`${region.percent}%`}
                   />
                 ))
               ) : (
